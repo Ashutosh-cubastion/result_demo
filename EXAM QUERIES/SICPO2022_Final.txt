@@ -1,0 +1,552 @@
+Create table marks_edp
+(
+	regid bigint,
+	roll bigint,
+	name character varying,
+	fname character varying,
+	mname character varying,
+	dob date,
+	gender character varying(2),
+	cat1 integer,
+	cat2 integer,
+	cat3 integer,
+	ESM_SPLCAT character varying(2),
+	DEPTL_DP character varying(2),
+	NCC_CERTI character varying(2),
+	NCC_TYPE character varying,
+	RRU_DEGREE boolean,
+	RRUDEGCLAS character varying,
+	AGERELAX boolean,
+	AGERLXCODE integer,
+	EQ character varying,
+	VENUE_P1 integer,
+	EXMDATE_P1 text,
+	eng numeric,
+	gi numeric,
+	gk numeric,
+	QA numeric,
+	score_p1 numeric,
+	NORMALIZED numeric,
+	NCCP1MARKS integer,
+	paper1 numeric,
+	medium text,
+	P1Q_FEM boolean,
+	P1Q_MALE boolean,
+	PET text,
+	REMARK_PET text,
+	EXMDATE_P2 text,
+	VENUE_P2 integer,
+	SCORE_P2 numeric,
+	NCCP2MARKS integer,
+	PAPER2 numeric,
+	TOTAL numeric,
+	P2Q_FEM boolean,
+	P2Q_MALE boolean,
+	WITHHELD text,
+	REMARKS_WH text,
+	REJPROV text,
+	REMARKS text,
+	PERMADISTT text,
+	PERMASTATE text,
+	SHARE_INFO character varying(1)
+)
+------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2022allocation_final
+
+\copy marks_edp from 'C:\Users\Public\SICPO2022\P2QLY.csv' csv header;
+
+-------------------------------------------------------------------------------------------------------
+
+create table dv_data
+(
+	rollno bigint,
+	name character varying,
+	gender integer,
+	dob date,
+	cat1 integer,
+	cat2 integer,
+	cat3 integer,
+	ESM_SPLCAT character varying(1),
+	ESM_JOIN date,
+	ESM_DISCH date,
+	ESM_ELIG character varying(1),
+	DEPTL_DP character varying(1),
+	NCC_CERTI character varying(1),
+	NCC_TYPE character varying(2),
+	AGERELAX character varying(1),
+	AGERLXCODE integer,
+	GRADUATION character varying(1),
+	DEEM_GRAD character varying(1),
+	DL_CAR character varying(1),
+	DL_MOTOR character varying(1),
+	POST_PREF text,
+	DME character varying(20),
+	APPLY_RME character varying(1),
+	RME character varying(20),
+	MED_RESULT character varying(10),
+	REJ_PROV character varying(10),
+	REMARKS text,
+	REM_DATA text
+)
+
+------------------------------------------------------------------------------------------------------------
+ psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2022allocation_final
+
+ \copy dv_data from 'C:\Users\Public\SICPO2022\DV_DME_RME_DATA(2).csv' csv header;
+ 
+ 
+----------------------------------------------------------------------------------------------------------------
+create table candidates as (
+select rollno,null as regid,name,null as father_name,null as mother_name,gender,dob,cat1,cat2,cat3,esm_splcat as isexs_specialquota,
+esm_join as esm_joining_date,esm_disch as discharged_date,esm_elig as exs_reservation,deptl_dp as isdept_candidate,
+ ncc_certi as isncc_certificate,ncc_type as typeof_ncccertificate,agerelax,agerlxcode as agerelax_code,graduation,deem_grad as deemed_graduation,
+ dl_car as driving_licence_forcar,dl_motor as driving_licence_formotorcycle,post_pref,dme,apply_rme as rme_applied,rme,med_result,
+ rej_prov,remarks,rem_data from dv_data);
+ 
+ -----------------------------------------------------------------------------------------------------------------------------
+
+
+alter table candidates add constraint sicpo_2022_candidates_pk primary key (rollno);
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+do
+$$
+begin
+
+alter table candidates add column eng numeric;
+alter table candidates add column gi numeric;
+alter table candidates add column gk numeric;
+alter table candidates add column qa numeric;
+alter table candidates add column score_p1 numeric;
+alter table candidates add column normalized_p1 numeric;
+alter table candidates add column papper1 numeric;
+alter table candidates add column medium text;
+alter table candidates add column pet text;
+alter table candidates add column score_p2 numeric;
+alter table candidates add column nccmarks numeric;
+alter table candidates add column paper2 numeric;
+alter table candidates add column total numeric;
+
+end
+$$
+---------------------------------------------------------------------------------------------------------------
+
+update candidates
+set regid=b.regid ,
+father_name=b.fname,
+mother_name =b.mname,
+eng=b.eng,
+gi=b.gi,
+gk=b.gk,
+qa=b.qa,
+score_p1=b.score_p1,
+normalized_p1 =b.normalized,
+medium=b.medium,
+pet=b.pet,
+score_p2= b.score_p2 from marks_edp b
+where candidates.rollno=b.roll;
+
+--------------------------------------------------------------------------------------------------------------
+
+update candidates set nccmarks ='4'where isncc_certificate ='Y' and typeof_ncccertificate ='A';---339 updated
+
+update candidates set nccmarks ='6'where isncc_certificate ='Y' and typeof_ncccertificate ='B';---265 updated
+
+update candidates set nccmarks ='10'where isncc_certificate ='Y' and typeof_ncccertificate ='C';---961 updated
+
+--------------------------------------------------------------------------------------------------------
+
+update candidates set nccmarks ='0' where isncc_certificate <>'Y' ;
+update candidates set nccmarks ='0' where isncc_certificate is null;
+
+update candidates
+set paper1 =normalized_p1 + nccmarks;
+
+update candidates
+set paper2 =score_p2 + nccmarks;
+
+---------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column tenth_rollno text;
+alter table candidates add column regionid integer;
+alter table candidates add column present_address text;
+alter table candidates add column present_districtid integer;
+alter table candidates add column present_stateid integer;
+alter table candidates add column present_pincode integer;
+alter table candidates add column pemanent_address text;
+alter table candidates add column pemanent_districtid integer;
+alter table candidates add column pemanent_stateid integer;
+alter table candidates add column pemanent_pincode integer;
+alter table candidates add column email_id text;
+alter table candidates add column mobile_number text;
+
+-------------------------------------------------------------------------------------------------------------
+
+update candidates 
+set tenth_rollno = b.ear_tenth_roll_no,
+regionid=b.ear_regionid,
+present_address=b.ear_present_address,
+present_districtid=b.ear_present_districtid,
+present_stateid=b.ear_present_stateid,
+present_pincode=b.ear_present_pincode,
+pemanent_address=b.ear_permanent_address,
+pemanent_districtid=b.ear_permanent_districtid,
+pemanent_stateid=b.ear_permanent_stateid,
+pemanent_pincode=b.ear_permanent_pincode,
+email_id=b.ear_email_id,
+mobile_number= b.ear_mobile_number
+from t_examsicpo2022_applicant_reg_pu b where candidates.regid ::bigint =b.ear_person_regno;
+
+-------------------------------------------------------------------------------------------------------
+
+alter table candidates add column serviceperiod character varying;
+alter table candidates add column exsm_length character varying;
+
+-------------------------------------------------------------------------------------------------------
+
+update candidates set serviceperiod = age(discharged_date, esm_joining_date) where cat2='3';---1591
+
+update candidates set exsm_length =substring(serviceperiod,1,3) where cat2='3';
+-------------------------------------------------------------------------------------------------------
+
+update candidates set rejection_provision=rej_prov;
+
+update candidates set rejection_provision ='C' where rej_prov is null and med_result in ('T','F');
+
+----------------------------------------------------------------------------------------------------------
+
+update candidates set total = paper1 +paper2;
+
+update candidates set 
+cat1_cpo=cat1,
+cat1_dp =cat1;
+--------------------------------------------------------------------------------------------------------------
+
+update candidates
+set cat1_cpo='9',
+cat1_dp = '0'
+where cat1 ='5'; -------------------63 updates
+
+--------------------------------------------------------------------------------------------------------------
+
+update candidates
+set cat1_cpo='9',
+cat1_dp = '6'
+where cat1 ='7'; --------------------378 updates
+
+--------------------------------------------------------------------------------------------------------
+
+alter table candidates add column meritm integer;
+alter table candidates add column meritf integer;
+
+---------------------------------------------------------------------------------------------------------
+
+do
+$$
+begin
+
+alter table candidates add column dob_flag_cpo character varying;
+alter table candidates add column dob_flag_dp character varying;
+alter table candidates add column catsel_dob_cpo character varying;
+alter table candidates add column catsel_dob_dp character varying;
+
+end
+$$
+
+------------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column agerelax_code_raw integer;
+
+update candidates set agerelax_code_raw =agerelax_code;
+
+select regid,rollno,cat1,cat1_dp,cat1_cpo,cat2,cat3,agerelax,agerelax_code,agerelax_code_raw 
+from candidates where (agerelax= 'N' or agerelax is null);----10258
+
+--------------------------------------------------------------------------------------------------------------
+select regid,rollno,cat1,cat1_dp,cat1_cpo,cat2,cat3,agerelax,agerelax_code,agerelax_code_raw 
+from candidates where (agerelax= 'N' or agerelax is null) and cat2= '3';
+
+update candidates set agerelax_code ='06' where (agerelax= 'N' or agerelax is null) and cat2= '3';---99 updated
+
+select regid,rollno,cat1,cat1_dp,cat1_cpo,cat2,cat3,agerelax,agerelax_code,agerelax_code_raw 
+from candidates where (agerelax= 'N' or agerelax is null) and cat2 is null and cat1 in('1','2');
+
+update candidates set agerelax_code ='01' where (agerelax= 'N' or agerelax is null) and cat2 is null and cat1 in('1','2');---2202 updated
+
+select regid,rollno,cat1,cat1_dp,cat1_cpo,cat2,cat3,agerelax,agerelax_code,agerelax_code_raw 
+from candidates where (agerelax= 'N' or agerelax is null) and cat2 is null and cat1 in('6','7');
+
+update candidates set agerelax_code ='02' where (agerelax= 'N' or agerelax is null)and cat2 is null and cat1 in('6','7');------3811 updated
+
+----------------------------------------------------------------------------------------------------------------------
+alter table candidates alter column agerelax_code type character varying;
+
+dpb_flag_dp
+
+"12"	2
+"17"	27
+"18"	34
+"19"	20
+"9"		7215
+"99"	2176
+		4754
+
+dob_flag_cpo
+
+"12"	2
+"9"		7215
+"99"	2257
+		4754		
+		
+------------------------------------------------------------------------------------------------------------------------		
+
+update candidates
+set dob_flag_cpo =null,
+dob_flag_dp =null;
+
+update candidates set agerelax_code ='06' where agerelax_code='6';
+update candidates set agerelax_code ='01' where agerelax_code='1';
+update candidates set agerelax_code ='02' where agerelax_code='2';
+
+update candidates
+set dob_flag_cpo ='06',
+dob_flag_dp ='06'
+where cat2='3' and dob_flag_cpo ='99' and meritm is not null; -----748 updates
+
+----------------------------------------------------------------------------------------------------------------
+
+select * from dv_data where rollno in ('1408000745','1408000810');
+
+update candidates
+set serviceperiod='17 years 3 days',
+exsm_length ='17'
+where rollno ='1408000810';
+
+update candidates
+set serviceperiod='19 years 4 mons 20 days',
+exsm_length ='19'
+where rollno ='1408000745';
+
+
+update candidates set dob_flag_cpo='99' where cat1_dp='6' and cat1_dp<>cat1_cpo and dob_flag_cpo='02';---42 candidates obc for dp and ur for cpo
+
+
+-------------------------------------------------------------------------------------------------------------------
+8601001045 rollno taken relaxaxtion 02 but cat1 is 9;
+
+-----------------------------------------------------------------------------------------------------------------
+
+do
+$$
+begin
+alter table candidates add column cutoff_flag_female_cpo character varying;
+alter table candidates add column cutoff_flag_female_dp character varying;
+alter table candidates add column cutoff_flag_male_cpo character varying;
+alter table candidates add column cutoff_flag_male_dp character varying;
+
+end
+$$
+
+----------------------------------------------------------------------------------------------------------
+update candidates set isexs_specialquota ='Yes' where isexs_specialquota='Y';---290 updated
+update candidates set isexs_specialquota ='No' where isexs_specialquota='N';---1306 updated
+
+--------------------------------------------------------------------------------------------------------------
+
+select rollno,gender,cat1,cat1_cpo,cat1_dp,cat2,paper1,total,cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates
+where meritf is not null and cat1_cpo<>cat1_dp and total >'288.45112';
+
+select rollno,gender,cat1,cat1_cpo,cat1_dp,cat2,paper1,total,cutoff_flag_male_cpo,cutoff_flag_male_dp from candidates
+where cutoff_flag_male_cpo ='';
+-------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column cutoff_flag_male_spclexs_dp character varying;
+alter table candidates add column catsel_female_cpo character varying;
+alter table candidates add column catsel_female_dp character varying;
+alter table candidates add column catsel_male_cpo character varying;
+alter table candidates add column catsel_male_dp character varying;
+alter table candidates add column catsel_male_spclexs_dp character varying;
+
+---------------------------------------------------------------------------------------------------------------
+
+select rollno,gender,cat1,cat1_cpo,cat1_dp,cat2,paper1,total,cutoff_flag_male_cpo,cutoff_flag_male_dp,cutoff_flag_male_spclexs_dp from candidates
+where cutoff_flag_male_spclexs_dp is not null;------132 records
+
+----------------------------------------------------------------------------------------------------------
+
+update candidates set exs_reservation='No' where exs_reservation='N'; ---53
+update candidates set exs_reservation='Yes' where exs_reservation='Y'; ---1474
+
+----------------------------------------------------------------------------------------------------------
+
+select rollno,gender,dob,cat1,cat1_cpo,cat1_dp,agerelax_code_raw,agerelax_code,meritf,dob_flag_cpo,catsel_dob_cpo,cutoff_flag_female_cpo,catsel_female_cpo 
+from candidates where meritf is not null and cat1_dp<>cat1_cpo;
+
+select rollno,gender,dob,cat1,cat1_cpo,cat1_dp,agerelax_code_raw,agerelax_code,meritf,dob_flag_cpo,dob_flag_dp,catsel_dob_cpo,catsel_dob_dp,cutoff_flag_female_cpo,cutoff_flag_female_dp,catsel_female_cpo,catsel_female_dp 
+from candidates where meritf is not null and cat1_dp<>cat1_cpo;
+
+select rollno,gender,dob,cat1,cat1_cpo,cat1_dp,agerelax_code_raw,agerelax_code,meritm,dob_flag_cpo,dob_flag_dp,catsel_dob_cpo,catsel_dob_dp,cutoff_flag_male_cpo,cutoff_flag_male_dp,catsel_male_cpo,catsel_male_dp 
+from candidates where meritm is not null and cat1_dp<>cat1_cpo;
+
+-----------------------------------------------------------------------------------------------------------
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_against_ur character varying;
+alter table candidates add column sub_category character varying;
+
+-----------------------------------------------------------------------------------------------------------------
+select rollno,name,cat2,post_pref_original,post_pref,graduation,deemed_graduation from candidates where deemed_graduation= 'Y';
+
+update candidates 
+set post_pref = 'A' where deemed_graduation= 'Y';
+---------------------------------------------------------------------------------------------------------------
+
+UPDATE candidates
+SET post_pref = ARRAY_TO_STRING(STRING_TO_ARRAY(post_pref, NULL), ',');
+
+update candidates
+set allocated_category= null,
+	allocated_post=null,
+	allocated_against_ur=null,
+	sub_category=null;
+	
+update vacancy_male
+set current=initial_vacancy,
+allocated=null,
+left_vacancy =null;	
+
+---------------------------------------------------------------------------------------------------------------
+
+select count(*) from candidates where gender='1' and allocated_post is not null;
+select sum(initial_vacancy),sum(allocated),sum(left_vacancy) from vacancy_female;
+
+update candidates
+set allocated_category= null,
+	allocated_post=null,
+	allocated_against_ur=null,
+	sub_category=null
+where gender ='2';
+
+
+---------------------------------------------------------------------------------------------------------------
+
+update candidates 
+set post_pref =replace(post_pref,A,'')where post_pref like '%A%' and gender='2' and meritm is not null and 
+(driving_licence_forcar ='N' OR driving_licence_formotorcycle='N');
+
+update candidates 
+set post_pref =replace(post_pref,',','')where gender='2';
+
+UPDATE candidates
+SET post_pref = ARRAY_TO_STRING(STRING_TO_ARRAY(post_pref, NULL), ',') where gender='2';
+
+--------------------------------------------------------------------------------------------------------------------
+
+7002000741
+2405023973 ---these candidates had X in post_pref
+
+--------------------------------------------------------------------------------------------------------------------
+2405038263
+3009006916
+3013026736-----these candidates had V in post_pref
+
+--------------------------------------------------------------------------------------------------------------------
+
+8008001112----these candidates had P in post_pref
+1203001304 ---these candidates had Q in post_pref
+
+-------------------------------------------------------------------------------------------------------------------
+
+select * from vacancy_male order by post_code,sub_category_code;
+
+update vacancy_male
+set current=initial_vacancy,
+allocated=null,
+left_vacancy =null;	
+
+update candidates
+set allocated_category= null,
+	allocated_post=null,
+	allocated_against_ur=null,
+	sub_category=null
+where gender ='2';
+
+select * from vacancy_male order by post_code,sub_category_code;
+select count(*) from candidates where allocated_post is not null and gender ='2';
+
+update vacancy_male set allocated =null,
+left_vacancy=null where post_code ='A';
+
+-----------------------------------------------------------------------------------------------------------------
+
+update candidates
+set rejection_provision ='R' where med_result ='U';
+
+--------------------------------------------------------------------------------------------------------------
+
+update candidates
+set meritm=null,
+meritf=null,
+allocated_category=null,
+allocated_post=null,
+allocated_against_ur=null,
+sub_category=null;
+
+--------------------------------------------------------------------------------------------------------------
+
+select rollno,name,cat1,cat1_dp,cat1_cpo,gender,dob,cat2,exs_reservation,serviceperiod,agerelax_code,deemed_graduation,post_pref,med_result,rej_prov,rejection_provision,meritm,meritf from
+candidates where rollno in ('2201037638','2002008025','2405063416','2006000356','8007005068','8007004527','8007008404','2201001708','2003002935','2201003282','8007006453','2405067741','2201003883','8601000933','2006001264');
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_merit('SICPO22',1);-----8601 updates
+select * from sp_get_merit('SICPO22',2);-----828 updates
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+update vacancy_male
+set current=initial_vacancy,
+allocated=null,
+left_vacancy =null,
+min_marks=null,
+min_paper1=null,
+min_paper2=null,
+min_marks_cand_dob=null,
+max_merit=null;
+
+-----------------------------------------------------------------------------------------------------------------------
+
+2405042487
+2405057086
+5105003391
+6006010930
+2405017107
+2405052183
+6006012954
+2405041005 -----st esm candidates
+
+select * from vacancy_male where left_vacancy<>'0';
+select * from vacancy_male where post_code ='A' and category_code ='2'  and sub_category_code in ('3','3*');
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+select rollno,meritf,cat1,cat1_dp,post_pref,rejection_provision,remarks,med_result,allocated_category||allocated_post as key from candidates where allocated_post is not null and gender='1' order by meritf;
+
+select rollno,meritf,cat1,cat1_dp,cat1_cpo,cat2,post_pref,rejection_provision,
+remarks,med_result,allocated_category,allocated_post,sub_category
+from candidates where  allocated_post is not null and gender='2' order by meritm;
+
+select rollno,meritf,cat1,cat1_dp,post_pref,rejection_provision,
+remarks,med_result,allocated_category,allocated_post
+from candidates where allocated_post is not null and gender='1' order by meritf;
+
+select * from candidates where rollno in ('2201059199','8601004581','2201006861','2201029076','2201019114','2201013180');
+
+
+select * from candidates where rollno in ('8601001045','2201063207','2201059199','8601004581','2201006861','2201029076','2201019114','2201013180');
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------

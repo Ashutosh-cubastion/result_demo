@@ -1,0 +1,112 @@
+CREATE TABLE IF NOT EXISTS public.t_sicpo_exam_2023_tier1_marks
+(
+    regid character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    rollno character varying(10) COLLATE pg_catalog."default",
+    name character varying(50) COLLATE pg_catalog."default",
+    father_name character varying(50) COLLATE pg_catalog."default",
+    mother_name character varying(50) COLLATE pg_catalog."default",
+    date_of_birth date,
+    gender integer,
+    cat1 integer,
+    cat2 integer,
+    cat3 integer,
+    p1_esm_special_quota character varying(5) COLLATE pg_catalog."default",
+    p1_delhi_police_departmental_candidate character varying(5) COLLATE pg_catalog."default",
+    p1_n_c_c_certificate_holder character varying(5) COLLATE pg_catalog."default",
+    p1_type_of_n_c_c_certificate character varying(30) COLLATE pg_catalog."default",
+    p1_general_intelligence_and_reasoning character varying(20) COLLATE pg_catalog."default",
+    p1_general_knowledge_and_general_awareness character varying(20) COLLATE pg_catalog."default",
+    p1_quantitative_aptitude character varying(20) COLLATE pg_catalog."default",
+    p1_english_comprehension character varying(20) COLLATE pg_catalog."default",
+    p1_raw_score character varying(20) COLLATE pg_catalog."default",
+    p1_normalized_score character varying(20) COLLATE pg_catalog."default",
+    p1_n_c_c_bonus_score character varying(20) COLLATE pg_catalog."default",
+    p1_final_score character varying(20) COLLATE pg_catalog."default",
+    is_active boolean,
+    excluded_notice text COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.t_sicpo_exam_2023_tier1_marks
+    OWNER to postgres;
+	
+----------------------------------------------------------------------------
+
+
+CREATE TABLE IF NOT EXISTS public."sicpo2024Tier1Marks"
+(
+    "registrationNo" character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    "rollNo" character varying(10) COLLATE pg_catalog."default",
+    name character varying(50) COLLATE pg_catalog."default",
+    "fatherName" character varying(50) COLLATE pg_catalog."default",
+    "motherName" character varying(50) COLLATE pg_catalog."default",
+    dob date,
+    gender character varying(16),
+    cat1 character varying(16),
+    cat2 character varying(16),
+    cat3 character varying(16),
+    p1_delhi_police_departmental_candidate character varying(5) COLLATE pg_catalog."default",
+	p1_esm_special_quota character varying(5) COLLATE pg_catalog."default",
+    p1_n_c_c_certificate_holder character varying(5) COLLATE pg_catalog."default",
+    p1_type_of_n_c_c_certificate character varying(30) COLLATE pg_catalog."default",
+    p1_general_intelligence_and_reasoning character varying(20) COLLATE pg_catalog."default",
+    p1_general_knowledge_and_general_awareness character varying(20) COLLATE pg_catalog."default",
+    p1_quantitative_aptitude character varying(20) COLLATE pg_catalog."default",
+    p1_english_comprehension character varying(20) COLLATE pg_catalog."default",
+    p1_raw_score character varying(20) COLLATE pg_catalog."default",
+    p1_normalized_score character varying(20) COLLATE pg_catalog."default",
+    p1_n_c_c_bonus_score character varying(20) COLLATE pg_catalog."default",
+    p1_final_score character varying(20) COLLATE pg_catalog."default",
+	CONSTRAINT reg_sicpo24_marks PRIMARY KEY ("registrationNo")
+)
+
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."sicpo2024Tier1Marks"
+    OWNER to sscpgadmin;
+
+
+CREATE INDEX IF NOT EXISTS indx_reg_sicpo2024t1
+    ON public."sicpo2024Tier1Marks" USING btree
+    ("registrationNo" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+CREATE INDEX IF NOT EXISTS indx_roll_sicpo2024t1
+    ON public."sicpo2024Tier1Marks" USING btree
+    ("rollNo" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;	
+	
+-------------------------------------------------------------------------------
+
+-----prod candidate master----
+psql -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal
+
+
+alter table "sicpo2024Tier1Marks" add column "isActive" boolean;
+alter table "sicpo2024Tier1Marks" add column "excludedNotice" text;
+
+
+update "sicpo2024Tier1Marks" set "isActive"=false;
+update "sicpo2024Tier1Marks" set "excludedNotice"='No';
+
+
+pg_dump -U sscpgadmin -h 10.192.97.43 -p 5432 -t sicpo2024Tier1Marks -F c -f C:\Users\Public\sicpo2024Tier1Marks.dump ssc_db_candidate_portal
+
+
+-------dev db------
+pg_restore -U sscpgadmin -h 10.192.98.45 -p 5432 -d ssc_db_candidate_portal -t sicpo2024Tier1Marks C:\Users\Public\sicpo2024Tier1Marks.dump
+
+
+"10000000019"	"7208008171"	"AKSH RAJ SHEKHAWAT"--------->"10000000075" ews
+
+
+update "capf2024Tier1Marks" set "p1_delhi_police_departmental_candidate"='-' where "p1_delhi_police_departmental_candidate" is null;
+update "capf2024Tier1Marks" set "p1_esm_special_quota"='-' where "p1_esm_special_quota" is null;
+update "capf2024Tier1Marks" set "p1_n_c_c_certificate_holder"='-' where "p1_n_c_c_certificate_holder" is null;
+update "capf2024Tier1Marks" set "p1_type_of_n_c_c_certificate"='-' where "p1_type_of_n_c_c_certificate" is null;
+update "capf2024Tier1Marks" set "p1_n_c_c_bonus_score"='-' where "p1_n_c_c_bonus_score" is null;
+
+

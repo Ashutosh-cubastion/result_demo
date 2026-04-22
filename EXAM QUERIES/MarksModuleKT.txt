@@ -1,0 +1,96 @@
+1.Writeup and shortlisted candidates list shared by confidential11/confidential12/EDP through email./RESULT
+
+After this work for Marks Module starts.
+
+2. On the same email ask them to share the data for Marks module using the proper format.(Can be checked from previous emails)
+ (Dear Sir/Madam,
+ Please provide the data for Marks Module for CHSLE_2021 tier1 for further processing.)
+ 
+3. Please take follow ups on daily basis with them until data is received.
+4. Data will be shared over e-mail or physically by confidential11/confidential12/EDP in .dbf format.
+5. Perform the sanity on each column of the recieved data by opening the file in Excel.
+6. Registration_no(11), roll no(10),Name,Father's name,mother's name,Date of birth can not be null. Report this to confidential11/confidential12/EDP if any discrepency is found.
+7. Make sure you change the date of birth to the format same as in DB.
+8. Gender can either be 1 or 2 or 3
+	1-Female
+	2-Male
+	3-Transgender
+	If received M or F ---> change it to 2 and 1 respectively.
+9.cat1---> can't be blank and will have values 0/1/2/6/9
+	0- EWS
+	1-SC
+	2-ST
+	6-OBC
+	9-UR
+10.cat2---> this is for ex-serviceman. Can be blank
+			3-ex-serviceman
+11.cat3--> for Physically handicafed candidates, can be blank or accept values 4/5/7/8
+		4-'OH'
+		5-'HH'
+		7-'VH'
+		8-'Others'
+12.Age relaxation is shared by confidential11/confidential12/EDP.Remove it as we don't show it on marks module page.
+13.Tier1---> marks obtained by the candidate in tier1,can't be null
+14.Pref--> candidates preference for vacancy allocation,can be null		
+15.tier2--->marks obtained by the candidate in tier2,can't be null
+16.TT_exempted ---> stands for typing test exempted, this field can either be blank or Y.
+17.MIST_exempted---> mistake exempted
+18.MIST_DEOC--> marks,if not sure what does this means, please ask confidential11/confidential12/EDP whoever has shared the data.
+19.MIST_DEOO--->same as above
+20.catsel---> category selected
+21.postsel---> post selected
+22.Rank---> remove the column as we don't show it in marks module
+23.rejprev---> rejection preview
+			C-clear
+			P-provisonal
+			R-rejected
+			W-with held
+			
+Addition to the above shared columns by confidential11/confidential12/EDP we add the below 2 columns manually on the file.
+24. Remarks---> supporting comments 
+25.is_active----> those candidates whose is_active flag is marked true only can check their marks under marks/result section.
+26.excluded_notice --->this is always set to NOT		(by design by the developers)
+	
+NOTE: P1 and P2 prefixes are configured to show data on particular sections on the marks module page(in .net code).
+	like for tier1 paper use P1 for tier2 paper use P2
+
+27. After data sanity, create the transaction table (t_examname_examyear_tier1_marks) with the same column names and numbers.
+28. Import the data into this newly created table from the .csv file. Make sure column names and sequence in the csv file is same as in newly created table.
+29. Add a new entry in the exam_master table. Insert the values accordingly in this table. use transaction table name in table_name column.
+30. There is a column named is_active, set this to True.Only those exams whose is_active is true will be visible under the drop down menu of marks/result page.
+31. Send the screenshot of the view page(marks/result) for each type of candidate(SC/ST/OBC/UR/EWS/PWD) to the confidential11/confidential12/EDP section.
+32. After their approval on staging environment, proceed for prod release.
+33. Take the backup of the db using pg_dump in cmd and restore them in 6 servers.
+34. Is_active flag in the exam_master table to be set False. Set it to TRUE only in one server.
+
+NOTE: Replace all the blanks with - when inserting data in DB.(particular column with having prefix and some others if we want to display on the screen)
+	.> st_whether_exempted_from_typint_test : replace the value 'Y' from t_chsl_exam_2021_skill_test table(created after skill test was conducted post 			tier2).
+
+create table t_chsl_exam_2022_final_marks
+(
+	regid varying(11)  PRIMARY KEY NOT NULL,
+	rollno varying(10) NOT NULL,
+	name varying(50) NOT NULL,
+	father_name varying(50) NOT NULL,
+	mother_name varying(50) NOT NULL,
+	date_of_birth date NOT NULL,
+	gender varying(1),
+	cat1 integer NOT NULL,
+	cat2 integer,
+	cat3 integer,
+	p1_paper_1 numeric,
+	pref_post_preference text,
+	p2_paper_2 numeric,
+	TT_exempted,
+	mist_exempted numeric,
+	mist_deoc numeric,
+	mist_deoo numeric,
+	catsel integer,
+	postsel text,
+	rejprev char(1),
+	remarks varying(50),
+	is_active boolean,
+      excluded_notice boolean
+)
+
+

@@ -1,0 +1,461 @@
+select * from t_appl_dv_ro_candidatedata_ssc where advcd_notificationid='74' and advcd_examid='22'
+and advcd_regno in ('20001635557','20005085169');
+
+select * from t_appl_dv_ro_candidatedata_ssc where advcd_notificationid='74' and advcd_examid='22'
+and advcd_rollno in ('3011089514','3011098307','3011100147','3011101444','3011096911');
+
+update t_appl_dv_ro_candidatedata_ssc
+set advcd_isactive =true
+where advcd_notificationid='74' and advcd_examid='22'
+and advcd_rollno in ('3011089514','3011098307','3011100147','3011101444','3011096911');
+
+update t_appl_dv_ro_candidatedata_ssc
+set advcd_isactive =true
+where advcd_notificationid='74' and advcd_examid='22'
+and advcd_rollno in ('2405153822','2405183846');
+
+select * from t_appl_dv_ro_candidatedata_ssc where advcd_notificationid='74' and advcd_examid='22'
+and advcd_rollno in ('3002015423');
+
+
+'2201218655','2201025736','2201293346','2218033787','2218023403','2406011594','3001042021','3011065698','3205011071','2405038504','2201260078','3001099386'
+
+"2024-01-13"	"2201218655"
+"2023-06-14"	"2201293346"
+"2023-09-19"	"2201025736"
+"2023-04-13"	"2218033787"
+"2023-04-12"	"2218023403"
+"2023-08-21"	"2406011594"
+"2023-09-11"	"3001042021"
+"2023-04-28"	"3011065698"
+"2023-05-30"	"3205011071"
+"2023-09-23"	"3001099386"
+"2023-06-22"	"2405038504"
+"2023-08-23"	"2201260078"
+
+----------------------------------------------------------------------------------------
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t t_appl_dv_cedp2023candidatedetails_ssc -F c -f C:\Users\Public\t_appl_dv_cedp2023candidatedetails_ssc.dump ssc2
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cedp2023allocation_final -t candidates_selected C:\Users\Public\candidates.dump
+
+
+
+alter table t_appl_dv_cedp2023candidatedetails_ssc add constraint pk_1 primary key (advc_rollno);
+alter table t_appl_dv_cedp2023petpst_ssc add constraint pk_2 primary key (pt_rollno);
+alter table candidates add constraint pk_rollno primary key (rollno);
+
+
+select * into candidates_selected from candidates;
+
+
+
+do
+$$
+begin
+	
+Alter table candidates add column pt_id integer;
+Alter table candidates add column pt_rollno text ;
+Alter table candidates add column pt_regno bigint;
+Alter table candidates add column pt_name text COLLATE pg_catalog."default";
+Alter table candidates add column pt_father_name text COLLATE pg_catalog."default";
+Alter table candidates add column pt_mother_name text COLLATE pg_catalog."default";
+Alter table candidates add column pt_genderid integer;
+Alter table candidates add column pt_isracequalified boolean;
+Alter table candidates add column pt_islongjumpqualified boolean;
+Alter table candidates add column pt_ishighjumpqualified boolean;
+Alter table candidates add column pt_ispetqualified boolean;
+Alter table candidates add column pt_heightmeasure double precision;
+Alter table candidates add column pt_isheightrelxavail boolean;
+Alter table candidates add column pt_heightrelx text COLLATE pg_catalog."default";
+Alter table candidates add column pt_heightbar boolean;
+Alter table candidates add column pt_chestexp double precision;
+Alter table candidates add column pt_chestnotexp double precision;
+Alter table candidates add column pt_ischestrelxavail boolean;
+Alter table candidates add column pt_chestrelx text COLLATE pg_catalog."default";
+Alter table candidates add column pt_pemtstatus boolean;
+Alter table candidates add column pt_finalstatus boolean;
+Alter table candidates add column pt_remarks text COLLATE pg_catalog."default";
+	
+end
+$$	
+	
+
+update candidates a	
+
+set a.pt_rollno =b.pt_rollno,
+a.pt_regno =b.pt_regno,
+a.pt_name =b.pt_name,
+a.pt_father_name =b.pt_father_name,
+a.pt_mother_name =b.pt_mother_name,
+a.pt_genderid =b.pt_genderid,
+a.pt_isracequalified =b.pt_isracequalified,
+a.pt_islongjumpqualified =b.pt_islongjumpqualified,
+a.pt_ishighjumpqualified =b.pt_ishighjumpqualified,
+a.pt_ispetqualified =b.pt_ispetqualified,
+a.pt_heightmeasure =b.pt_heightmeasure,
+a.pt_isheightrelxavail =b.pt_isheightrelxavail,
+a.pt_heightrelx =b.pt_heightrelx,
+a.pt_heightbar =b.pt_heightbar,
+a.pt_chestexp =b.pt_chestexp,
+a.pt_chestnotexp =b.pt_chestnotexp,
+a.pt_ischestrelxavail =b.pt_ischestrelxavail,
+a.pt_chestrelx =b.pt_chestrelx,
+a.pt_pemtstatus =b.pt_pemtstatus,
+a.pt_finalstatus =b.pt_finalstatus,
+a.pt_remarks=b.pt_remarks
+
+from t_appl_dv_cedp2023petpst_ssc b
+where a.rollno=b.pt_rollno; 
+
+
+
+do
+$$
+begin
+
+	
+alter table candidates add column  advc_name text COLLATE pg_catalog."default";
+alter table candidates add column  advc_father_name text COLLATE pg_catalog."default";
+alter table candidates add column  advc_mother_name text COLLATE pg_catalog."default";
+alter table candidates add column  advc_candidatenameremarks text COLLATE pg_catalog."default";
+alter table candidates add column  advc_fathernameremarks text COLLATE pg_catalog."default";
+alter table candidates add column  advc_mothernameremarks text COLLATE pg_catalog."default";
+alter table candidates add column  advc_genderid integer;
+alter table candidates add column  advc_categoryid integer;
+alter table candidates add column  advc_reason_for_catchange text COLLATE pg_catalog."default";
+alter table candidates add column  advc_isex_serviceman boolean;
+alter table candidates add column  advc_serviceperiod text COLLATE pg_catalog."default";
+alter table candidates add column  advc_discharged_date date;
+alter table candidates add column  advc_isph boolean;
+alter table candidates add column  advc_examregion_code text COLLATE pg_catalog."default";
+alter table candidates add column  advc_minority_community boolean;
+alter table candidates add column  advc_dvactualdate date;
+alter table candidates add column  advc_ipaddress text COLLATE pg_catalog."default";
+alter table candidates add column  advc_arccode text COLLATE pg_catalog."default";
+alter table candidates add column  advc_phcode integer;
+alter table candidates add column  advc_rejectionprovision text COLLATE pg_catalog."default";
+alter table candidates add column  advc_rejectionreason text COLLATE pg_catalog."default";
+alter table candidates add column  advc_remarks text COLLATE pg_catalog."default";
+alter table candidates add column  advc_rollno text COLLATE pg_catalog."default" ;
+alter table candidates add column  advc_isdvcomplete boolean;
+alter table candidates add column  advc_regno bigint;
+alter table candidates add column  advc_dob date;
+alter table candidates add column  advc_schedule_date date;
+alter table candidates add column  advc_is_eligible_exsvc_reservation boolean;
+alter table candidates add column  advc_exsvc_joining_date date;
+alter table candidates add column  advc_age text COLLATE pg_catalog."default";
+alter table candidates add column  advc_tenth_rollno text COLLATE pg_catalog."default";
+alter table candidates add column  advc_driving_licence_formotorcycle boolean;
+alter table candidates add column  advc_drivinglicensenumberlmv text COLLATE pg_catalog."default";
+alter table candidates add column  advc_authoritynameforlmv text COLLATE pg_catalog."default";
+alter table candidates add column  advc_driving_licence_date_formotorcycle date;
+alter table candidates add column  advc_driving_licence_forcar boolean;
+alter table candidates add column  advc_drivinglicensenumberhmv text COLLATE pg_catalog."default";
+alter table candidates add column  advc_authoritynameforhmv text COLLATE pg_catalog."default";
+alter table candidates add column  advc_driving_licence_date_forcar date;
+alter table candidates add column  advc_pet_pst_date date;
+alter table candidates add column  advc_isdept_candidate boolean;
+alter table candidates add column  advc_isdept_certificate boolean;
+alter table candidates add column  advc_iswards_of_delhipolice boolean;
+alter table candidates add column  advc_issportsperson_of_distinction boolean;
+alter table candidates add column  advc_typeof_sportdistinction text COLLATE pg_catalog."default";
+alter table candidates add column  advc_isncc_certificate boolean;
+alter table candidates add column  advc_typeof_ncccertificate text COLLATE pg_catalog."default";
+alter table candidates add column  advc_exs_govtjob boolean;
+alter table candidates add column  advc_exs_govtjob_join_date date;
+alter table candidates add column  advc_exam_applied_date date ;
+alter table candidates add column  advc_exs_govtjob_undertaking boolean;
+alter table candidates add column  advc_isexs_specialquota boolean;
+alter table candidates add column  advc_specialforcensg_proof boolean;
+alter table candidates add column  advc_commandoqi_proof boolean;
+alter table candidates add column  advc_commando_navyair_proof boolean;
+alter table candidates add column  advc_email_id text COLLATE pg_catalog."default";
+alter table candidates add column  advc_share_persinfo boolean;
+alter table candidates add column  advc_permanentaddress text COLLATE pg_catalog."default";
+alter table candidates add column  advc_permanentstateid integer;
+alter table candidates add column  advc_permanentdistid integer;
+alter table candidates add column  advc_permanentpincode text COLLATE pg_catalog."default";
+alter table candidates add column  advc_persentaddress text COLLATE pg_catalog."default";
+alter table candidates add column  advc_persentstateid integer;
+alter table candidates add column  advc_persentdistid integer;
+alter table candidates add column  advc_persentpincode text COLLATE pg_catalog."default";
+alter table candidates add column  advc_attendance text COLLATE pg_catalog."default";
+alter table candidates add column  advc_photostatus text COLLATE pg_catalog."default";
+alter table candidates add column  advc_reasonforchangesport text COLLATE pg_catalog."default";
+alter table candidates add column  advc_reasonfordepartmentalchange text COLLATE pg_catalog."default";
+alter table candidates add column  advc_actualgender text COLLATE pg_catalog."default";
+
+end
+$$
+
+
+update candidates a
+set
+a.advc_name =b.advc_name ,
+a.advc_father_name =b.advc_father_name ,
+a.advc_mother_name =b.advc_mother_name ,
+a.advc_candidatenameremarks =b.advc_candidatenameremarks ,
+a.advc_fathernameremarks =b.advc_fathernameremarks ,
+a.advc_mothernameremarks =b.advc_mothernameremarks ,
+a.advc_genderid =b.advc_genderid ,
+a.advc_categoryid =b.advc_categoryid ,
+a.advc_reason_for_catchange =b.advc_reason_for_catchange ,
+a.advc_isex_serviceman =b.advc_isex_serviceman ,
+a.advc_serviceperiod =b.advc_serviceperiod ,
+a.advc_discharged_date =b.advc_discharged_date ,
+a.advc_isph =b.advc_isph ,
+a.advc_examregion_code =b.advc_examregion_code ,
+a.advc_minority_community =b.advc_minority_community ,
+a.advc_dvactualdate =b.advc_dvactualdate ,
+a.advc_ipaddress =b.advc_ipaddress ,
+a.advc_arccode =b.advc_arccode ,
+a.advc_phcode =b.advc_phcode ,
+a.advc_rejectionprovision =b.advc_rejectionprovision ,
+a.advc_rejectionreason =b.advc_rejectionreason ,
+a.advc_remarks=b.advc_remarks,
+a.advc_rollno =b.advc_rollno ,
+a.advc_isdvcomplete =b.advc_isdvcomplete ,
+a.advc_regno =b.advc_regno ,
+a.advc_dob =b.advc_dob ,
+a.advc_schedule_date =b.advc_schedule_date ,
+a.advc_is_eligible_exsvc_reservation =b.advc_is_eligible_exsvc_reservation ,
+a.advc_exsvc_joining_date=b.advc_exsvc_joining_date,
+a.advc_age=b.advc_age,
+a.advc_tenth_rollno =b.advc_tenth_rollno ,
+a.advc_driving_licence_formotorcycle =b.advc_driving_licence_formotorcycle ,
+a.advc_drivinglicensenumberlmv =b.advc_drivinglicensenumberlmv ,
+a.advc_authoritynameforlmv =b.advc_authoritynameforlmv ,
+a.advc_driving_licence_date_formotorcycle =b.advc_driving_licence_date_formotorcycle ,
+a.advc_driving_licence_forcar =b.advc_driving_licence_forcar ,
+a.advc_drivinglicensenumberhmv =b.advc_drivinglicensenumberhmv ,
+a.advc_authoritynameforhmv =b.advc_authoritynameforhmv ,
+a.advc_driving_licence_date_forcar =b.advc_driving_licence_date_forcar ,
+a.advc_pet_pst_date =b.advc_pet_pst_date ,
+a.advc_isdept_candidate =b.advc_isdept_candidate ,
+a.advc_isdept_certificate =b.advc_isdept_certificate ,
+a.advc_iswards_of_delhipolice =b.advc_iswards_of_delhipolice ,
+a.advc_issportsperson_of_distinction =b.advc_issportsperson_of_distinction ,
+a.advc_typeof_sportdistinction=b.advc_typeof_sportdistinction,
+a.advc_isncc_certificate =b.advc_isncc_certificate ,
+a.advc_typeof_ncccertificate =b.advc_typeof_ncccertificate ,
+a.advc_exs_govtjob =b.advc_exs_govtjob ,
+a.advc_exs_govtjob_join_date=b.advc_exs_govtjob_join_date,
+a.advc_exam_applied_date =b.advc_exam_applied_date ,
+a.advc_exs_govtjob_undertaking =b.advc_exs_govtjob_undertaking ,
+a.advc_isexs_specialquota =b.advc_isexs_specialquota ,
+a.advc_specialforcensg_proof =b.advc_specialforcensg_proof ,
+a.advc_commandoqi_proof =b.advc_commandoqi_proof ,
+a.advc_commando_navyair_proof =b.advc_commando_navyair_proof ,
+a.advc_email_id =b.advc_email_id ,
+a.advc_share_persinfo =b.advc_share_persinfo ,
+a.advc_permanentaddress =b.advc_permanentaddress ,
+a.advc_permanentstateid =b.advc_permanentstateid ,
+a.advc_permanentdistid =b.advc_permanentdistid ,
+a.advc_permanentpincode =b.advc_permanentpincode ,
+a.advc_persentaddress =b.advc_persentaddress ,
+a.advc_persentstateid =b.advc_persentstateid ,
+a.advc_persentdistid =b.advc_persentdistid ,
+a.advc_persentpincode =b.advc_persentpincode ,
+a.advc_attendance =b.advc_attendance ,
+a.advc_photostatus =b.advc_photostatus ,
+a.advc_reasonforchangesport =b.advc_reasonforchangesport ,
+a.advc_reasonfordepartmentalchange =b.advc_reasonfordepartmentalchange ,
+a.advc_actualgender=b.advc_actualgender
+
+from t_appl_dv_cedp2023candidatedetails_ssc b 
+where a.rollno =b.advc_rollno;
+
+
+select distinct advc_rejectionprovision,count(*) from candidates group by advc_rejectionprovision;
+"A"		32177
+"C"		8649
+"R"		44989
+"TU"	85
+"W"		149
+
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+alter table candidates add column cutoff_flag character varying;
+alter table candidates add column catsel character varying;
+alter table candidates add column cat1 character varying;
+alter table candidates add column cat2 character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+alter table candidates add column agerelax_code character varying;
+
+
+update candidates set cat1=advc_categoryid
+where advc_rejectionprovision in ('TU','W','C'); --8883
+
+update candidates set cat2='3'
+where advc_isex_serviceman ='true';---583
+
+update candidates set exsm_length = split_part(advc_serviceperiod,'/',1)
+where advc_isex_serviceman ='true'; ----583
+
+update candidates set agerelax_code = split_part(advc_arccode,',',1);
+
+update candidates set exs_reservation ='Yes'
+where cat2='3' and advc_is_eligible_exsvc_reservation ='true';---583
+
+
+update candidates
+set advc_dob=ear_dob,
+cat1=cat1_t1,
+agerelax_code=agerelax_code_t1,
+remarks ='Temporary Unfit hence dob same as of application'
+where advc_rejectionprovision in ('TU') and advc_dob is null;---nccc ka marks dena hei inko
+
+select * from sp_get_dob_flag('CEDP23',3);
+
+select distinct dob_flag,count(*) from candidates
+where advc_rejectionprovision in ('TU','W','C') group by dob_flag;
+
+"01"	399
+"02"	458
+"20"	5
+"25"	10
+"26"	447
+"27"	61
+"28"	25
+"29"	6
+"9"		7472
+
+
+select * from sp_get_catseldob_flag('CEDP23',4);
+
+select distinct catsel_dob,count(*) from candidates
+where advc_rejectionprovision in ('TU','W','C') group by catsel_dob;
+
+"0"	2
+"1"	252
+"2"	149
+"3"	533
+"6"	459
+"9"	7488
+
+
+select * from sp_get_cutoff('CEDP23',5);
+select * from sp_get_catsel('CEDP23',6);
+
+alter table candidates add column ncc_marks numeric;
+alter table candidates add column final_score numeric;
+
+select distinct advc_typeof_ncccertificate,count(*) from candidates where advc_rejectionprovision in ('TU','W','C') group by advc_typeof_ncccertificate;
+"1"	107
+"2"	187
+"3"	411
+	8178
+	
+update candidates set ncc_marks='0' where advc_rejectionprovision in ('TU','W','C');
+
+update candidates set ncc_marks='2' 
+where advc_rejectionprovision in ('TU','W','C')
+and advc_typeof_ncccertificate ='1';---107
+
+update candidates set ncc_marks='3' 
+where advc_rejectionprovision in ('TU','W','C')
+and advc_typeof_ncccertificate ='2';---187
+
+update candidates set ncc_marks='5' 
+where advc_rejectionprovision in ('TU','W','C')
+and advc_typeof_ncccertificate ='3';--411
+
+select advc_rollno,cat2, ncc_marks from candidates where advc_rejectionprovision in ('TU','W','C') and cat2='3' and ncc_marks<>'0';---29
+
+update candidates set ncc_marks='0' 
+where advc_rejectionprovision in ('TU','W','C')
+and cat2='3'; ---ncc marks not be given to ESM
+
+
+select distinct ear_typeof_certificate,count(*)  from candidates
+where remarks ='Temporary Unfit hence dob same as of application' group by ear_typeof_certificate;----temporary unfit NCC certificate holder
+
+"1.0"	1
+"3.0"	1
+		83
+		
+update candidates set ncc_marks='2' 
+where advc_rejectionprovision in ('TU','W','C')
+and remarks ='Temporary Unfit hence dob same as of application'
+and ear_typeof_certificate ='1.0'; ----rollno 1401016006
+
+update candidates set ncc_marks='5' 
+where advc_rejectionprovision in ('TU','W','C')
+and remarks ='Temporary Unfit hence dob same as of application'
+and ear_typeof_certificate ='3.0';		---rollno 2201015080
+
+update candidates
+set final_score = normalized_marks +ncc_marks
+where advc_rejectionprovision in ('TU','W','C');----8883
+
+alter table candidates add column merit_male integer;
+alter table candidates add column merit_female integer;
+
+select * from sp_get_merit('CEDP23',1);
+select * from sp_get_merit('CEDP23',2);
+
+select advc_rollno,cat1,cat2,advc_genderid,pt_heightrelx,pt_chestrelx,pt_finalstatus,advc_arccode,dob_flag,advc_remarks,advc_isdept_candidate,advc_iswards_of_delhipolice,advc_isexs_specialquota
+from candidates where advc_rejectionprovision in ('TU','W','C')
+and dob_flag<>'9'
+and( pt_heightrelx is not null or pt_chestrelx is not null)
+and pt_heightrelx='hrelaxforward';----"2230042845","3011065824","2230024253" correct
+
+select advc_rollno,cat1,cat2,advc_genderid,pt_heightrelx,pt_chestrelx,pt_finalstatus,advc_arccode,dob_flag,advc_remarks,advc_isdept_candidate,advc_iswards_of_delhipolice,advc_isexs_specialquota
+from candidates where advc_rejectionprovision in ('TU','W','C')
+and dob_flag<>'9'
+and( pt_heightrelx is not null or pt_chestrelx is not null)
+and pt_heightrelx='ST';---58 records correct
+
+select advc_rollno,cat1,dob_flag,catsel
+from candidates where advc_rejectionprovision in ('TU','W','C')
+and dob_flag<>'9'
+and( pt_heightrelx is not null or pt_chestrelx is not null)
+and pt_chestrelx='ST';---5 records correct
+
+alter table candidates add column catsel_original character varying;
+
+update candidates 
+set catsel_original =catsel
+where advc_rejectionprovision in ('TU','W','C');---8883
+
+update candidates
+set catsel='3',
+remarks ='ESM only goes to their category'
+where advc_rejectionprovision in ('TU','W','C')
+and cat2='3';---533 updates
+
+select advc_rollno,cat1,cat2,dob_flag,catsel_original,catsel
+from candidates where advc_rejectionprovision in ('TU','W','C')
+and cat2='3';
+
+update candidates
+set catsel='3*',
+remarks ='Special ESM only goes to their category'
+where advc_rejectionprovision in ('TU','W','C')
+and cat2='3' and catsel='3'
+and advc_isexs_specialquota ='true' ;---81
+
+select advc_rollno,cat1,pt_heightrelx,pt_chestrelx,dob_flag,catsel_original,catsel,remarks
+from candidates where advc_rejectionprovision in ('TU','W','C')
+and pt_heightrelx='ST';
+
+update candidates
+set catsel= replace(catsel,'9',''),
+remarks= 'category specific relaxation taken'
+where advc_rejectionprovision in ('TU','W','C')
+and pt_heightrelx='ST';---242
+
+
+update candidates
+set catsel= replace(catsel,'9',''),
+remarks= 'category specific relaxation taken'
+where advc_rejectionprovision in ('TU','W','C')
+and pt_chestrelx='ST';--27
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_sub_category character varying;
+alter table candidates add column allocated_gender character varying;
+
+
+select rollno,pt_finalstatus,pt_remarks,advc_rejectionprovision,advc_remarks,allocated_category,allocated_sub_category,allocated_gender from candidates_allocated where rollno in 
+('1401004782','1401005034','1401007811','1401016434','1402015149','1402019777','1402020566','1402030750','1403014994','1403022310','1403026000','1404002287','1404006868','1404009896','1404010409','1404014512','1404014922','1404016496','1404018139','1404019115','1404019301','1404020422','1404022668','1404025479','1601002867','2002007692','2002011089','2003021566','2003033601','2003036966','2003038039','2003039935','2003047120','2201086260','2201130518','2201156072','2201158571','2201164570','2201166619','2201172102','2201221811','2201238001','2201261769','2201261772','2201292004','2201316275','2201321669','2201322085','2201331818','2201336611','2201346043','2201350097','2201353641','2201356338','2201364203','2201370657','2201372083','2201377913','2201379339','2201385896','2202015056','2202015827','2202022696','2202024377','2202031126','2214002916','2214015604','2214019539','2214024532','2214026630','2214027025','2214031176','2214032950','2214035166','2214038843','2214039325','2214039951','2214043418','2214044772','2214045365','2214049748','2214049912','2214052840','2214055682','2215026772','2215068585','2215075448','2215089178','2215089515','2216006317','2216008351','2218003674','2218006770','2218023165','2218030745','2218033066','2218033899','2218044499','2218061532','2218067783','2218068435','2218071586','2218073643','2218076306','2218077560','2218078091','2218082673','2218085616','2218085856','2218087056','2218089854','2218093880','2220005423','2220010660','2230025553','2230035283','2230067745','2230074946','2230080456','2230086459','2404017102','2405032727','2405038629','2405044207','2405059677','2405122672','2405139128','2405191794','2406004125','3001005251','3001005635','3001014820','3001021031','3001026083','3001033524','3001039832','3001045190','3001046239','3001047184','3001052013','3001062004','3001062449','3001076637','3001095876','3001097427','3001099379','3001101652','3009001851','3009004159','3009007867','3009008921','3009033973','3009034716','3009045473','3009053760','3009092528','3009098888','3009100193','3009102874','3009107193','3009107777','3009110934','3009111519','3009117701','3009118165','3009120197','3009120605','3009121771','3010095117','3011020822','3011070623','3016002687','3016010047','3209001320','3209004904','6001020154','6001032713','6005019218','6005031919','7201011097','7207007109','8201001548');

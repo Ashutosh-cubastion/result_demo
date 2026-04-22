@@ -1,0 +1,1374 @@
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t cut_off_table -F c -f C:\Users\Public\cut_off_table.dump alloc_selectionpost2023_xi_allocation
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arctable.dump alloc_selectionpost2023_xi_allocation
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\mastertable.dump alloc_selectionpost2023_xi_allocation
+
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2024_xii_allocation -t cut_off_table C:\Users\Public\cut_off_table.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2024_xii_allocation -t arc_table C:\Users\Public\arctable.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2024_xii_allocation -t master_table C:\Users\Public\mastertable.dump
+
+alter table cut_off_table add constraint pk_serial primary key(serial_id);
+alter table arc_table add constraint pk_arc primary key(arc_code,age_group);
+alter table master_table add constraint pk_serial1 primary key(serial);
+
+
+create table candidates
+(
+reg_no character varying,
+name character varying,
+newName character varying,
+fathersName character varying ,
+mothersName	character varying,
+dob	date,
+ageAsOnDob character varying,
+genderId integer,
+gender	character varying,
+categoryId integer,
+category character varying,
+nationality character varying,
+isPwbd 	character varying,
+typeOfPwbd	character varying,
+PwbdCode character varying,
+isBenchmarkDisabilityVh character varying,
+isBenchmarkDisabilityOh character varying,
+markOfIdentification character varying,
+tenthEducationBoard character varying,
+tenthRollNumber	character varying,
+tenthYearOfPassing	character varying,
+examCentrePreference1 character varying,
+examCentreCode1 character varying,
+examCentrePreference2 character varying,
+examCentreCode2 character varying,
+examCentrePreference3 character varying,
+examCentreCode3	character varying,
+regionName character varying,
+postRegion character varying,
+post_code character varying,
+post_name character varying,
+level_of_post text,
+postRelatedToUserConfirmation character varying,
+isEsm character varying,
+lengthOfService text,
+dojOfEsm character varying,
+dodOfEsm character varying,
+isCivilPost character varying,
+isPhysicalLimitToWrite character varying,
+isScribe character varying,
+scribeMedium character varying,
+isOwnScribe character varying,
+isSkillTestRequired character varying,
+skillTestMedium	 character varying,
+isAgeRelaxation character varying,
+ageRelaxationCode character varying,
+essentialQualification	character varying,
+otherQualification character varying,
+organisationName1 character varying,
+designation1 character varying,
+natureOfDuty1 character varying,
+servicePeriodFrom1 character varying,
+servicePeriodTo1 character varying,
+organisationName2 character varying,
+designation2 character varying,
+natureOfDuty2 character varying,
+servicePeriodFrom2 character varying,
+servicePeriodTo2 character varying,
+organisationName3 character varying,
+designation3 character varying,
+natureOfDuty3 character varying,
+servicePeriodFrom3	character varying,
+servicePeriodTo3 character varying,
+organisationName4 character varying,
+designation4 character varying,
+natureOfDuty4 character varying,
+servicePeriodFrom4 character varying,
+servicePeriodTo4 character varying,
+organisationName5 character varying,
+designation5 character varying,
+natureOfDuty5 character varying,
+servicePeriodFrom5 character varying,
+servicePeriodTo5 character varying,
+organisationName6 character varying,
+designation6 character varying,
+natureOfDuty6 character varying,
+servicePeriodFrom6 character varying,
+servicePeriodTo6 character varying,
+organisationName7 character varying,
+designation7 character varying,
+natureOfDuty7	character varying,
+servicePeriodFrom7 character varying,
+servicePeriodTo7 character varying,
+organisationName8 character varying,
+designation8 character varying,
+natureOfDuty8 character varying,
+servicePeriodFrom8 character varying,
+servicePeriodTo8 character varying,
+organisationName9 character varying,
+designation9 character varying,
+natureOfDuty9 character varying,
+servicePeriodFrom9 character varying,
+servicePeriodTo9 character varying,
+organisationName10 character varying,
+designation10 character varying,
+natureOfDuty10 character varying,
+servicePeriodFrom10 character varying,
+servicePeriodTo10 character varying,
+organisationName11 character varying,
+designation11 character varying,
+natureOfDuty11 character varying,
+servicePeriodFrom11 character varying,
+servicePeriodTo11 character varying,
+organisationName12 character varying,
+designation12 character varying,
+natureOfDuty12 character varying,
+servicePeriodFrom12 character varying,
+servicePeriodTo12 character varying,
+organisationName13	character varying,
+designation13 character varying,
+natureOfDuty13 character varying,
+servicePeriodFrom13 character varying,
+servicePeriodTo13 character varying,
+organisationName14 character varying,
+designation14 character varying,
+natureOfDuty14 character varying,
+servicePeriodFrom14 character varying,
+servicePeriodTo14 character varying,
+organisationName15 character varying,
+designation15 character varying,
+natureOfDuty15 character varying,
+servicePeriodFrom15 character varying,
+servicePeriodTo15 character varying,
+organisationName16 character varying,
+designation16 character varying,
+natureOfDuty16 character varying,
+servicePeriodFrom16 character varying,
+servicePeriodTo16 character varying,
+organisationName17 character varying,
+designation17 character varying,
+natureOfDuty17 character varying,
+servicePeriodFrom17 character varying,
+servicePeriodTo17 character varying,
+organisationName18 character varying,
+designation18 character varying,
+natureOfDuty18 character varying,
+servicePeriodFrom18 character varying,
+servicePeriodTo18 character varying,
+organisationName19 character varying,
+designation19 character varying,
+natureOfDuty19 character varying,
+servicePeriodFrom19 character varying,
+servicePeriodTo19 character varying,
+organisationName20 character varying,
+designation20 character varying,
+natureOfDuty20 character varying,
+servicePeriodFrom20 character varying,
+servicePeriodTo20 character varying,
+organisationName21 character varying,
+designation21 character varying,
+natureOfDuty21 character varying,
+servicePeriodFrom21 character varying,
+servicePeriodTo21 character varying,
+organisationName22 character varying,
+designation22 character varying,
+natureOfDuty22 character varying,
+servicePeriodFrom22	character varying,
+servicePeriodTo22 character varying,
+organisationName23 character varying,
+designation23 character varying,
+natureOfDuty23 character varying,
+servicePeriodFrom23 character varying,
+servicePeriodTo23 character varying,
+organisationName24	character varying,
+designation24 character varying,
+natureOfDuty24 character varying,
+servicePeriodFrom24 character varying,
+servicePeriodTo24 character varying,
+organisationName25 character varying,
+designation25 character varying,
+natureOfDuty25 character varying,
+servicePeriodFrom25 character varying,
+servicePeriodTo25 character varying,
+organisationName26 character varying,
+designation26 character varying,
+natureOfDuty26	character varying,
+servicePeriodFrom26	character varying,
+servicePeriodTo26 character varying,
+organisationName27 character varying,
+designation27 character varying,
+natureOfDuty27 character varying,
+servicePeriodFrom27 character varying,
+servicePeriodTo27 character varying,
+organisationName28 character varying,
+designation28	character varying,
+natureOfDuty28 character varying,
+servicePeriodFrom28	character varying,
+servicePeriodTo28 character varying,
+organisationName29 character varying,
+designation29 character varying,
+natureOfDuty29 character varying,
+servicePeriodFrom29 character varying,
+servicePeriodTo29 character varying,
+organisationName30 character varying,
+designation30 character varying,
+natureOfDuty30 character varying,
+servicePeriodFrom30 character varying,
+servicePeriodTo30 character varying,
+organisationName31 character varying,
+designation31 character varying,
+natureOfDuty31 character varying,
+servicePeriodFrom31 character varying,
+servicePeriodTo31	character varying,
+organisationName32 character varying,
+designation32	character varying,
+natureOfDuty32 character varying,
+servicePeriodFrom32 character varying,
+servicePeriodTo32 character varying,
+organisationName33	character varying,
+designation33	character varying,
+natureOfDuty33 character varying,
+servicePeriodFrom33 character varying,
+servicePeriodTo33 character varying,
+organisationName34 character varying,
+designation34 character varying,
+natureOfDuty34 character varying,
+servicePeriodFrom34 character varying,
+servicePeriodTo34 character varying,
+organisationName35 character varying,
+designation35 character varying,
+natureOfDuty35	character varying,
+servicePeriodFrom35 character varying,
+servicePeriodTo35 character varying,
+organisationName36 character varying,
+designation36 character varying,
+natureOfDuty36 character varying,
+servicePeriodFrom36 character varying,
+servicePeriodTo36 character varying,
+organisationName37	character varying,
+designation37 character varying,
+natureOfDuty37 character varying,
+servicePeriodFrom37	character varying,
+servicePeriodTo37 character varying,
+organisationName38 character varying,
+designation38 character varying,
+natureOfDuty38 character varying,
+servicePeriodFrom38	character varying,
+servicePeriodTo38	character varying,
+organisationName39	character varying,
+designation39 character varying,
+natureOfDuty39 character varying,
+servicePeriodFrom39 character varying,
+servicePeriodTo39 character varying,
+organisationName40 character varying,
+designation40	character varying,
+natureOfDuty40	character varying,
+servicePeriodFrom40	character varying,
+servicePeriodTo40	character varying,
+organisationName41 character varying,
+designation41	character varying,
+natureOfDuty41 character varying,
+servicePeriodFrom41 character varying,
+servicePeriodTo41 character varying,
+organisationName42	character varying,
+designation42 character varying,
+natureOfDuty42 character varying,
+servicePeriodFrom42 character varying,
+servicePeriodTo42 character varying,
+organisationName43 character varying,
+designation43	character varying,
+natureOfDuty43 character varying,
+servicePeriodFrom43 character varying,
+servicePeriodTo43 character varying,
+organisationName44	character varying,
+designation44 character varying,
+natureOfDuty44	character varying,
+servicePeriodFrom44	 character varying,
+servicePeriodTo44 character varying,
+organisationName45	character varying,
+designation45	character varying,
+natureOfDuty45 character varying,
+servicePeriodFrom45 character varying,
+servicePeriodTo45 character varying,
+organisationName46	character varying,
+designation46	character varying,
+natureOfDuty46	character varying,
+servicePeriodFrom46	character varying,
+servicePeriodTo46 character varying,
+organisationName47 character varying,
+designation47 character varying,
+natureOfDuty47 character varying,
+servicePeriodFrom47 character varying,
+servicePeriodTo47 character varying,
+organisationName48	character varying,
+designation48 character varying,
+natureOfDuty48 character varying,
+servicePeriodFrom48 character varying,
+servicePeriodTo48 character varying,
+presentAddress character varying,
+presentDistrict character varying,
+presentState character varying,
+presentPincode	character varying,
+permanentAddress character varying,
+permanentDistrict character varying,
+permanentState character varying,
+permanentPincode character varying,
+contactDetailForOtherNationals character varying,
+phoneNo	character varying,
+emailId	 character varying,
+status character varying,
+isExempted character varying,
+form_completion_date character varying,
+form_completion_time character varying,
+numberOfAttempts character varying,
+ipAddress character varying
+
+)
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2024_xii_allocation
+ SET CLIENT_ENCODING TO 'UTF-8';
+ 
+alloc_selectionpost2024_xii_allocation=#  \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_SR.csv' csv header;
+COPY 332792
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_NWR.csv' csv header;
+COPY 150282
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_NER.csv' csv header;
+COPY 36503
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_MPR.csv' csv header;
+COPY 241232
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_KKR.csv' csv header;
+COPY 144517
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_ER.csv' csv header;
+COPY 535594
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_NR.csv' csv header;
+COPY 974398 
+alloc_selectionpost2024_xii_allocation=# \COPY candidates from 'C:\Users\SalauddinKhan\Downloads\rhq_CR.csv' csv header;
+COPY 827874
+
+
+select distinct status,count(*) from candidates group by status;
+"APPLICATION COMPLETED (CONTENTS NOT VERIFIED)"	3371589
+"APPLICATION SUBMITTED (PAYMENT PENDING)"		75742
+
+
+select genderid,count(*) from candidates group by genderid;
+1	1353694
+2	2093620
+3	17
+
+select categoryid,count(*) from candidates group by categoryid;
+0	257978
+1	1072370
+2	323646
+6	1143330
+9	650004
+null	3    "10000025306"
+			 "10000023689"
+             "10000012755"
+			 
+select distinct isesm,count(*) from candidates group by isesm;
+"f"	3430178
+"t"	17144
+	9		"10002114048"
+			"10006504050"
+			"10006826033"
+			"10001294695"
+			"10001760283"
+			"10005925063"
+			"10008076218"
+			"10005809930"
+			"10006578865"
+			 
+alter table candidates add column cat1 character varying;
+alter table candidates add column cat2 character varying;
+alter table candidates add column cat3 character varying;
+
+update candidates
+set cat1=categoryid;---3447331
+
+update candidates
+set cat2= case when isesm='t' then '3' else null end;
+
+select distinct cat2,count(*) from candidates group by cat2;
+"3"	17144
+	3430187
+	
+select distinct pwbdcode,count(*) from candidates group by pwbdcode;
+"4"	38156
+"5"	6715
+"7"	10953
+"8"	3613
+	3387894
+
+update candidates
+set cat3=pwbdcode;	
+
+select distinct cat3,count(*) from candidates group by cat3;
+"4"	38156
+"5"	6715
+"7"	10953
+"8"	3613
+	3387894
+	
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+
+UPDATE candidates
+SET exsm_length = LEFT(lengthofservice, 2)
+where cat2='3';---17144
+
+update candidates
+set exs_reservation='Yes' where cat2='3';
+
+select distinct isesm,iscivilpost,count(*) from candidates group by isesm,iscivilpost;
+"f"	"f"	70
+"f"		3430108
+"t"	"f"	16765
+"t"	"t"	379
+		9
+
+update candidates
+set exs_reservation='No' where cat2='3' and iscivilpost='t';---379
+
+select distinct agerelaxationcode,count(*) from candidates where status='APPLICATION COMPLETED (CONTENTS NOT VERIFIED)' group by agerelaxationcode;
+"1"		468119
+"10"	14750
+"11"	11472
+"12"	3931
+"13"	889
+"2"		228923
+"3"		9375
+"4"		11536
+"5"		4415
+"6"		16457
+"8"		31
+"9"		8
+		2601683
+		
+alter table candidates add constraint pk_pkey primary key (reg_no,post_code);
+	
+
+select * from candidates where post_code is null limit 10;----"10005658872","10006283233"
+
+do
+$$
+begin
+
+update candidates
+set post_code='CR12224' where reg_no='10005658872' and post_name='LAB. ASSISTANT (CHEMICAL) GRADE III';---cr region
+
+update candidates
+set post_code='WR10224' where reg_no='10006283233' and post_name='MEDICAL ATTENDANT (MULTI-TASKING STAFF)';----wr region
+
+end
+$$	
+
+
+select count(*) from candidates where left(ageasondob,2)>='25' and agerelaxationcode is null and cat1 in ('1','2','6');----281889
+
+---------ARC CODE UPDATES-------------------------------------------------------------------------
+
+alter table candidates add column agerelax_code character varying;
+
+update candidates
+set agerelax_code = agerelaxationcode;
+
+update candidates
+set agerelax_code = '6'
+where cat2='3' and left(ageasondob,2)>='25' and agerelaxationcode is null;---81 updates
+
+select count(*) from  candidates where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('1','2') and agerelaxationcode is null;---854
+
+update candidates
+set agerelax_code = '5'
+where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('1','2') and agerelaxationcode is null;
+
+select count(*) from  candidates where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('6') and agerelax_code is null;---2586
+
+update candidates
+set agerelax_code = '4'
+where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('6') and agerelax_code is null;
+
+select count(*) from  candidates where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('0','9') and agerelax_code is null;---2155
+
+update candidates
+set agerelax_code = '3'
+where cat2 is null and left(ageasondob,2)>='25' and cat3 in ('4','5','7','8') and cat1 in ('0','9') and agerelax_code is null;
+
+select * from  candidates where cat2 is null and left(ageasondob,2)>='25' and cat3 is null and cat1 in ('1','2') and agerelax_code is null;----141301
+
+update candidates
+set agerelax_code = '1'
+where cat2 is null and left(ageasondob,2)>='25' and cat3 is null and cat1 in ('1','2') and agerelax_code is null;
+
+
+select * from  candidates where cat2 is null and left(ageasondob,2)>='25' and cat3 is null and cat1 in ('6') and agerelax_code is null;----137115
+
+update candidates
+set agerelax_code = '2'
+where cat2 is null and left(ageasondob,2)>='25' and cat3 is null and cat1 in ('6') and agerelax_code is null;
+
+
+create table TCS_MARKS
+(
+DriveID character varying,
+ExamID	character varying,
+ParticipantID character varying,
+Name character varying,
+ParticipantType character varying,
+TestCenterCode character varying,
+TestCenterName character varying,
+LanName character varying,
+City character varying,
+State	character varying,
+Country character varying,
+Subject character varying,
+QuestionPaperName character varying,
+TotalQuestions character varying,
+QuestionsNotVisited character varying,
+QuestionsNotAttempted character varying,
+QuestionsAttempted character varying,
+QuestionsAttemptedandMarkedForReview character varying,
+QuestionsNotAttemptedandMarkedForReview character varying,
+TotalAttempted character varying,
+TotalCorrect character varying,
+TotalWrong character varying,
+"DelayedDuration(sec)" character varying,
+SubmitTime	character varying,
+English_Language numeric,
+Quantitative_Aptitude numeric,
+General_Awareness	numeric,
+General_Intelligence numeric,
+Score numeric,
+FirstLoginTime	character varying,
+ProfileConfirmTime character varying,
+RingtheBellTime character varying,
+DefaultLanguage character varying,
+MaximumMarks numeric,
+Normalized_Score numeric,
+Date_Shift character varying,
+SystemName character varying
+)
+------------------------------MARKS DATA---------------------------------------------
+
+alter table TCS_MARKS add constraint pk_participant primary key (participantid);
+
+graduation level---->204895
+higher seconadry level--->187179
+matriculation level--->218373
+
+select count(1) from tcs_marks;----610447
+
+select count(1) from candidates;----3371589
+
+select count(1) from unverified_data;----3312589
+
+
+create table debarred
+(
+	Region character varying,
+	RegistrationNumber character varying,
+	rollnumber character varying,
+	Name character varying,
+	father_name character varying,
+	mother_name character varying,
+	DOB character varying,
+	gender character varying,
+	category character varying,
+	ExaminationName character varying,
+	ExaminationYear character varying,
+	debarfrom character varying,
+	debarupto character varying,
+	debar_res character varying
+
+)
+---debarred data pertaining to KKR region is PENDING
+
+-----Unverified Data-----
+create table unverified_data
+(
+	regid character varying,
+	rollno character varying,
+	name character varying,
+	level_of_exam character varying,
+	post_code character varying,
+	exam_date character varying,
+	exam_shift character varying,
+	tc_code character varying,
+	c_code character varying,
+	region character varying
+)
+
+alter table unverified_data add constraint pk_sel12 primary key (regid,post_code);
+
+REGID		ROLL		NAME		LEVEL_EXAM	POST_CATE	EXAM_DATE	EXAM_SHIFT	TCS_VENUE	C_CODE	REGION
+10000099286	5422113889	AMIT CHAUHAN	H	    NR10124	    2024-06-25	S			38811				NR
+10000099286	5422113889	AMIT CHAUHAN	H	    NR10524	    2024-06-25	S			38811				NR
+10000099286	5423112300	AMIT CHAUHAN	G	    NR12724	    2024-06-25	S			38811				NR
+10000099286	5422113889	AMIT CHAUHAN	H	    NW12024	    2024-06-25	S			38811				NR
+10000099286	5422115217	AMIT CHAUHAN	H	    NR10124	    2024-06-25	S2			38811				NR
+10000099286	5422115217	AMIT CHAUHAN	H	    NR10524	    2024-06-25	S2			38811				NR
+10000099286	5423113446	AMIT CHAUHAN	G	    NR12724	    2024-06-25	S3			38811				NR
+10000099286	5422115217	AMIT CHAUHAN	H	    NW12024	    2024-06-25	S2			38811				NR
+
+alter table unverified_data drop constraint pk_sel12;
+
+---there were 8666 records in NR unvd where exam shift was 'S';
+
+NR---938195
+CR---785735
+WR---197301
+SR---107589 INCLUDING MULTIPLE POSTCODES IN A SINGLE RECORD
+MPR---231935
+ER---519067
+NER---32438
+NWR--142767
+KKR---47051 INCLUDING MULTIPLE POSTCODES IN A SINGLE RECORD
+
+
+select count(*) from unverified_data ;----3312589
+
+Matriculation (10th)
+Higher Secondary (10+2)
+Graduation & Above
+
+
+--027---M---9c0xtes60eps027
+
+028--H---9c0xtes60eps028
+
+029---G ---9c0xtes60eps029
+
+---convert vacancy in proper format----
+SELECT
+    REGION,
+    POST_code,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'SC' AS category,
+    SC AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'ST' AS category,
+    ST AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'OBC' AS category,
+    OBC AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'UR' AS category,
+    UR AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'EWS' AS category,
+    EWS AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'TOTAL' AS category,
+    TOTAL AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'ESM' AS category,
+    ESM AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'OH' AS category,
+    OH AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'HH' AS category,
+    HH AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'VH' AS category,
+    VH AS original_vacancy
+FROM vacancy_raw
+UNION ALL
+SELECT
+    REGION,
+    POST_CODE,
+    POST_NAME,
+    DEPARTMENT,
+    AGE,
+    PAY_SCALE,
+    EQ_LEVEL,
+    GENDER,
+    'OTHERS' AS category,
+    OTHERS AS original_vacancy
+FROM vacancy_raw;
+
+------------------------Male/Female specific posts-------------------------------
+
+update vacancy_table
+set gender='1' where post_code in ('NW10224','NW12324','NR20424','NR23824','CR11924','CR14524','CR15424','ER10124','ER12624','MP10624','WR10124','WR13224','WR13424','WR14924','SR12524','KK10124');
+
+select reg_no from candidates where gender='2' and post_code in ('NW10224','NW12324','NR20424','NR23824','CR11924','CR14524','CR15424','ER10124','ER12624','MP10624','WR10124','WR13224','WR13424','WR14924','SR12524','KK10124');---no male has applied for them
+
+update vacancy_table
+set gender='2' where post_code in ('ER10224','KK12524');
+
+select reg_no from candidates where gender='1' and post_code in ('ER10224','KK12524');---no female has applied for them
+
+ 
+----cancelled posts ----
+
+'NW12424','CR14724','KK10424','MP10224','WR14424','NR13124','NR13524','NR15624','NR15824','NR20024','NR20224','NR22224','NR28924','NR29024','NR29124','NR29224','NR29324','NR29424','NR29524'
+
+
+
+update vacancy_table
+set initial_vacancy =original_vacancy * 30
+where original_vacancy <=4;---4961 updates
+
+update vacancy_table
+set initial_vacancy = 150
+where original_vacancy >=5;--209 updates
+
+update vacancy_table
+set initial_vacancy = orignal_vacancy * 15
+where original_vacancy >10;----82 updates
+
+update vacancy_table
+set initial_vacancy = original_vacancy * 15
+where original_vacancy >10;----68 updates
+
+update vacancy_table
+set initial_vacancy=999
+where category_name in ('ESM','HH','VH','OH','OTHERS');
+
+update vacancy_table
+set category_code='0' where category_name='EWS';
+
+update vacancy_table
+set category_code='1' where category_name='SC';
+
+update vacancy_table
+set category_code='2' where category_name='ST';
+
+update vacancy_table
+set category_code='3' where category_name='ESM';
+
+update vacancy_table
+set category_code='4' where category_name='OH';
+
+update vacancy_table
+set category_code='5' where category_name='HH';
+
+update vacancy_table
+set category_code='6' where category_name='OBC';
+
+update vacancy_table
+set category_code='7' where category_name='VH';
+
+update vacancy_table
+set category_code='8' where category_name='OTHERS';
+
+update vacancy_table
+set category_code='9' where category_name='UR';
+
+
+CREATE TABLE IF NOT EXISTS public.vacancy_table
+(
+	slno integer,
+    region character varying COLLATE pg_catalog."default",
+    post_code character varying COLLATE pg_catalog."default",
+    post_name character varying COLLATE pg_catalog."default",
+    department character varying COLLATE pg_catalog."default",
+    age character varying COLLATE pg_catalog."default",
+    pay_scale character varying COLLATE pg_catalog."default",
+    eq_level character varying COLLATE pg_catalog."default",
+    gender character varying COLLATE pg_catalog."default",
+    category_name text COLLATE pg_catalog."default",
+	category_code character varying,
+    original_vacancy integer,
+    initial_vacancy integer
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.vacancy_table
+    OWNER to postgres;
+	
+	
+select * into not_in_format_kkr_sr from 
+(SELECT
+    REGID,
+    ROLLno,
+    NAME,
+    level_of_exam,
+    unnest(string_to_array(POST_code, ',')) AS POSTCODES,
+    EXAM_DATE,
+    EXAM_SHIFT,
+    tc_code,
+   c_code,
+    region
+FROM
+    not_in_format)
+	
+update vacancy_raw
+set post_code =trim(post_code);
+
+update not_in_format_kkr_sr
+set postcodes=trim(postcodes);	
+	
+update 	not_in_format_kkr_sr a
+set a.level_of_exam = b.eq_level
+from vacancy_raw b where a.postcodes=b.post_code;-----425388 updates
+
+
+"WR14424"
+"NR29524"
+"NR29224"
+"CR14724"
+"NR13124"
+"MP10224"
+"NR20224"
+"NR13524"
+"NR29024"
+"NR15824"
+"NR20024"
+"NR28924"
+"NR29424"
+"NR15624"
+"KK10424"
+"NW12424"
+"NR29324"
+"NR22224"
+"NR29124"
+
+update not_in_format_kkr_sr
+set 
+level_of_exam ='GRADUATION & ABOVE' where level_of_exam is null and postcodes in ('NW12424','CR14724','KK10424','MP10224','WR14424','NR20224','NR22224','NR29424','NR29524');---30030 updates
+
+
+update not_in_format_kkr_sr
+set 
+level_of_exam ='HIGHER SECONDARY (10+2)' where level_of_exam is null and postcodes in ('NR13124','NR15824','NR20024','NR29024','NR29324');---5343 updates
+
+
+update not_in_format_kkr_sr
+set 
+level_of_exam ='MATRICULATION' where level_of_exam is null and postcodes in ('NR13524','NR15624','NR28924','NR29124','NR29224');---4390 updates
+
+select distinct postcodes from not_in_format_kkr_sr where level_of_exam is null;--- 0
+
+update unverified_data
+set post_code=trim(post_code);
+
+update 	unverified_data a
+set a.level_of_exam = b.eq_level
+from vacancy_raw b where a.post_code=b.post_code
+and a.region='NER';-----30623 updates
+
+update unverified_data
+set 
+level_of_exam ='GRADUATION & ABOVE' where level_of_exam is null and post_code in ('NW12424','CR14724','KK10424','MP10224','WR14424','NR20224','NR22224','NR29424','NR29524');---1184 updates
+
+
+update unverified_data
+set 
+level_of_exam ='HIGHER SECONDARY (10+2)' where level_of_exam is null and post_code in ('NR13124','NR15824','NR20024','NR29024','NR29324');---352 updates
+
+
+update unverified_data
+set 
+level_of_exam ='MATRICULATION' where level_of_exam is null and post_code in ('NR13524','NR15624','NR28924','NR29124','NR29224');---279 updates
+
+select * from unverified_data where level_of_exam is null;---0
+
+
+"G"							510281
+"Graduation & Above"		107699
+"GRADUATION & ABOVE"		172929
+"H"							561274
+"Higher Secondary (10+2)"	115926
+"HIGHER SECONDARY (10+2)"	149464
+"M"							617642
+"MATRICULATION"				175196
+"Matriculation (10th)"		116443
+
+update unverified_data
+set level_of_exam='GRADUATION & ABOVE' where
+level_of_exam in ('G','Graduation & Above');---617980 UPDATES
+
+update unverified_data
+set level_of_exam='HIGHER SECONDARY (10+2)' where
+level_of_exam in ('H','Higher Secondary (10+2)');---677200 UPDATES
+
+update unverified_data
+set level_of_exam='MATRICULATION' where
+level_of_exam in ('M','Matriculation (10th)');----734085 UPDATES
+
+select distinct level_of_exam,count(*) from unverified_data group by level_of_exam;
+"GRADUATION & ABOVE"		790909
+"HIGHER SECONDARY (10+2)"	826664
+"MATRICULATION"				909281
+
+
+alter table tcs_marks add column eq character varying;
+
+select distinct subject,count(*) from tcs_marks group by subject;
+
+"Selection Post Graduate level"				204440
+"Selection Post Graduate level VH"			455
+"Selection Post Higher Secondary level"		186590
+"Selection Post Higher Secondary level VH"	589
+"Selection Post Matriculation level"		217562
+"Selection Post Matriculation level VH"		811
+
+update tcs_marks
+set eq='GRADUATION & ABOVE' where subject in ('Selection Post Graduate level','Selection Post Graduate level VH');---204895
+
+update tcs_marks
+set eq='HIGHER SECONDARY (10+2)' where subject in ('Selection Post Higher Secondary level','Selection Post Higher Secondary level VH');---187179
+
+update tcs_marks
+set eq='MATRICULATION' where subject in ('Selection Post Matriculation level','Selection Post Matriculation level VH');---218373
+
+
+
+-----------DEBARRED CHECKING-----------------
+
+Select regno,name,ds_name,father_name,ds_father_name,mother_name,ds_mother_name,dob,ds_dob,gender,cat1
+from candidates,debarred_total where 
+replace ((UPPER(ds_name)||UPPER(ds_father_name)||UPPER(ds_mother_name)),' ','') = replace ((UPPER(name)||UPPER(father_name)||UPPER(mother_name)),' ','');
+
+replace ((UPPER(ds_name)||UPPER(ds_mother_name)),' ','') = replace ((UPPER(name)||UPPER(mother_name)),' ','') and dob::character varying = ds_dob;
+
+replace ((UPPER(ds_name)||UPPER(ds_father_name)),' ','') = replace ((UPPER(name)||UPPER(father_name)),' ','') and dob::character varying = ds_dob;	
+
+alter table candidates add column debarred character varying;
+
+'10007996203','10000940035','10001171482','10001351350','10000169590','10006132127','10005684790','10008590451','10006487778','10008558625','10008298381','10005954377','10005869219','10000927895','10002164310','10006691027','10000988736','10006723254','10006417778','10006231587','10006719808','10000949934','10000800797','10000070482','10008131599','10008303330','10008602801','10001791619','10001079685','10006617610','10002097852','10008076008','10006663144','10005901984','10001222189','10005765470','10005895103','10000706634','10001810993','10005498830','10006599047','10008083687','10006812435','10005870001','10006639306','10006135176','10005912447','10005946525','10005769932','10006508841','10008127652','10006583950','10002101836','10005685735','10008227219','10000146881','10000996109','10001117260','10001260727','10005719803','10001799662','10005678119','10008108895','10008501134','10005799805','10001089748','10001755803','10006676690','10005471263','10005912391','10000816746','10001825803','10006607734','10005630469','10005661434','10001291586','10001831812','10006700073','10001714536','10005788504','10000150934','10006693412','10001224489','10008305616','10001066235','10002141803','10005942698','10002172891','10002169889','10008128435','10000797328','10000006067','10006894635','10001646317','10006134343','10006576410','10008513081','10006564305','10000031710','10006438549','10001062271','10000982672','10000901665','10000997691','10008486936','10008233192','10000917186','10008126996','10008298753','10008398511','10000068205','10008332160','10006731414','10008080744','10002076276','10006780631','10006640459','10000780026','10000855124','10008130476','10005857523','10000158576','10008038959','10000109837','10005806613','10006529701','10005725590','10006730939','10005471400','10005750635','10001203224','10001585125','10008552321','10008484787','10001721300','10000698503','10006114009','10006787176','10008582253','10001219228','10008212527','10008307778','10008530986','10001595440','10001154385','10006544104','10008079887','10007531071','10001804507','10005797204','10005784646','10005755783','10008303088','10006689791','10000011602','10000101521','10006641119','10001053004','10008159045','10008635672','10000853635','10008347637','10008289856','10001339319','10005699982','10008063358','10005641797','10001105926','10006523242','10000843291','10008585122','10000089191','10008553655','10005603323','10000698988','10005862223','10005926960','10000191803','10006891221','10005706128','10000043687','10005806526','10001515611','10008220805','10008001064','10006458284','10001281190','10000756949','10005691963','10008030905','10008088377','10000716079','10005918358','10002057131','10005804897','10006625189','10005928663','10001655712','10000732805','10001641977','10000919937','10006476689','10006588187','10008036297','10001755038','10008461618','10000951264','10000773078','10006722870','10005792738','10006608321','10001724336','10006657230','10005866139','10008072665','10000702186','10001324536','10001177589','10008008673','10005847957','10008011737','10008245192','10006231156','10006570251','10005837003','10001029917','10008458568','10006723787','10006157707','10008090302','10006810122','10001807280','10005957695','10006582957','10006556631','10008643428','10005695876','10000049930','10005682985','10008152703','10000723892','10008488217','10005936106','10001821189','10000737508','10000850407','10006505975','10008300081','10006550008','10008054841','10005466492','10000704328','10005697707','10006506217','10006255849','10001496287','10008384060','10006573949','10000020805','10000893881','10006328219','10006363692','10000760590','10001035316','10006585366','10000875689','10005926981','10006108501','10008180264','10008627935','10005922428','10001114541','10005858034','10008602372','10005784135','10006487781','10006470159','10001470873','10008088678','10005756388','10005770807','10001115524','10001774572','10008455357','10000090180','10008416325','10000842196','10000056358','10008447708','10006609429','10006536503','10005714946','10006509689','10006461618','10005897049','10005958495','10006655560','10006794798','10008386140','10000000285','10001280255','10000054444','10002052868','10005803068','10005845858','10002079904','10005740966','10006485640','10001617756','10001766792','10006594739','10001243363','10008187102','10005904451','10005928835','10008588176','10001112867','10008070678','10008324744','10001218591','10006499810','10008585784','10005731657','10001295872','10000859940','10001818380','10006667413','10006583585','10002108876','10005891894','10002108529','10000169123','10000925419','10008572118','10005847074','10000113282','10005694354','10000995799','10001292299','10001660340','10001618028','10006785892','10005703039','10005781967','10008112475','10001124458','10005755620','10001607636','10008400545','10001114622','10006711636','10001221481','10002127559','10001168589','10005635089','10002045644','10000037220','10000090996','10008452990','10000141117','10008453010','10006793175','10001201245','10005692646','10008486607','10005640783','10008134843','10000125334','10008556479','10000055666','10005727766','10000707135','10005812749','10002067291','10007998836','10006101718','10006608852','10001208123','10001044638','10006658409','10007986564','10006536986','10000999301','10005920043','10006653828','10000057299','10001115375','10008231806','10008495399','10001226562','10005899431','10001361959','10001791240','10005917612','10005494939','10001136396','10001356159','10001456478','10001064116','10005667599','10008551116','10008515064','10001321468','10000671913','10001187872','10008554000','10006705039','10006486304','10001623006','10000084240','10001820506','10001626861','10006729527','10005684878','10002099791','10000668289','10005866502','10001134410','10006514345','10006565887','10001786243','10001344244','10000958293','10006651536','10006735697','10001612045','10008409146','10006467805','10006486032','10008510750','10008576002','10005778827','10005956105','10006125595','10007530584','10001787729','10001208090','10000027477','10000013066','10006416339','10007998572','10008130851','10005694175','10008586592','10000854008','10005741281','10000847965','10008598640','10008294098','10005843231','10005785149','10008485922','10005638653','10006277235','10001347835','10005861209','10008518261','10001349905','10007521189','10006532813','10008631833','10006589477','10007517680','10006782762','10001131333','10000922467','10001735606','10000073197','10005730680','10005913279','10005675717','10002102400','10000923971','10005851844','10001679510','10008481572','10006505917','10005662088','10001151188','10008191549','10000858960','10000033816','10008123699','10005754435','10000875367','10006656649','10008023188','10006647616','10006104967','10008445148','10002113879','10001766034','10001359775','10005920856','10001350704','10006699995','10008119797','10006585204','10000905494','10006438565','10001051667','10000171942','10008475964','10000828123','10006472004','10006588588','10001800233','10008293441','10001019880','10006682774','10001662471','10008379835','10000747709','10002176690','10006617586','10001771377','10006829494','10002055259','10000820549','10006657374','10001166393','10005753754','10006562265','10006599511','10002151637','10001106252','10002109917','10006693248','10001312600','10000997771','10005825349','10001276908','10008088667','10005692434','10008326846','10001676545','10006616632','10001161203','10006550729','10006274139','10000049459','10005923280','10006728627','10002058625','10000841474','10008071569','10006641223','10008186702','10001766894','10001211359','10008579341','10008010706','10001230010','10002090088','10005656888','10005782066','10000789530','10005802630','10006290823','10001203590','10008554910','10006544312','10001064319','10006561659','10006682944','10001592724','10006539797','10008489064','10005926276','10006680511','10002035514','10005842316','10005765713','10002092260','10006709578','10006651810','10000731130','10000963787','10006695258','10008310243','10000957071','10008170304','10001313129','10000996555','10006529895','10006519102','10006535309','10006265438','10000929595','10000100371','10001025227','10008377773','10001835955','10008180539','10001786906','10001294834','10005877733','10008577442','10000929647','10000824508','10000105977','10006734398','10008642070','10000832385','10006245161','10005742022','10000775441','10005960113','10001198635','10008445148','10002092260','10008183173'
+
+update candidates
+set debarred='Yes'
+where  reg_no in ('10007996203','10000940035','10001171482','10001351350','10000169590','10006132127','10005684790','10008590451','10006487778','10008558625','10008298381','10005954377','10005869219','10000927895','10002164310','10006691027','10000988736','10006723254','10006417778','10006231587','10006719808','10000949934','10000800797','10000070482','10008131599','10008303330','10008602801','10001791619','10001079685','10006617610','10002097852','10008076008','10006663144','10005901984','10001222189','10005765470','10005895103','10000706634','10001810993','10005498830','10006599047','10008083687','10006812435','10005870001','10006639306','10006135176','10005912447','10005946525','10005769932','10006508841','10008127652','10006583950','10002101836','10005685735','10008227219','10000146881','10000996109','10001117260','10001260727','10005719803','10001799662','10005678119','10008108895','10008501134','10005799805','10001089748','10001755803','10006676690','10005471263','10005912391','10000816746','10001825803','10006607734','10005630469','10005661434','10001291586','10001831812','10006700073','10001714536','10005788504','10000150934','10006693412','10001224489','10008305616','10001066235','10002141803','10005942698','10002172891','10002169889','10008128435','10000797328','10000006067','10006894635','10001646317','10006134343','10006576410','10008513081','10006564305','10000031710','10006438549','10001062271','10000982672','10000901665','10000997691','10008486936','10008233192','10000917186','10008126996','10008298753','10008398511','10000068205','10008332160','10006731414','10008080744','10002076276','10006780631','10006640459','10000780026','10000855124','10008130476','10005857523','10000158576','10008038959','10000109837','10005806613','10006529701','10005725590','10006730939','10005471400','10005750635','10001203224','10001585125','10008552321','10008484787','10001721300','10000698503','10006114009','10006787176','10008582253','10001219228','10008212527','10008307778','10008530986','10001595440','10001154385','10006544104','10008079887','10007531071','10001804507','10005797204','10005784646','10005755783','10008303088','10006689791','10000011602','10000101521','10006641119','10001053004','10008159045','10008635672','10000853635','10008347637','10008289856','10001339319','10005699982','10008063358','10005641797','10001105926','10006523242','10000843291','10008585122','10000089191','10008553655','10005603323','10000698988','10005862223','10005926960','10000191803','10006891221','10005706128','10000043687','10005806526','10001515611','10008220805','10008001064','10006458284','10001281190','10000756949','10005691963','10008030905','10008088377','10000716079','10005918358','10002057131','10005804897','10006625189','10005928663','10001655712','10000732805','10001641977','10000919937','10006476689','10006588187','10008036297','10001755038','10008461618','10000951264','10000773078','10006722870','10005792738','10006608321','10001724336','10006657230','10005866139','10008072665','10000702186','10001324536','10001177589','10008008673','10005847957','10008011737','10008245192','10006231156','10006570251','10005837003','10001029917','10008458568','10006723787','10006157707','10008090302','10006810122','10001807280','10005957695','10006582957','10006556631','10008643428','10005695876','10000049930','10005682985','10008152703','10000723892','10008488217','10005936106','10001821189','10000737508','10000850407','10006505975','10008300081','10006550008','10008054841','10005466492','10000704328','10005697707','10006506217','10006255849','10001496287','10008384060','10006573949','10000020805','10000893881','10006328219','10006363692','10000760590','10001035316','10006585366','10000875689','10005926981','10006108501','10008180264','10008627935','10005922428','10001114541','10005858034','10008602372','10005784135','10006487781','10006470159','10001470873','10008088678','10005756388','10005770807','10001115524','10001774572','10008455357','10000090180','10008416325','10000842196','10000056358','10008447708','10006609429','10006536503','10005714946','10006509689','10006461618','10005897049','10005958495','10006655560','10006794798','10008386140','10000000285','10001280255','10000054444','10002052868','10005803068','10005845858','10002079904','10005740966','10006485640','10001617756','10001766792','10006594739','10001243363','10008187102','10005904451','10005928835','10008588176','10001112867','10008070678','10008324744','10001218591','10006499810','10008585784','10005731657','10001295872','10000859940','10001818380','10006667413','10006583585','10002108876','10005891894','10002108529','10000169123','10000925419','10008572118','10005847074','10000113282','10005694354','10000995799','10001292299','10001660340','10001618028','10006785892','10005703039','10005781967','10008112475','10001124458','10005755620','10001607636','10008400545','10001114622','10006711636','10001221481','10002127559','10001168589','10005635089','10002045644','10000037220','10000090996','10008452990','10000141117','10008453010','10006793175','10001201245','10005692646','10008486607','10005640783','10008134843','10000125334','10008556479','10000055666','10005727766','10000707135','10005812749','10002067291','10007998836','10006101718','10006608852','10001208123','10001044638','10006658409','10007986564','10006536986','10000999301','10005920043','10006653828','10000057299','10001115375','10008231806','10008495399','10001226562','10005899431','10001361959','10001791240','10005917612','10005494939','10001136396','10001356159','10001456478','10001064116','10005667599','10008551116','10008515064','10001321468','10000671913','10001187872','10008554000','10006705039','10006486304','10001623006','10000084240','10001820506','10001626861','10006729527','10005684878','10002099791','10000668289','10005866502','10001134410','10006514345','10006565887','10001786243','10001344244','10000958293','10006651536','10006735697','10001612045','10008409146','10006467805','10006486032','10008510750','10008576002','10005778827','10005956105','10006125595','10007530584','10001787729','10001208090','10000027477','10000013066','10006416339','10007998572','10008130851','10005694175','10008586592','10000854008','10005741281','10000847965','10008598640','10008294098','10005843231','10005785149','10008485922','10005638653','10006277235','10001347835','10005861209','10008518261','10001349905','10007521189','10006532813','10008631833','10006589477','10007517680','10006782762','10001131333','10000922467','10001735606','10000073197','10005730680','10005913279','10005675717','10002102400','10000923971','10005851844','10001679510','10008481572','10006505917','10005662088','10001151188','10008191549','10000858960','10000033816','10008123699','10005754435','10000875367','10006656649','10008023188','10006647616','10006104967','10008445148','10002113879','10001766034','10001359775','10005920856','10001350704','10006699995','10008119797','10006585204','10000905494','10006438565','10001051667','10000171942','10008475964','10000828123','10006472004','10006588588','10001800233','10008293441','10001019880','10006682774','10001662471','10008379835','10000747709','10002176690','10006617586','10001771377','10006829494','10002055259','10000820549','10006657374','10001166393','10005753754','10006562265','10006599511','10002151637','10001106252','10002109917','10006693248','10001312600','10000997771','10005825349','10001276908','10008088667','10005692434','10008326846','10001676545','10006616632','10001161203','10006550729','10006274139','10000049459','10005923280','10006728627','10002058625','10000841474','10008071569','10006641223','10008186702','10001766894','10001211359','10008579341','10008010706','10001230010','10002090088','10005656888','10005782066','10000789530','10005802630','10006290823','10001203590','10008554910','10006544312','10001064319','10006561659','10006682944','10001592724','10006539797','10008489064','10005926276','10006680511','10002035514','10005842316','10005765713','10002092260','10006709578','10006651810','10000731130','10000963787','10006695258','10008310243','10000957071','10008170304','10001313129','10000996555','10006529895','10006519102','10006535309','10006265438','10000929595','10000100371','10001025227','10008377773','10001835955','10008180539','10001786906','10001294834','10005877733','10008577442','10000929647','10000824508','10000105977','10006734398','10008642070','10000832385','10006245161','10005742022','10000775441','10005960113','10001198635','10008445148','10002092260','10008183173');---2340 updates 
+
+update candidates
+set merit=null
+where debarred='Yes';----2340 updates 
+
+-----------------------UNVERIFIED DATA------------------------------------------------
+
+select level_of_exam,count(*) from unverified_data group by level_of_exam;
+"GRADUATION & ABOVE"		1014625
+"HIGHER SECONDARY (10+2)"	1049345
+"MATRICULATION"				1248619
+
+select count(*) from unverified_data ;----3312589
+
+---------------------------------------------------------------------------------------
+marks and roll numbers should be updated in the following manner:
+
+In the SCORE file, EQ and roll numbers are available. REGID should be updated from UNVD data on the basis of RKEY (EQ+ROLL). 
+Then a new KEY (EQ+REGID) should be generated for updating scores in the APP_DATA.
+
+In the APP_DATA, EQ, REGID and POST_CODE are available but roll numbers and scores are not available. Roll Number should be updated 
+from the UNVD data on the basis of PKEY (REGID+POST_CODE) and not on the basis of EQ+REGID. 
+This will ensure updating of correct roll numbers. If the roll numbers are updated on the basis of KEY (EQ+REGID), 
+incorrect roll numbers will get updated as seen from the above screenshots.
+Marks should be updated from the SCORE file on the basis of KEY (EQ+REGID) to ensure 
+that scores are correctly updated even if the candidate has applied from more than one regions and
+even if different roll numbers are assigned by different regionsfor the same candidate.
+
+Alter table unverified_data add column key1 character varying;----roll+eq
+Alter table unverified_data add column key2 character varying;---regno+eq
+
+
+update unverified_data
+set 
+key1 =rollno||level_of_exam;-----3312589 updates
+
+alter table tcs_marks add column key1 character varying;
+alter table tcs_marks add column regno character varying;
+alter table tcs_marks add column key2 character varying;
+
+select participantid,eq,participantid||eq as key1 from tcs_marks limit 10;
+
+update tcs_marks
+set key1=participantid||eq;----610447 UPDATES
+
+update tcs_marks
+set key1=trim(key1);---610447 updates
+
+
+select  participantid from tcs_marks
+where key1 not in (select distinct key1 from unverified_data);------there is no such candidate in tcs_marks file whose key(rollno+eq) is not present in unverified data
+
+update tcs_marks a
+set a.regno=b.regid
+from unverified_data b
+where a.key1=b.key1;----610447 updates
+
+select * from tcs_marks where regno is null limit 10;----0
+
+
+
+update tcs_marks
+set key2=regno||eq;----610447 UPDATES
+
+
+update unverified_data
+set 
+key2 =regid||post_code;
+
+
+alter table candidates add column rollno character varying;
+alter table candidates add column parta_gi double precision;
+alter table candidates add column partb_ga double precision;
+alter table candidates add column partc_qa double precision;
+alter table candidates add column partd_eng double precision;
+alter table candidates add column score double precision;
+alter table candidates add column total double precision;----normalized score
+
+update candidates
+set key1=reg_no||post_code;---3371589 updates
+
+------------roll number update in candidates from unverified_data-------------------
+update candidates a
+set a.rollno=b.rollno
+from unverified_data b
+where a.key1=b.key2;-----3312583
+
+
+
+----------------------------marks update in candidates from tcs_marks -----------------------------\
+update candidates
+set level_of_post='MATRICULATION' where level_of_post='Matriculation (10th)';----1272374
+
+update candidates
+set level_of_post='HIGHER SECONDARY (10+2)' where level_of_post='Higher Secondary (10+2)';---1069096
+
+update candidates
+set level_of_post='GRADUATION & ABOVE' where level_of_post='Graduation & Above';----1030119
+
+update candidates
+set key2=reg_no||level_of_post;---3371589
+
+update candidates
+set key2=trim(key2);----3371589
+
+update candidates a
+set a.parta_gi=b.general_intelligence,
+a.partb_ga=b.general_awareness,
+a.partc_qa=b.quantitative_aptitude,
+a.partd_eng=b.english_language,
+a.score=b.score,
+a.total=b.normalized_score
+from tcs_marks b
+where a.key2=b.key2;-------1931419 updates
+
+
+select rollno
+from unverified_data where key2 not in (select distinct key1 from candidates);
+
+update candidates set marks_available='Yes' where total is not null;---1931419 updates
+
+CREATE INDEX IF NOT EXISTS cand_reg_post_xii
+    ON public.candidates USING btree
+    (reg_no ASC NULLS LAST, post_code COLLATE pg_catalog."default" ASC NULLS LAST, level_of_post COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+CREATE INDEX IF NOT EXISTS marks_index_xii
+    ON public.candidates USING btree
+    (parta_gi ASC NULLS LAST, partb_ga ASC NULLS LAST, total ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+alter table candidates add column post_age_limit character varying;
+	
+update candidates a
+set a.post_age_limit=b.age
+from vacancy_table b
+where a.post_code=b.post_code;	
+
+-------------------------------DOB FLAGS ----------------------------------------------------------
+
+Alter table candidates add column dob_flag_18_25 character varying;
+Alter table candidates add column dob_flag_18_27 character varying;
+Alter table candidates add column dob_flag_18_28 character varying;
+Alter table candidates add column dob_flag_18_30 character varying;
+Alter table candidates add column dob_flag_18_35 character varying;
+Alter table candidates add column dob_flag_18_37 character varying;
+Alter table candidates add column dob_flag_18_42 character varying;
+Alter table candidates add column dob_flag_20_25 character varying;
+Alter table candidates add column dob_flag_21_25 character varying;
+Alter table candidates add column dob_flag_21_27 character varying;
+Alter table candidates add column dob_flag_21_28 character varying;
+Alter table candidates add column dob_flag_21_30 character varying;
+Alter table candidates add column dob_flag_25_30 character varying;
+
+
+Alter table candidates add column catsel_dob_18_25 character varying;
+Alter table candidates add column catsel_dob_18_27 character varying;
+Alter table candidates add column catsel_dob_18_28 character varying;
+Alter table candidates add column catsel_dob_18_30 character varying;
+Alter table candidates add column catsel_dob_18_35 character varying;
+Alter table candidates add column catsel_dob_18_37 character varying;
+Alter table candidates add column catsel_dob_18_42 character varying;
+Alter table candidates add column catsel_dob_20_25 character varying;
+Alter table candidates add column catsel_dob_21_25 character varying;
+Alter table candidates add column catsel_dob_21_27 character varying;
+Alter table candidates add column catsel_dob_21_28 character varying;
+Alter table candidates add column catsel_dob_21_30 character varying;
+Alter table candidates add column catsel_dob_25_30 character varying;
+
+Alter table candidates add column cutoffcatsel character varying;
+
+Alter table candidates add column catsel_18_25 character varying;
+Alter table candidates add column catsel_18_27 character varying;
+Alter table candidates add column catsel_18_28 character varying;
+Alter table candidates add column catsel_18_30 character varying;
+Alter table candidates add column catsel_18_35 character varying;
+Alter table candidates add column catsel_18_37 character varying;
+Alter table candidates add column catsel_18_42 character varying;
+Alter table candidates add column catsel_20_25 character varying;
+Alter table candidates add column catsel_21_25 character varying;
+Alter table candidates add column catsel_21_27 character varying;
+Alter table candidates add column catsel_21_28 character varying;
+Alter table candidates add column catsel_21_30 character varying;
+Alter table candidates add column catsel_25_30 character varying;
+
+alter table candidates add column merit integer;
+
+-----GROUP B POSTS:-------
+'NW10424','NW10824','NW10924','NW11124','NW11224','NW11324','NW11424','NW11624','NW11724','NW11824','NW12024','NW12124','NW12224','NW12624','NW12724','KK10224','KK10324','KK10524','NE10124','KK10624','KK10724','KK10824','NE10324','NE10424','NE10524','NE10624','KK10924','KK11424','SR10124','SR10524','NE10924','NE11024','SR10724','SR10824','WR11824','SR11024','NE11624','WR12024','WR12124','WR12324','SR11324','NR10124','ER14724','KK12224','ER15524','KK12324','SR11624','SR11724','ER14024','ER15324','NR10424','SR11824','CR10124','NR10524','CR10324','SR11924','NR10624','NR10724','SR12024','CR11024','NR10824','SR12124','ER13724','NR10924','CR11124','CR11224','ER13824','NR14324','CR11624','CR11724','WR13324','CR11824','ER13924','WR13524','ER14524','CR12324','CR12424','CR12524','CR12624','CR12724','CR12824','CR12924','CR13024','CR13124','WR14024','CR13224','CR13324','CR13424','NR11224','CR13524','CR13624','WR14224','CR13724','NR11324','CR13824','CR14024','ER14324','NR11424','CR14224','CR14324','MP11724','WR14524','MP12024','NR11724','WR14724','ER11224','WR14824','CR14924','NE11824','NR12024','CR15124','WR15024','NR12124','WR15124','NR14524','NR12424','NR12724','NR12824','NR14724','NR13324','NR14924','NR13424','NR13624','NR13724','NR15024','NR13924','ER11724','NR15124','ER13424','ER16024','NR20224','ER16524','NR20324','NR15324','ER12524','ER16624','NR20524','ER13124','NR20624','NR21024','ER10624','ER10724','ER10824','ER10924','ER11924','ER11824','ER16424','ER12924','NR15724','NR16024','NR16324','NR22524','NR16424','NR22624','NR16624','NR16724','NR23024','NR17424','NR18824','NR19924','NR23524','NR23624','NR19724','NR19624','NR17724','NR17824','NR18224','NR18324','KK12424','NR18624','NR18724','ER15624','ER17024','ER12224','NR25124','NR25424','NR25524','ER14824','NE11924','CR15723','ER17124','NR25624','NR25824','NR25924','NR27224','NR26024','NR26124','WR15724','NR27324','NR26224','WR15824','NR26324','NR27424','NR26424','NR26524','NR27524','NR26624','NR26724','NR27624','NR26824','NR27724','NR26924','NR27824','NR27024','NR27124','NR27924','NR28424','NR28624','NR29524','NR29724','ER17324','ER17524','NR11824','SR13024','SR13224','SR13124','NR21124','NR29624'
+
+--------------------candcelled posts------------------------------
+
+'WR14424','NR29524','NR29224','CR14724','NR13124','MP10224','NR20224','NR13524','NR29024','NR15824','NR20024','NR28924','NR29424','NR15624','KK10424','NW12424','NR29324','NR22224','NR29124'
+
+select distinct essentialqualification,count(*) from candidates where marks_available='Yes' and cat2='3' group by essentialqualification;
+"Diploma"					287
+"Graduation"				5519
+"Higher Secondary (10+2)"	885
+"Matriculation(10th)"		352
+"Ph.D"						3
+"Post Graduation"			2977
+
+
+create table candidates_till_catsel
+(
+reg_no	character varying,
+rollno character varying,
+post_code character varying,
+level_of_post character varying,
+age_limit character varying,
+merit character varying,
+cutoff_flag character varying,
+dob_flag_18_30 character varying,
+dob_flag_18_25 character varying,
+dob_flag_18_27 character varying,
+dob_flag_20_25 character varying,
+dob_flag_18_28 character varying,
+dob_flag_21_28 character varying,
+dob_flag_21_27 character varying,
+dob_flag_18_35 character varying,
+dob_flag_25_30 character varying,
+dob_flag_21_25 character varying,
+dob_flag_21_30 character varying,
+dob_flag_18_42 character varying,
+dob_flag_18_37 character varying,
+catsel_dob_flag_18_30 character varying,
+catsel_dob_flag_18_25 character varying,
+catsel_dob_flag_18_27 character varying,
+catsel_dob_flag_20_25 character varying,
+catsel_dob_flag_18_28 character varying,
+catsel_dob_flag_21_28 character varying,
+catsel_dob_flag_21_27 character varying,
+catsel_dob_flag_18_35 character varying,
+catsel_dob_flag_25_30 character varying,
+catsel_dob_flag_21_25 character varying,
+catsel_dob_flag_21_30 character varying,
+catsel_dob_flag_18_42 character varying,
+catsel_dob_flag_18_37 character varying,
+catsel_18_30 character varying,
+catsel_18_25 character varying,
+catsel_18_27 character varying,
+catsel_20_25 character varying,
+catsel_18_28 character varying,
+catsel_21_28 character varying,
+catsel_21_27 character varying,
+catsel_18_35 character varying,
+catsel_25_30 character varying,
+catsel_21_25 character varying,
+catsel_21_30 character varying,
+catsel_18_42 character varying,
+catsel_18_37 character varying
+
+)
+
+ \copy candidates_till_catsel from 'C:\Users\SalauddinKhan\Desktop\candidates_processed_till_catsel.csv' csv header;---- 1931419
+ 
+ 
+update candidates a
+set 
+a.dob_flag_18_25=b.dob_flag_18_25,
+a.dob_flag_18_27=b.dob_flag_18_27,
+a.dob_flag_18_28=b.dob_flag_18_28,
+a.dob_flag_18_30=b.dob_flag_18_30,
+a.dob_flag_18_35=b.dob_flag_18_35,
+a.dob_flag_18_37=b.dob_flag_18_37,
+a.dob_flag_18_42=b.dob_flag_18_42,
+a.dob_flag_20_25=b.dob_flag_20_25,
+a.dob_flag_21_25=b.dob_flag_21_25,
+a.dob_flag_21_27=b.dob_flag_21_27,
+a.dob_flag_21_28=b.dob_flag_21_28,
+a.dob_flag_21_30=b.dob_flag_21_30,
+a.dob_flag_25_30=b.dob_flag_25_30,
+a.catsel_dob_18_25=b.catsel_dob_flag_18_25,
+a.catsel_dob_18_27=b.catsel_dob_flag_18_27,
+a.catsel_dob_18_28=b.catsel_dob_flag_18_28,
+a.catsel_dob_18_30=b.catsel_dob_flag_18_30,
+a.catsel_dob_18_35=b.catsel_dob_flag_18_35,
+a.catsel_dob_18_37=b.catsel_dob_flag_18_37,
+a.catsel_dob_18_42=b.catsel_dob_flag_18_42,
+a.catsel_dob_20_25=b.catsel_dob_flag_20_25,
+a.catsel_dob_21_25=b.catsel_dob_flag_21_25,
+a.catsel_dob_21_27=b.catsel_dob_flag_21_27,
+a.catsel_dob_21_28=b.catsel_dob_flag_21_28,
+a.catsel_dob_21_30=b.catsel_dob_flag_21_30,
+a.catsel_dob_25_30=b.catsel_dob_flag_25_30,
+a.cutoffcatsel=b.cutoff_flag,
+a.merit=b.merit,
+a.catsel_18_25=b.catsel_18_25,
+a.catsel_18_27=b.catsel_18_27,
+a.catsel_18_28=b.catsel_18_28,
+a.catsel_18_30=b.catsel_18_30,
+a.catsel_18_35=b.catsel_18_35,
+a.catsel_18_37=b.catsel_18_37,
+a.catsel_18_42=b.catsel_18_42,
+a.catsel_20_25=b.catsel_20_25,
+a.catsel_21_25=b.catsel_21_25,
+a.catsel_21_27=b.catsel_21_27,
+a.catsel_21_28=b.catsel_21_28,
+a.catsel_21_30=b.catsel_21_30,
+a.catsel_25_30=b.catsel_25_30
+
+from candidates_till_catsel b 
+where trim(a.reg_no||a.post_code)=trim(b.reg_no||b.post_code)
+and a.marks_available='Yes';---1931419 updates
+
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_eq character varying;
+alter table candidates add column age_limit character varying;
+
+
+update vacancy_table
+set current=initial;
+
+select sum(original_vacancy),sum(initial),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;----2114,139428,139428,null,null
+
+
+update candidates
+set post_age_limit ='18-25' where
+post_code in ('NW12424','CR14724','KK10424','MP10224','WR14424','NR13524','NR15624','NR15824','NR22224','NR28924','NR29224');
+
+-----------------------cancelled candidature beacause they appeared more than once in exam for same EQ------------------------------------
+
+select eq,regno,count(*) from tcs_marks group by eq,regno having count(regno)>1;
+
+"10000143136"
+"10000775252"
+"10001132869"
+"10001338852"
+"10001700614"
+"10005898467"
+"10006797277"
+"10008600546"
+"10006641164"
+"10000678361"
+"10001147225"
+"10002110196"
+"10005762948"
+"10006654648"
+
+update candidates
+set remarks='Appeared more than once in exam for same EQ'
+where reg_no in ('10000143136','10000775252','10001132869','10001338852','10001700614','10005898467','10006797277','10008600546','10006641164','10000678361','10001147225','10002110196','10005762948','10006654648');
+

@@ -1,0 +1,572 @@
+CREATE TABLE IF NOT EXISTS public.t_examgd2024_applicant_reg_pu
+(
+    ear_appl_regid bigint ,
+    ear_person_regno bigint ,
+    ear_personid integer ,
+    ear_name text ,
+    ear_changedname text ,
+    ear_father_name text ,
+    ear_mother_name text ,
+    ear_dob date NOT NULL,
+    ear_candiateage_ason_date real NOT NULL,
+    ear_gender integer NOT NULL,
+    ear_categoryid integer,
+    ear_nationality integer NOT NULL,
+    ear_identification_mark text ,
+    ear_tenth_education_board integer NOT NULL,
+    ear_tenth_roll_no text ,
+    ear_tenth_yearofpassing integer NOT NULL,
+    ear_photo_img_url text ,
+    ear_sign_img_url text ,
+    ear_centerid1 integer NOT NULL,
+    ear_centerid2 integer NOT NULL,
+    ear_centerid3 integer NOT NULL,
+    ear_regionid integer NOT NULL,
+    ear_isncc_certificate boolean,
+    ear_typeofncc_certificate integer,
+    ear_is_ex_serviceman boolean NOT NULL,
+    ear_service_period text ,
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_domicile_stateid integer NOT NULL,
+    ear_domicile_districtid integer NOT NULL,
+    ear_ismigrated_candidate boolean,
+    ear_isreservation_availed_candidate boolean,
+    ear_origin_stateid integer,
+    ear_origin_districtid integer,
+    ear_isnaxal_district boolean NOT NULL,
+    ear_isborder_district boolean NOT NULL,
+    ear_post_pref text ,
+    ear_is_age_relaxation boolean NOT NULL,
+    ear_age_relaxation_code integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text COLLATE pg_catalog."default",
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone DEFAULT now(),
+    ear_notificationid integer NOT NULL,
+    ear_application_status integer,
+    ear_is_ews_candidate boolean,
+    ear_share_persinfo_accrossportal boolean NOT NULL,
+    ear_edqualification integer NOT NULL,
+    ear_education_details text ,
+    ear_passed_qual_exam text COLLATE pg_catalog."default",
+    ear_state_for_university integer,
+    ear_eduqual_university_board integer,
+    ear_eduqual_rollno text COLLATE pg_catalog."default",
+    ear_eduqual_passingyear integer,
+    ear_eduqual_percentage text COLLATE pg_catalog."default",
+    ear_eduqual_cgpa text COLLATE pg_catalog."default",
+    ear_present_address text COLLATE pg_catalog."default",
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text COLLATE pg_catalog."default",
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text ,
+    ear_mobile_number text ,
+    ear_other_national_address text COLLATE pg_catalog."default",
+    ear_photo_date date,
+    ear_isdate_clear_on_photo boolean NOT NULL,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text COLLATE pg_catalog."default",
+    applicationfee character varying(30) ,
+    ear_rollno text COLLATE pg_catalog."default",
+    ear_qrcode_path text COLLATE pg_catalog."default",
+    ear_add_source character(1) COLLATE pg_catalog."default",
+    ear_upd_source character(1) COLLATE pg_catalog."default",
+    ear_noofattempt integer,
+    ear_languagepreference integer,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean,
+    CONSTRAINT t_examgd2024_applicant_reg_pu_pkey PRIMARY KEY (ear_person_regno)
+	)
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+SET CLIENT_ENCODING TO 'UTF-8';
+
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu165.csv' csv header ;---226
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu166.csv' csv header ;---717042
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu167.csv' csv header ;---977616
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu170.csv' csv header ;---1160379
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu171.csv' csv header ;---997950
+\copy (select * from t_examgd2024_applicant_reg_pu where ear_isactive=true and ear_application_status='1') to 'C:\Users\Public\t_examgd2024_applicant_reg_pu172.csv' csv header ;---882287
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_tier1_result
+SET CLIENT_ENCODING TO 'UTF-8';
+
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu165.csv' csv header ;---226
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu166.csv' csv header ;---717042
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu167.csv' csv header ;---977616
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu170.csv' csv header ;---1160379
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu171.csv' csv header ;---997950
+\copy t_examgd2024_applicant_reg_pu from 'C:\Users\Public\t_examgd2024_applicant_reg_pu172.csv' csv header ;---882287
+
+aceclo-cera
+cefolac200
+montemac-L
+nurokind--t3
+
+create table tc_marks
+(
+	ParticipantID	character varying,
+	Parta_gi numeric,
+	Partb_ga numeric,
+	Partc_ma numeric,
+	Partd_english numeric,
+	Partd_hindi numeric,
+	score numeric,
+	normalized_score numeric
+)
+
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_ctgd2022_petpst_result
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_tier1_result C:\Users\Public\master_table.dump
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t cut_off_table -F c -f C:\Users\Public\cutoff_table.dump alloc_ctgd2022_petpst_result
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_tier1_result C:\Users\Public\cutoff_table.dump
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_ctgd2022_petpst_result
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_tier1_result C:\Users\Public\arc_table.dump
+
+create table candidates as select * from t_examgd2024_applicant_reg_pu;
+alter table candidates add constraint pk_regid primary key (ear_person_regno);
+
+alter table candidates add column cat1 character varying;
+alter table candidates add column cat2 character varying;
+alter table candidates add column cat3 character varying;
+
+
+select distinct categoryid,count(*) from candidates group by categoryid;
+select distinct ph_code,count(*) from candidates group by ph_code;
+select distinct gender,count(*) from candidates group by gender;
+select distinct typeoffncc_certificate,count(*) from candidates group by typeoffncc_certificate;
+select distinct is_ex_serviceman,count(*) from candidates group by is_ex_serviceman;
+false	4729994
+true	5506
+
+update candidates set cat1=categoryid;
+update candidates set cat2='0';
+update candidates set cat2='3' where is_ex_serviceman =true;---5506
+
+UPDATE candidates
+SET exsm_length = LEFT(serviceperiod, 2);
+
+select distinct is_ex_serviceman,isexs_benefit_availed_for_civilpost,count(*) from candidates where cat2='3' group by is_ex_serviceman,isexs_benefit_availed_for_civilpost;
+
+update candidates
+set exs_reservation='Yes' where cat2='3';
+
+update candidates
+set exs_reservation='No' where cat2='3' and isexs_benefit_availed_for_civilpost='true';
+
+alter table candidates add column exsm_length character varying ;
+alter table candidates add column exs_reservation character varying ;
+
+
+alter table candidates add column stateconsidered integer;
+alter table candidates add column statename_considered text;
+alter table candidates add column districtconsidered integer;
+alter table candidates add column districtname_considered text;
+alter table candidates add column naxal_district character varying;---yes/no
+alter table candidates add column border_district character varying;---yes/no
+alter table candidates add column age_relaxation_code character varying;
+alter table candidates add column remarks text;
+
+select distinct ear_domicile_stateid from candidates;
+select distinct ear_domicile_districtid from candidates;
+select distinct ear_isreservation_availed_candidate,count(*) from candidates group by ear_isreservation_availed_candidate;
+false	14198
+true	7153
+		4714149
+		
+select distinct ear_ismigrated_candidate,ear_isreservation_availed_candidate,count(*) from candidates group by ear_ismigrated_candidate,ear_isreservation_availed_candidate;
+false			3802200
+true	false	14198
+true	true	7153
+		911949		
+
+update candidates
+set stateconsidered=ear_domicile_stateid,
+districtconsidered=ear_domicile_districtid;
+
+-----migrated and taken origin state reservation-----
+select regno,cat1,cat2,ear_domicile_stateid,ear_domicile_districtid,ear_ismigrated_candidate,ear_isreservation_availed_candidate,ear_origin_stateid,ear_origin_districtid,ear_isnaxal_district,ear_isborder_district 
+from candidates where ear_ismigrated_candidate='true'
+and ear_isreservation_availed_candidate=true
+and cat1 in ('1','2','6');----7153
+
+update candidates
+set stateconsidered=ear_origin_stateid,
+districtconsidered=ear_origin_districtid
+where ear_ismigrated_candidate='true'
+and ear_isreservation_availed_candidate=true
+and cat1 in ('1','2','6');
+
+-----migrated but not taken origin state reservation-----
+select regno,cat1,cat2,ear_domicile_stateid,ear_domicile_districtid,ear_ismigrated_candidate,ear_isreservation_availed_candidate,ear_origin_stateid,ear_origin_districtid,ear_isnaxal_district,ear_isborder_district 
+from candidates where ear_ismigrated_candidate='true'
+and (ear_isreservation_availed_candidate is null or ear_isreservation_availed_candidate=false)
+and cat1 in ('1','2','6');----14198
+
+update candidates
+set cat1='9',
+remarks ='Migrated but candidates have not opted to avail the benefit of reservation from the State of their origin'
+where ear_ismigrated_candidate='true'
+and (ear_isreservation_availed_candidate is null or ear_isreservation_availed_candidate=false)
+and cat1 in ('1','2','6');
+ 
+select ear_is_age_relaxation,ear_age_relaxation_code,count(*) from candidates group by ear_is_age_relaxation,ear_age_relaxation_code;
+false		3365380
+true	1	739145
+true	2	611250
+true	3	5418
+true	4	8320
+true	5	2762
+true	6	3225
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='1' group by cat1;
+"1"	433539
+"2"	301463
+"9"	4143---->remove arc
+
+update candidates
+set age_relaxation_code=null where age_relaxation_code='1' and cat1='9';---4143 updates
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='2' group by cat1;
+"6"	608801
+"9"	2449---->remove arc
+
+select remarks ,count(*) from candidates where age_relaxation_code='2' and cat1='9' group by remarks;
+
+update candidates
+set age_relaxation_code=null where age_relaxation_code='2' and cat1='9';---2448
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='3' group by cat1;
+"0"	164
+"1"	453
+"2"	77
+"6"	1899
+"9"	2825
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='4' group by cat1;
+
+"0"	2286
+"9"	6034
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='5' group by cat1;
+"6"	2729
+"9"	33----change arc to for UR
+
+update candidates
+set age_relaxation_code='4',
+remarks='Migrated but candidates have not opted to avail the benefit of reservation from the State of their origin,hence arc_code changed to for UR' where age_relaxation_code='5' and cat1='9';
+
+select distinct cat1,count(*) from candidates where age_relaxation_code='6' group by cat1;
+"1"	1704
+"2"	1448
+"9"	73---change arc to for UR
+
+update candidates
+set age_relaxation_code='4',
+remarks='Migrated but candidates have not opted to avail the benefit of reservation from the State of their origin,hence arc_code changed to for UR'
+where age_relaxation_code='6' and cat1='9';---73
+
+
+alter table candidates add column ncc_marks character varying;
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+alter table candidates add column cut_off character varying;
+alter table candidates add column catsel character varying;
+alter table candidates add column merit integer;
+
+
+create table marks_edp
+(
+rollno character varying,
+parta_gi character varying,
+partb_ga character varying,
+partc_ma character varying,
+partd_eng_hin character varying,
+score character varying,
+normalized_score character varying,
+regid character varying
+);
+
+
+alter table candidates add column rollno character varying;
+alter table candidates add column parta_gi character varying;
+alter table candidates add column partb_ga character varying;
+alter table candidates add column partc_ma character varying;
+alter table candidates add column partd_eng_hin character varying;
+alter table candidates add column score character varying;
+alter table candidates add column normalized_score character varying;
+
+select distinct typeofncc_certificate,count(*) from candidates_4735500 group by typeofncc_certificate;
+1	67280
+2	80348
+3	62173
+	4525699
+	
+update candidates
+set ncc_marks ='8' where typeofncc_certificate='3';----62173 updates
+
+update candidates
+set ncc_marks ='4.8' where typeofncc_certificate='2';---- 80348 updates
+
+update candidates
+set ncc_marks ='3.2' where typeofncc_certificate='1';----67280 updates
+
+update candidates
+set ncc_marks ='0' where cat2='3';----5506 updates
+
+update candidates a
+set a.rollno=b.rollno,
+a.parta_gi=b.parta_gi,
+a.partb_ga=b.partb_ga,
+a.partc_ma=b.partc_ma,
+a.partd_eng_hin=b.partd_eng_hin,
+a.score=b.score,
+a.normalized_score=b.normalized_score,
+a.marks_available='Yes'
+from marks_edp b where a.regno ::character varying =b.regid;
+
+alter table candidates add column total character varying;
+
+update candidates
+set ncc_marks ='8' where typeofncc_certificate='3';----45493 updates
+
+update candidates
+set ncc_marks ='4.8' where typeofncc_certificate='2';---- 58260 updates
+
+update candidates
+set ncc_marks ='3.2' where typeofncc_certificate='1';----45745 updates
+
+update candidates
+set ncc_marks ='0' where cat2='3';----2994 updates
+
+select distinct typeofncc_certificate,count(*) from candidates group by typeofncc_certificate;
+"0"		2886650
+"3.2"	45745
+"4.8"	58260
+"8"		45493
+
+alter table candidates add column rejection_provision character varying;
+
+update candidates
+set rejection_provision='C' ;
+
+select distinct ear_age_relaxation_code from candidates where age_relaxation_code is null and candiateage_ason_date>='23';---1,2
+select distinct cat1 from candidates where age_relaxation_code is null and candiateage_ason_date>='23';---9
+
+CREATE TABLE IF NOT EXISTS public.vacancy_table
+(
+    state_code character varying(10) COLLATE pg_catalog."default",
+    state character varying(75) COLLATE pg_catalog."default",
+    gender character varying(5) COLLATE pg_catalog."default",
+    post_code character varying(5) COLLATE pg_catalog."default",
+    force character varying(10) COLLATE pg_catalog."default",
+    area character varying(5) COLLATE pg_catalog."default",
+    category character varying(255) COLLATE pg_catalog."default",
+    category_code character varying(5) COLLATE pg_catalog."default",
+    vacancies integer,
+    initial integer,
+    current integer,
+    allocated integer,
+    left_vacancy integer
+)
+
+
+select * from sp_get_merit('GD24',1);-----merit updated successfully for 2565340 candidates
+
+update candidates
+set dob_flag='03' where rollno in 
+('2201335600','1801005353','9211000742','1004019245','9213015302','1401066627','1401037105','2002016421','2201305166','2405223679','2406016379','2201224483','2201337453','3002008923','3007005980','3002017801','3002023792','3003007781','3010026828','3010060064','3010042143','3013126619','3016012486','3201021892','3207010054','3206040931','3207008250','3205066179','4404004660','4205059734','4602006078','4404032221','4410033674','6001044195','6001055056','6005050047','6005052603','6007001222','6007005367','6007032539','6007033634','7202012401','8001005493','8007003992','8007003901','8011001893','8007030275'
+);
+
+
+update candidates
+set catsel_dob='3' where rollno in 
+('2201335600','1801005353','9211000742','1004019245','9213015302','1401066627','1401037105','2002016421','2201305166','2405223679','2406016379','2201224483','2201337453','3002008923','3007005980','3002017801','3002023792','3003007781','3010026828','3010060064','3010042143','3013126619','3016012486','3201021892','3207010054','3206040931','3207008250','3205066179','4404004660','4205059734','4602006078','4404032221','4410033674','6001044195','6001055056','6005050047','6005052603','6007001222','6007005367','6007032539','6007033634','7202012401','8001005493','8007003992','8007003901','8011001893','8007030275'
+);
+
+update candidates a
+set a.statename_considered= b.st_state_name
+from m_states_gis b
+where a.stateconsidered=b.st_stateid;
+
+update candidates a
+set a.districtname_considered= b.ds_dist_name
+from m_districts_gis b
+where a.districtconsidered=b.ds_distid;
+
+update candidates a
+set a.naxal_district= b.ds_naxal
+from m_districts_gis b
+where a.districtconsidered=b.ds_distid;
+
+update candidates a
+set a.border_district= b.ds_border
+from m_districts_gis b
+where a.districtconsidered=b.ds_distid;
+
+update candidates
+set border_district='Yes' where border_district='true';
+
+update candidates
+set border_district='No' where border_district='false';
+
+update candidates
+set naxal_district='Yes' where naxal_district='true';
+
+update candidates
+set naxal_district='No' where naxal_district='false';
+
+
+alter table candidates add column debarred character varying;
+
+update candidates
+set debarred='Yes'
+where regno in ('10008213697','10004718439','10006507264','71001026285','10008126280','10007400661','10008140644','10008037761','10008143389','10001985336','10003551299','10008132687','71000123989','10008226358','10006620286','10008238864','71000726482','10006943658','10007237264','10008250237','10005274894','10006449636','10006583054','10008258720','10008256397','10008260382','10008269932','10004809261','81000218212','10008046333','10008136461','10008255407','10008294734','10006596331','10006422153','71000434425','10006653306','10008326823','10008326882','10004825921','10002151259','10005840785','10008228644','10002037768','10008386075','10007825915','10007333802','10008412220','10008408783','10008403441','10007000655','10008425537','10003958083','10008427239','10004414728','10008406536','10008408138','10008156001','10008151654','10008170160','10006732605','10008058637','10006384849','10006337754','10006639122','10008196834','10007849539','10008184323','10003709952','10006510082','10008217217','10008219428','20001243908','20005493646','20005324818','20003484546','20001245361','72001164154','20003835232','72000495984','20004996355','20004962483','20003929450','20000364027','92000598251','72001627398','20002145510','92000017579','20002907383','72001870488','20003472351','20001209128','72000809105','72000737887','72000639123','20004807150','20004838254','20001522666','72000371997','72001008983','20000065386','72001659413','20001561532','20005484899','20002131513','20003934641','20001535574','72000781762','72000360244','20002051379','20002155048','20003147886','20002011689','20002377828','72001215596','72000566137','92000336993','72000158942','20005485156','72000513530','72002061326','20003318195','20001944390','92000031643','72000972693','20000829756','20005541924','72000601058','72000953117','92000511567','72001161421','20000459664','20004098268','72001596872','72000650335','20002434995','72000460437','20006260710','20001776918','72001793614','20003171211','20004792336','72001377123','20004751109','72000601831','20005830519','20004620274','20003017317','20001673963','20001716370','72000237243','72000769515','72001307162','72001526024','20001570199','20001702541','20002969725','20002176970','20001824717','20001590072','20002641950','72001915512','20003201678','20004982162','20000371809','72001158422','20005053847','20004888837','20003327953','20003352218','72000861307','20001446668','20003410264','72001699287','20001826654','20003820447','20002831485','92000371830','20003971564','20005383430','20003973584','72000339782','20005472802','20003046983','20004706599','20003017233','20001172031','20003118697','20004900687','20004082172','92000189030','20004853971','20003252666','92000208735','20005163890','20001510162','72001283265','72000746877','72000185367','72001258106','20004006886','72001152617','20001571632','20004529474','20002097788','20004722388','20000297579','20003977800','72001768904','72000548967','72000955667','72001125116','20004047918','20005384975','20004973119','20000638560','72000572635','20003494272','20006353398','20001047092','72001279349','20001117576','20003507488','20004193074','72001987458','20000483684','20001677393','92000696026','20002914208','20001682720','20001585965','72000780397','20005429948','72001668795','20004955890','20000286674','72000452675','72000353678','92000110078','72001591662','72000781234','20001476115','20001565692','92000449282','72001957581','72000557387','20002510446','20004144322','20002279634','72001479384','72001413137','20001623855','72001651938','72000245423','20002605446','20003482496','20004354285','72001030131','20003466723','20003512795','20002956425','72001477817','72000489276','20001638388','20002121156','72001205083','20001557931','20000370722','72000351781','20004956879','92000026375','20004215794','20002976852','72001039251','20003036847','20003876551','20005118352','72001981826','20005066543','72001143291','92000413308','20001455930','72001101182','72001626109','92000022502','20006212836','20006269696','20006391818','72002054713','20001449928','30003991385','30004828029','30004828029','30005608466','30002129447','73000518841','30003163703','30000396944','30005557898','93000120155','30002835416','30003200601','30001553802','30006302068','73001134834','73001134834','30005533290','30005533290','30003576674','30007244375','30001712755','73000687522','30004872619','30004020330','30001918246','30005789424','30000193629','30005518550','30005518550','30004284455','30004112660','30003579933','30005784796','30006675796','30004071009','30005058219','30003472718','30004723172','30000739918','30004846266','30001780599','73000943152','73000943152','93000688013','73001450535','73001450535','73001649612','30005518876','30004142819','30003962320','30001362270','30003108708','30004911742','30004911742','30003917130','30003220142','30004146272','30004805038','73001861980','30005814891','30001432357','30001432357','30006429293','30001745853','30003843635','30005609878','30000179113','30003958527','73001065057','73001065057','30003706171','30003764822','30005495551','30006816906','30005690377','40005630265','40003879663','40006972050','40002539559','40001382422','40005570707','40006976098','40001111956','40005175951','40001938463','40001740036','40002828134','40006212847','40003950287','74000179673','40003671877','74000857615','40001748343','40005625404','40007104296','40003677081','40004792221','40003642120','40007102864','40003670236','40001867453','74001640052','40007093891','40007118662','40005486068','40005677685','40004040285','40005429389','40005663983','40003594543','40005529175','40006291361','74001246457','40002285353','40005076955','40006161544','40007005007','40001769685','74001137825','40001718859','40003555833','40005140132','74000175228','74000795905','40004059089','40004985055','40003926298','40001741019','40003984770','40002581114','40002950858','40002142003','40001690735','40004958253','40007141633','40004674106','40001885634','40003735848','40003461239','40005418929','40003806858','40004529330','74001067529','40007301489','50001760250','50003798214','50003934450','50002193623','50003724898','50007840639','50004433524','50001901923','50007842339','50005935103','50007867175','50007892592','50007894990','75001077034','75000889853','50006082943'
+);
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_state character varying;
+alter table candidates add column allocated_area character varying;
+alter table candidates add column allocated_against_ur character varying;
+
+
+
+
+
+
+
+create table aviral_result
+(
+regno character varying,
+allocated_category character varying,
+allocated_post character varying,
+allocated_state	character varying,
+allocated_area character varying,
+allocated_against_ur character varying,
+key character varying
+
+)
+
+alter table vacancy_table add column min_marks numeric;
+alter table vacancy_table add column min_marks_parta numeric;
+alter table vacancy_table add column min_marks_partb numeric;
+alter table vacancy_table add column min_marks_cand_dob numeric;
+
+
+Select regno,name,ds_name,father_name,ds_father_name,mother_name,ds_mother_name,dob,ds_dob,gender,cat1
+from candidates,debarred_total where 
+replace ((UPPER(ds_name)||UPPER(ds_father_name)||UPPER(ds_mother_name)),' ','') = replace ((UPPER(name)||UPPER(father_name)||UPPER(mother_name)),' ','');
+
+--replace ((UPPER(ds_name)||UPPER(ds_mother_name)),' ','') = replace ((UPPER(name)||UPPER(mother_name)),' ','') and dob::character varying = ds_dob;
+
+--replace ((UPPER(ds_name)||UPPER(ds_father_name)),' ','') = replace ((UPPER(name)||UPPER(father_name)),' ','') and dob::character varying = ds_dob;	
+
+
+select * from candidates where allocated_category='1' and catsel not like '%1%' limit 10;
+select * from candidates where allocated_category='2' and catsel not like '%2%' limit 10;
+select * from candidates where allocated_category='3' and catsel not like '%3%' limit 10;
+select * from candidates where allocated_category='6' and catsel not like '%6%' limit 10;
+select * from candidates where allocated_category='9' and catsel not like '%9%' limit 10;
+
+
+update vacancy_table
+set allocated=null,
+left_vacancy=null;
+
+update candidates
+set allocated_category=null,
+allocated_post=null,
+allocated_state=null,
+allocated_area=null,
+allocated_against_ur=null;
+
+
+cand+father+dob
+'10004414728','10006510082','10006596331','10008170160','10008196834','10008219428','10008269932','10008294734','10008326823','10008412220','20000007135','20000065199','20000065386','20000081496','20000136717','20000153869','20000286674','20000297579','20000349415','20000364027','20000370722','20000371809','20000421419','20000424765','20000459664','20000472879','20000483684','20000487938','20000502776','20000504634','20000513962','20000549323','20000588579','20000638560','20000666197','20000745374','20000829756','20000846672','20000894825','20001047092','20001110530','20001117576','20001172031','20001172118','20001209128','20001224492','20001243908','20001245361','20001290940','20001446668','20001449928','20001455930','20001465051','20001476115','20001510162','20001519803','20001522666','20001526016','20001535574','20001547947','20001557931','20001561532','20001565692','20001570199','20001571632','20001585965','20001590072','20001598267','20001600792','20001623855','20001628737','20001631990','20001638388','20001660084','20001673963','20001677393','20001682720','20001696763','20001702541','20001716370','20001722896','20001776918','20001796370','20001824717','20001831728','20001872505','20001907169','20001944390','20001991438','20002011689','20002051379','20002068228','20002097788','20002121156','20002125142','20002131513','20002145510','20002155048','20002176970','20002184601','20002279634','20002331448','20002377828','20002391015','20002434995','20002437928','20002440818','20002443373','20002443419','20002453947','20002501368','20002510446','20002603446','20002605446','20002641950','20002806775','20002897965','20002907383','20002914208','20002956425','20002969725','20002970065','20002970925','20002972066','20002976852','20003006614','20003017233','20003017317','20003090888','20003123056','20003171211','20003206310','20003252666','20003266602','20003297734','20003318195','20003327953','20003352218','20003381697','20003429204','20003466723','20003472351','20003482496','20003484546','20003484594','20003489538','20003494272','20003507488','20003512795','20003627200','20003641718','20003783171','20003820447','20003835232','20003876551','20003914080','20003924332','20003929450','20003934641','20003971564','20003973584','20003977800','20003979652','20003989874','20004017955','20004047918','20004057279','20004082172','20004093069','20004098268','20004144322','20004193074','20004215794','20004251531','20004288511','20004317525','20004331796','20004354285','20004516914','20004529474','20004542691','20004620274','20004706599','20004722388','20004746162','20004747701','20004751109','20004768045','20004792336','20004798738','20004807150','20004822491','20004833940','20004838254','20004853971','20004856023','20004888837','20004900687','20004902579','20004955890','20004956879','20004973119','20004982162','20004996355','20005029340','20005029584','20005053847','20005118352','20005146841','20005159476','20005163890','20005166904','20005181704','20005183881','20005207104','20005228914','20005234828','20005293983','20005296585','20005312948','20005324818','20005349747','20005369565','20005383430','20005384975','20005424208','20005429948','20005437795','20005456878','20005472802','20005483028','20005483028','20005484376','20005484899','20005485156','20005493646','20005541469','20005541924','20005544408','20005610005','20005640796','20005650332','20005762180','20005765614','20005785189','20005830519','20005841348','20005852607','20006194919','20006260710','20006278079','20006317621','30000179113','30000190210','30000193629','30000299547','30000396944','30000546010','30000547152','30000739918','30001075421','30001362270','30001432357','30001553802','30001606253','30001712755','30001745853','30001780599','30001848310','30001918246','30001961429','30001974723','30002129447','30002278109','30002498599','30002719229','30002744001','30002792391','30002835416','30002852637','30003108708','30003163703','30003200601','30003211174','30003220142','30003288872','30003472718','30003555974','30003576674','30003579933','30003633161','30003661034','30003706171','30003764822','30003766915','30003917130','30003958527','30003962320','30003991385','30004020330','30004031905','30004071009','30004098033','30004112660','30004142819','30004284455','30004805038','30004828029','30004846266','30004872619','30004911742','30005058219','30005061821','30005069807','30005114074','30005114381','30005247755','30005495551','30005518550','30005518876','30005533290','30005557898','30005573444','30005587059','30005608466','30005609878','30005655207','30005690377','30005760524','30005789424','30005807186','30005814891','30006302068','30006429293','30006675796','30006816906','30007040275','30007244375','30007316004','40001111956','40001382422','40001690735','40001718859','40001740036','40001741019','40001748343','40001769685','40001867453','40001872265','40001885634','40001938463','40001962497','40002142003','40002539559','40002581114','40002677997','40002828134','40002950858','40003461239','40003555833','40003594543','40003614606','40003642120','40003731751','40003735848','40003926298','40003943196','40003950287','40003984770','40004059089','40004529330','40004674106','40004712247','40004799433','40004897209','40004933174','40004958253','40004985055','40005076955','40005140132','40005175951','40005418929','40005429389','40005529175','40005646331','40005748222','40005959743','40006085955','40006097699','40006161544','40006183014','40006212847','40006486195','40006716189','40007118662','40007141633','50001760250','50001901923','50002099311','50002193623','50003724898','50003798214','50004231954','50004433524','50004617323','50005107088','50005552811','50005935103','50007704458','50007839058','71000449682','72000131557','72000143742','72000155771','72000158942','72000185367','72000218321','72000232467','72000237243','72000245423','72000245623','72000281386','72000282692','72000339782','72000351781','72000353678','72000360244','72000371997','72000371997','72000452675','72000460437','72000484118','72000489276','72000495984','72000513530','72000515079','72000515092','72000518429','72000542477','72000548967','72000557387','72000566137','72000572635','72000581380','72000600286','72000601058','72000601082','72000601831','72000639123','72000639419','72000642937','72000650335','72000716051','72000737887','72000740288','72000746877','72000753160','72000769515','72000780397','72000781234','72000781762','72000807829','72000861307','72000862313','72000869538','72000953117','72000961897','72000972693','72000988768','72000991049','72000993022','72001008983','72001016443','72001016760','72001030131','72001039251','72001079958','72001083414','72001084411','72001101182','72001112568','72001124794','72001125116','72001131845','72001143291','72001152617','72001158422','72001161421','72001164154','72001178444','72001181991','72001185539','72001199566','72001205083','72001205609','72001208481','72001215596','72001258106','72001279349','72001283265','72001285729','72001307162','72001312570','72001313361','72001359516','72001377123','72001413137','72001421312','72001428887','72001436568','72001440208','72001477817','72001479384','72001507308','72001519981','72001526024','72001538908','72001591662','72001594169','72001596872','72001597512','72001600556','72001617314','72001626109','72001627398','72001651938','72001656836','72001659413','72001659564','72001661318','72001668795','72001694634','72001694934','72001699287','72001726553','72001768904','72001793614','72001800111','72001809219','72001836484','72001842594','72001870488','72001905754','72001915512','72001919857','72001951805','72001957581','72001973149','72001976562','72001981826','72001987458','72001993054','72002061326','72002066506','72002110412','73000003218','73000003218','73000008545','73000377711','73000479796','73000518841','73000543566','73000687522','73000811637','73000943152','73001065057','73001134834','73001195820','73001245727','73001450535','73001481631','73001522260','73001649612','73001725056','73001861980','74000162163','74000175228','74000179673','74000560191','74000795905','74000857615','74001067529','74001137825','74001246457','74001640052','75000528224','75000637466','75000889853','75001077034','75001476694','82000287717','92000017579','92000022502','92000026375','92000029403','92000031643','92000110078','92000189030','92000208735','92000277023','92000307811','92000336993','92000352155','92000371830','92000413308','92000415820','92000449282','92000506641','92000511567','92000522632','92000584266','92000598251','92000696026','93000120155','93000192242','93000688013','94000232111'
+
+----614 updates
+
+
+cand+mother+dob
+'20002443419','20004822491','72000515092','30005518876','73000687522','20001570199','40001690735','20002501368','10006510082','20002068228','72000862313','72000245623','30005061821','30001075421','20003327953','50001901923','30004911742','30004911742','40005959743','50004433524','30005247755','92000208735','20001449928','40002539559','20005234828','40004958253','20005166904','30004020330','30004805038','72001538908','30005573444','30002498599','40004529330','74000162163','20005429948','30006302068','40005748222','73001725056','30004284455','30005114074','30005608466','20003820447','72001600556','30001553802','20001682720','40003943196','72001199566','30000193629','20001243908','73001522260','92000277023','40006212847','20001172031','40004059089','20002970065','20002969725','20000894825','20005483028','20005483028','92000352155','92000598251','72000452675','92000449282','20003876551','20005785189','20002806775','40001741019','20004722388','20004902579','30005114381','20002437928','30003579933','30006816906','30003472718','30002129447','20001561532','20001944390','72001436568','20001565692','20000846672','20000846672','20002176970','72000988768','10008269932','72000218321','20002145510','20000371809','92000506641','72000282692','40001938463','20000459664','20002897965','30002719229','40001111956','20003090888','74000857615','30004098033','20003417143','20001510162','20005324818','30002792391','20000487938','73000003218','73000003218','72001479384','72001836484','40002950858','20001623855','30000396944','40001867453','72001083414','72001030131','20004017955','20004956879','20003171211','50007839058','72001285729','20002443373','50007704458','72001312570','72000245423','20002155048','20002377828','92000029403','72001957581','92000511567','30002744001','30005557898','74000560191','40006085955','20005312948','50005552811','20001446668','20000666197','30000299547','30003108708','72001164154','40003594543','20001585965','20005638520','20000065199','73001134834','73001134834','72000869538','40005140132','40005429389','20004833940','40001962497','40006486195','30005655207','20005456878','30003163703','20003934641','20001209128','20005349747','93000688013','82000287717','72002061326','30005069807','20005541469','72001377123','20001519803','20004982162','20004751109','72001125116','10006596331','72000518429','72001428887','72000513530','10008326823','30003288872','20004529474','72000639123','72001976562','30000179113','72000650335','73000008545','20004706599','20001535574','20003641718','30001745853','72001768904','72001215596','73001245727','73001450535','73001450535','72001208481','20001638388','20001991438','92000415820','30004828029','30004828029','30004142819','10004414728','20006317621','72000566137','20002331448','72000360244','72000639419','72000601831','72001694634','20004354285','72001507308','20004807150','20002956425','72001421312','20001547947','73000518841','72000781762','20004768045','40006161544','20003494272','72001809219','30003958527','20001702541','30001606253','72001597512','20003017233','20004838254','20004193074','40001718859','20000638560','20003783171','20005472802','72001477817','20001224492','20000745374','20003206310','20004853971','72000542477','92000031643','20001455930','20003006614','50005107088','40003731751','72000281386','20000081496','30001780599','40003555833','20003318195','92000522632','92000110078','20002970925','20003466723','20002641950','74000179673','40003461239','20003252666','20001245361','73001195820','72000740288','72001185539','72001594169','93000192242','72000601058','20000472879','20001290940','20004798738','20000364027','30001362270','20000370722','92000696026','72001596872','72001656836','72001526024','40004933174','72000185367','72000972693','72001617314','20003973584','72001181991','30005760524','72001158422','40003735848','20003977800','72001668795','20003507488','72000861307','72000143742','20005830519','20005762180','20004057279','72001973149','30003917130','72000746877','20001631990','20002605446','20003017317','20000513962','20004093069','20001628737','30003211174','40004674106','72000371997','72000371997','20001660084','73001649612','72001205083','40001769685','50004617323','40002677997','20002184601','20000504634','20003484594','20000829756','72000716051','20005293983','20001796370','20004973119','40003926298','20001465051','72000581380','72002066506','75001476694','20004288511','10008294734','20002434995','20004888837','20001831728','72001905754','20006278079','20003352218','20002131513','20002453947','92000371830','20004251531','50002193623','20001907169','20004144322','20002440818','20003989874','20004792336','40006183014','20001526016','20004098268','92000584266','72000781234','20002972066','30005518550','30005518550','30002835416','30007316004','72000557387','72001084411','72001626109','20001117576','72000953117','72001915512','30004112660','72001359516','40005646331','40006097699','20003266602','72000515079','20002097788','20005484899','72001016443','20001590072','72002110412','20004996355','30005789424','30007040275','20000349415','20003123056','20005296585','30005058219','72000155771','20001696763','30006675796','20000549323','73001065057','73001065057','20001172118','40001748343','72000737887','20002907383','73000943152','73000943152','40003984770','20000007135','72001131845','30001961429','20004747701','20004317525','40005175951','20005544408','92000022502','20002125142','20002279634','72001079958','30005690377','20004746162','40001872265','72000484118','20004856023','30000546010','30004092254','72001413137','20001571632','30003661034','20003489538','20003979652','72000642937','20001673963','20005650332','92000017579','20004542691','30003200601','72000495984','20002914208','72001008983','40002581114','30003555974','40001885634','20003924332','20002603446','72001993054','72001258106','20004620274','72001283265','72000807829','72001694934','72001591662','72001205609','30000190210','30003220142','30003633161','20001522666','72000489276','20005383430','72001440208','40005076955','20003472351','72001987458','72000232467','75000528224','72001112568','74001137825','30003576674','72001951805','73001481631','92000307811','93000120155','72001793614','50002099311','30002278109','72001699287','72000339782','20005437795','50001760250','20000421419','30002852637','30001848310','30003764822','92000336993','92000189030','72001661318','20005541924','71000449682','20002051379','30005814891','30001918246','20001600792','72001124794','20005852607','72000548967','20004082172','72001659413','20003381697','30004872619','20004331796','20004331796','20003929450','72000601082','72001101182','20003429204','40003642120','72001842594','72000993022','72000131557','20003971564','72001313361','20005029340','72001627398','75000889853','72000780397','40002142003','30007244375','20000588579','72001039251','30000739918','20004047918','72001178444','73000377711','72000600286','20000424765','20001872505','20000483684','20001677393','30001712755','72000351781','72001726553','20003484546','20000297579','72001870488','20005118352','72000753160','20001476115','20002391015','20005183881','30004031905','72001919857','20002121156','40004985055','50004231954','30003991385','72001016760','20005146841','75001077034','92000026375','72001800111','20005485156','20004215794','50005935103','20003297734','30004846266','20000153869','74000175228','30001432357','30001432357','20005053847','72000769515','20005369565','50003798214','10008170160','72000237243','20002976852','72001659564','72000158942','20002011689','20000065386','40001740036','40005418929','40001740036','30003706171','20001047092','20001110530','20001557931','73001861980','30005587059','72000961897','20005384975','20004516914','40006716189','20004900687','40004897209','50003724898','20005640796','40004712247','20005765614','20002510446','30003962320','74001640052','30003766915','73000811637','72001519981','20005228914','20005610005','20005610005','20006194919','30005807186','20005424208','40001382422','20005163890','20000502776','40002828134','20005841348','74001246457','20001776918','20005181704','30001974723','20003914080','20005484376','73000479796','30005533290','30005533290','30006429293','30000547152','40003614606','72001161421','20005493646','20000136717','20001716370','72001651938','72000572635','72001981826','72000991049','72000460437','72001143291','72001279349','20000286674','30004071009','20003627200','20001824717','20001722896','20005029584','72001307162','10008196834','92000413308','30005495551','20003835232','20001598267'
+
+----596 updates
+
+cand+father+mother
+'20002443419','40006212847','20000459664','72000515092','20001172031','20005166904','73000687522','20002897965','20002970065','20003090888','30004020330','30005518876','20004822491','20002969725','20005324818','20000894825','30002719229','40004059089','30004805038','20005483028','20005483028','30004098033','92000352155','20000487938','92000598251','20001570199','40001690735','92000449282','72001538908','72000452675','20002501368','20003171211','50007704458','10006510082','72001312570','30002498599','30005573444','40004529330','72000245423','20004956879','20002068228','20003876551','30002744001','30005557898','72000862313','74000560191','30000299547','40001741019','20002806775','20005785189','72001164154','72000245623','30005061821','30001075421','20004722388','20004902579','20003327953','74000162163','73001134834','73001134834','20000065199','40003594543','30005114381','20004833940','20002437928','20005429948','50001901923','40006486195','20005456878','30004911742','30004911742','30006302068','40005748222','40005959743','30003579933','50004433524','73001725056','30005247755','30006816906','30004284455','30003472718','20003934641','30002129447','93000688013','92000208735','20001561532','20001449928','30005114074','40002539559','20001944390','20005234828','72001436568','20001565692','20004751109','40004958253','20000846672','20000846672','20002176970','72002061326','72000988768','72001125116','30005608466','10008269932','10006596331','20003820447','72000513530','72000639123','72001976562','72000218321','72000650335','20002145510','72001768904','20000371809','20003641718','10004414728','92000506641','72001215596','72000282692','72001600556','30001553802','20006317621','20001682720','20002331448','40001938463','74000857615','72001199566','30000193629','20001510162','40003943196','40001867453','30002792391','72001083414','20001243908','73001522260','72000566137','72001030131','20003494272','72001809219','20004017955','73000003218','73000003218','72001479384','20001702541','72001836484','50007839058','72001285729','92000277023','40002950858','20002443373','72000542477','20003017233','20000638560','20002155048','20002377828','20003783171','92000029403','20005472802','20001224492','72001957581','20000745374','20003006614','20003206310','40001111956','92000511567','50005107088','20001446668','40003731751','73001195820','72000740288','20001623855','20003318195','20000666197','92000522632','92000110078','20002970925','40006085955','93000192242','30003108708','72001594169','20003466723','30000396944','20005312948','72000601058','20003252666','20000472879','20001585965','20001290940','72000869538','50005552811','30005655207','40001962497','30003163703','72001973149','20004057279','72001185539','20005762180','20003973584','30005760524','40005140132','40005429389','72001158422','20003977800','72000143742','72001668795','72001377123','82000287717','72000746877','20005830519','20001519803','20001631990','20002184601','20000504634','20004982162','30005069807','20001209128','20004529474','20002605446','20005349747','40004674106','72000518429','20001831728','72001428887','10008326823','20004706599','72001205083','20001535574','72001905754','20003484594','20005541469','20006278079','30004142819','30001745853','73001245727','30003288872','30000179113','73001450535','73001450535','20002453947','73000008545','92000371830','20004251531','72001421312','72001208481','72000716051','20003352218','20001638388','20001547947','73000518841','72000360244','72000639419','20001991438','72000781762','72000601831','20004768045','20002131513','20002972066','40006161544','72000557387','92000415820','30004828029','30004828029','72001507308','20001117576','72001694634','72001597512','20004354285','20002097788','20004838254','20001590072','20004193074','72002110412','20004996355','30003958527','30005789424','20004807150','20000349415','20000007135','72001477817','72001131845','20004853971','20002956425','72000281386','20000081496','30001780599','40003555833','30001961429','20004747701','40003461239','30006675796','74000179673','40005175951','20002641950','20004317525','20001245361','40001872265','92000696026','20004798738','72001596872','72001656836','72001079958','20000364027','40004933174','72001526024','30000546010','30001606253','72000185367','30001362270','40001718859','72000972693','92000031643','72001617314','72001413137','72001181991','20005650332','20001455930','92000017579','40003735848','30003555974','20004542691','20003507488','30003917130','20003017317','72001205609','72000861307','20000513962','72000495984','72001993054','20001628737','20000370722','30003211174','20001660084','73001649612','72001258106','40001769685','72000371997','72000371997','72000489276','30000190210','50004617323','20000829756','72001112568','75000528224','20005383430','40005076955','20003472351','20005293983','72001987458','30002278109','20005541924','72000232467','20001796370','93000120155','72001793614','75001476694','71000449682','20004973119','50002099311','20004288511','72001699287','20004093069','10008294734','20002434995','20005437795','50002193623','40002677997','20004888837','20001907169','20004144322','20002440818','20002051379','20003429204','20001526016','40003642120','20004098268','72000548967','20003989874','30005518550','30005518550','40006183014','40003926298','92000584266','20004082172','72001626109','20004331796','72000953117','72000781234','72001915512','40002142003','20003929450','30007244375','20001465051','72000581380','72001084411','72000601082','72002066506','40005646331','40006097699','72001842594','20003266602','72000515079','72000131557','20003971564','72000351781','72000155771','20001696763','20005484899','72001313361','72000753160','20005296585','30005058219','40003984770','20005029340','72000737887','20002391015','72001178444','20001476115','20000424765','72000600286','20005183881','20000549323','20004792336','73001065057','73001065057','20002907383','73000943152','73000943152','20001872505','20005544408','20003484546','20001677393','72001726553','30002835416','92000022502','20002125142','30007316004','20000297579','72000484118','72001870488','30004031905','20002279634','30004112660','72001359516','20003489538','20004746162','20003979652','72001016443','72000642937','30005690377','20001673963','20005118352','20003297734','30007040275','20002011689','20000065386','30003661034','20001571632','20005485156','20003123056','40001885634','40001740036','20003924332','30004846266','20001172118','30005587059','40001748343','20005053847','72000961897','20002603446','50003724898','20005640796','20002914208','72001008983','20004620274','40005418929','40002581114','20004856023','40004712247','20001557931','72001694934','72001591662','30003633161','20001522666','30003200601','74001137825','20004516914','30003576674','20005765614','72001440208','74001246457','20001776918','72001951805','20005181704','72000339782','50001760250','30001974723','92000336993','92000189030','72001283265','72000807829','72001661318','30003220142','30005814891','30001918246','72001124794','20003914080','20005852607','72001659413','20002510446','92000307811','73001481631','74001640052','30003962320','30003766915','20005484376','20003381697','73000479796','30005533290','30005533290','30006429293','30000547152','73000811637','20000421419','72000993022','30002852637','40003614606','30001848310','30003764822','75000889853','72001161421','72001627398','20000588579','72000780397','72001519981','20001600792','72001039251','20005228914','72001016760','20005146841','72001919857','30004872619','75001077034','92000026375','20005493646','20000136717','20002121156','72001800111','20001716370','72001101182','20005610005','20005610005','72001651938','30001432357','30001432357','72000572635','72001981826','72000991049','20004215794','72000460437','20006194919','72001143291','72001279349','50005935103','72000769515','20000153869','74000175228','20000286674','30005807186','30004071009','30000739918','10008170160','72000237243','20004047918','20002976852','72001659564','72000158942','20005369565','50003798214','73000377711','20005424208','20000483684','20003627200','40001382422','20005384975','20001824717','30001712755','30003706171','20001047092','20005163890','20001722896','72001307162','20005029584','20001110530','40004985055','73001861980','40006716189','10008196834','50004231954','92000413308','20000502776','30005495551','30003991385','20003835232','20001598267','40002828134','20004900687','40004897209','20005841348'
+
+---593 updates
+
+176 debarred rollno
+'1403032091','1402016086','1401027771','1004024066','3003082720','3003100126','3003083487','3003098194','3013086418','3009092861','3009107690','3003083025','3001089185','4404001572','4404001576','4404000995','4404000960','4404001489','4404001495','4410017926','4410017931','4410032008','4410032028','4419004090','4204002478','4204002467','4404014375','4415067098','4415067438','4415067153','4415068556','4415067808','4410137603','4205039558','4410066842','4609010545','4410069213','4410074515','4419012055','4205051437','4410080301','4410088989','4610012019','4410100072','4205062880','4205069070','4410104350','4205072348','4205072355','4205075889','4410120905','4419019731','4205079336','4410128466','4419020586','4419020723','4205028741','4205072452','4206000370','4206003406','4206025614','4207017219','4404027890','4410013253','4410017110','4410018322','4410046548','4410115906','4410118403','4410143195','4415009493','4415030725','4415062284','4415063278','4604007705','5102014498','5102015437','5105003919','5105056132','5105059814','7204009690','7007008565','7001039675','7001046123','7007003914','7007003807','7007003703','7007008370','7007008633','7007008859','7007010070','7007013154','7007013184','7007013314','7007013473','7007008418','7203010393','7203010981','7214018348','7001025178','7001027247','8201005302','8201004605','8001003990','8007021496','8012010053','8601032917','8603008788','8603009908','8604007980','8006005552','8204011831','8004004506','8006006014','8010001642','8201004849','8601041745','8601042140','8001006098','8004005216','8006006723','8006007122','8012016454','8012017241','8601044899','8601045215','8601045297','8601046278','8001006549','8003012332','8004005640','8009005749','8009005933','8010002186','8012017679','8012019120','8601049768','8604012820','8003014029','8006008574','8007038194','8001008075','8007040112','8007042326','8012021321','8012022307','8201007765','8601054627','8601055384','8601056027','8004007199','8007045498','8006005790','8201001496','8201002802','8201003175','8201003617','8201003760','8201003865','8601004378','8601011236','8601020065','8601039389','8601043133','8603005505','8003007838','8007020873','8007021409','8007000091','9002023074','9011017380','9001048156','9001039374','9011007412','9001000587','9001026963'
+---153 updates
+
+
+137 rollno by satishTJ
+
+'8007021409','8006006014','8001006098','8004005216','8012017679','8204011831','8009005933','8004007199','8601045297','8012010053','8004005640','8601043133','8601020065','8601054627','4415030725','8601049768','9002023074','8007020873','8001006549','8201004849','8006006723','8003012332','8603009908','8601056027','8007038194','8601045215','8007042326','8601055384','8003014029','8006008574','8007021496','8012016454','8004004506','8201003760','8601046278','8601032917','8006007122','8603008788','8010001642','9011007412','8003007838','8012021321','4415067808','8007045498','4610012019','8001008075','8601044899','8009005749','4410046548','8601041745','8601042140','8010002186','8006005552','9001000587','8201005302','8201004605','4207017219','8601004378','8007000091','8012022307','9001039374','4415067098','8201007765','4415068556','8006005790','8604007980','4410120905','4205072452','4410118403','8603005505','4415067438','4205062880','4205072348','4415062284','4205039558','9011017380','4419019731','4410115906','4410080301','4410032008','4410018322','9001048156','4410088989','4205051437','4419012055','4410100072','4205028741','4410069213','8601039389','4404027890','4415067153','8601011236','4404001576','4404014375','4410017926','4410032028','4419004090','4410143195','4404001572','4205069070','4604007705','4404000995','4404000960','4205079336','4410013253','4205075889','4205072355','4415009493','4410017110','4404001489','4410017931','4404001495','4206025614','4206000370','4419020586','4410128466','4410137603','4609010545','4415063278','9001026963','4419020723','8201001496','8201003617','8201003865','8201002802','8201003175','4206003406','8604012820','8012019120','8012017241','8001003990','4410074515','4410066842','4410104350','4204002478','4204002467','8007040112'
+---133 updates
+
+
+select ear_ismigrated_candidate,ear_isreservation_availed_candidate,count(*) from candidates group by ear_ismigrated_candidate,ear_isreservation_availed_candidate;
+
+false			2431299
+true	false	7833
+true	true	3990
+		593026
+		
+select categoryid,ear_ismigrated_candidate,ear_isreservation_availed_candidate,count(*) from candidates group by categoryid,ear_ismigrated_candidate,ear_isreservation_availed_candidate;
+
+
+0			196506
+1	false		654055
+1	true	false	2267
+1	true	true	1164
+2	false		363982
+2	true	false	1530
+2	true	true	574
+6	false		1413261
+6	true	false	4036
+6	true	true	2252
+9	false		1
+9			396520
+
+category	migrated	reservation	count
+SC	Yes	Yes	1164
+SC	Yes	No	2267
+ST	Yes	Yes	574
+ST	Yes	No	1530
+OBC	Yes	Yes	2252
+OBC	Yes	No	4036
+
+There were 1366 candidates whose Naxal status of application and naxal status as determined above were not matching.
+There were 915 candidates whose Border status of application and the border status as determined above were not matching.
+
+
+manipur
+ews ---6 candidate cleared merit ---all allocated--all naxal yes but no vacancy ---->ground area allocated
+obc---only male border vacancy left--but no such candidate found
+sc--only 6 candidates having border--all allocated
+UR---

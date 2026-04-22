@@ -1,0 +1,837 @@
+--------Check and Delete from m_master_data_check-------
+
+select * from m_master_data_check where cand_reg_no ='40005905063';
+select * from del_master_data_check where cand_reg_no ='40005904517';
+update m_master_data_check set is_active = 'false' where cand_reg_no ='40005904517'; 
+insert into del_master_data_check values(42790287,40005904517,'gurupadadas773@gmail.com',9883721066,'BUDDHADEB DAS','55','407131N0153',2018,'	','BUDDHADEBDAS55407131N01532018',36,'2022-12-30 18:30:31.831891',false,null);
+delete from m_master_data_check where cand_reg_no ='40005904517';
+
+select * from m_master_data_check where cand_reg_no ='10005258012';
+select * from del_master_data_check where cand_reg_no ='10005258012';
+update m_master_data_check set is_active = 'false' where cand_reg_no ='10005258012'; 
+insert into del_master_data_check values(35463947,10005258012,'www.nagaratna66@gmail.com',7259263209,'H NAGARATNA','1','15338011',2018,'2yzCnijNpLxs2syCjbUtrQ==','HNAGARATNA1153380112018',17,'2022-02-04 15:33:29.856671',false,);
+delete from m_master_data_check where cand_reg_no ='30006241219';
+
+insert into del_master_data_check (select cand_serial_id,cand_reg_no,cand_email,cand_mobile,cand_name,cand_tenth_education_board,cand_tenth_rollno,cand_tenth_yearofpassing,cand_aadhaar_number,concat,original_state_code,created_date_time,is_active,del_flag from m_master_data_check where cand_reg_no= '30006241219');
+
+
+---------------------------------------------------------------------------------------
+--------Check Secondary details----------------
+
+select * from m_personal_dtls_pu where pd_reg_no = '50001044017'; --pd_id--> 5715586
+select * from m_additional_dtls_pu where ad_personid =5715586;
+select * from m_contact_dtls_pu where cd_personid =5715586;
+select * from m_userlogin_ssc where ul_userid =5715586;
+
+delete from m_personal_dtls_pu where pd_reg_no = '50002756347';
+delete from m_additional_dtls_pu where ad_personid =5715586;
+delete from m_contact_dtls_pu where cd_personid =5715586;
+delete from m_userlogin_ssc where ul_userid =5715586;
+
+select * from m_master_data_check where cand_reg_no ='50002756347';
+update m_master_data_check set is_active = 'false' where cand_reg_no ='50002756347'; 
+insert into del_master_data_check values(25753087,50002756347,'anupamsinghsengar975571@gmail.com',9179893472,'ANUPAM SINGH','36','123624915',2012,'lzYOyvd4ibRIroaU9NbeCw==','ANUPAMSINGH361236249152012',20,'2020-12-17 17:53:49.989994',false,null);
+-----------------------------------------------------------------------------------------
+insert into m_master_data_check values (25753087,50002756347,'anupamsinghsengar975571@gmail.com',9179893472,'ANUPAM SINGH','36','123624915',2012,'lzYOyvd4ibRIroaU9NbeCw==','ANUPAMSINGH361236249152012',20,'2020-12-17 17:53:49.989994',false,null);
+
+update m_master_data_check set is_active = 'false' where cand_reg_no ='10006880464'; 
+insert into del_master_data_check values(42791957,10006880464,'juliatheresa16@gmail.com',9961184980,'JULIA VARGHESE','1','4318224',2017,'AxzyO9jFqjYSq6pUZfXmVw==','JULIAVARGHESE143182242017',18,'2022-12-30 19:00:08.010862',false,null);
+delete from m_master_data_check where cand_reg_no ='10006880464';
+
+----------------------------------------------------------------------------------
+
+select * from m_personal_dtls_pu where pd_reg_no = '40002547589'; pd_id--> 5715586
+select * from m_additional_dtls_pu where ad_personid =5581075;
+select * from m_contact_dtls_pu where cd_personid =5581075;
+select * from m_userlogin_ssc where ul_userid =5581075;
+
+delete from m_personal_dtls_pu where pd_reg_no = '40002547589';
+delete from m_userlogin_ssc where ul_userid =5581075;
+---------------------------------------------------------------------------------------
+select * from del_master_data_check where cand_reg_no ='20005682715';
+update m_master_data_check set is_active = 'false' where cand_reg_no ='20005682715'; 
+insert into del_master_data_check values(45653943,20005682715,'yashkumargaur27@gmail.com',9950283255,'YASH KUMAR GAUR','17','01077560',2015,'p3DiLqBEREsp29eXTW0E+w==','YASHKUMARGAUR17010775602015',29,'2023-05-25 08:40:14.505181',false,null);
+delete from m_master_data_check where cand_reg_no ='20005682715';
+
+
+select * from m_personal_dtls_pu where pd_reg_no = '40002547589';-- pd_id--> 5715586
+select * from m_additional_dtls_pu where ad_personid =5581075;
+select * from m_contact_dtls_pu where cd_personid =5581075;
+select * from m_userlogin_ssc where ul_userid =5581075;
+
+delete from m_personal_dtls_pu where pd_reg_no = '40002547589';
+delete from m_userlogin_ssc where ul_userid =5581075;
+
+--------------------------------------------------------------------------------
+Application form Details to be shared from server 49 
+location I:\DataRepository\DraftPrint
+----------------------------------------------------------------------------
+Taking dump of only table and restore in server
+
+pg_dump -U <username> -h <local_host> -p <local_port> -t <table_name> -F c -f /path/to/dumpfile.dump <database_name>
+pg_dump -U postgres -h localhost -p 5432 -t t_je2022_final_marks -F c -f C:\Users\Public\dumpfile.dump je2022_final
+pg_dump -U postgres -h localhost -p 5432 -t t_chsl_exam_2022_tier1_marks -F c -f C:\Users\Public\Chsle2022.dump CHSLE2022
+pg_dump -U postgres -h localhost -p 5432 -t t_sicpo_exam_2022_tier2_marks -F c -f C:\Users\Public\sicpo2022_tier2.dump sicpo22_tier2
+
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t ctgd2022_selected_application_data -F c -f C:\Users\Public\ctgd2022_selected_application_data.dump alloc_ctgd2022_tier1_result
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d ssc2 -t ctgd2022_selected_application_data C:\Users\Public\sicpo2022_tier2.dump
+
+
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t t_chsl_exam_2022_final_marks -F c -f C:\Users\Public\t_chsl_exam_2022_final_marks.dump ssc2
+pg_restore -U postgres -h 10.246.126.165 -p 5432 -d ssc2 -t t_chsl_exam_2022_final_marks C:\Users\Public\t_chsl_exam_2022_final_marks.dump
+
+
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t t_je2022_final_marks -F c -f C:\Users\Public\je2022dumpfile.dump ssc2
+pg_dump -U postgres -h 10.246.126.165 -p 5432 -t t_steno2022exam_applicant_reg_pu -F c -f C:\Users\Public\steno165dumpfile.dump ssc2
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t t_sicpo_exam_2022_tier2_marks -F c -f C:\Users\Public\sidp2022dumpfile.dump ssc2
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t t_mts_exam_2022_final_marks -F c -f C:\Users\Public\t_mts_exam_2022_final_marks.dump alloc_mts2022_t2_allocation
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_mts_exam_2022_final_marks C:\Users\Public\t_mts_exam_2022_final_marks.dump
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_states_gis -F c -f C:\Users\Public\states.dump alloc_mts2022_t1_allocation
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2022_t1_allocation -t m_states_gis C:\Users\Public\states.dump
+
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_steno2022exam_applicant_reg_pu14062023 C:\Users\Public\steno165dumpfile.dump
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_sicpo_exam_2022_tier2_marks C:\Users\Public\sicpo2022_tier2.dump
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_ssa_ldc_dept_2023_2024 C:\Users\Public\t_ssa_ldc_dept_2023_2024.dump
+
+
+
+pg_restore -U <username> -h <remote_host> -p <remote_port> -d <database_name> -t <table_name> /path/to/dumpfile.dump
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_je2022_final_marks C:\Users\Public\dumpfile.dump
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_chsl_exam_2022_tier1_marks C:\Users\Public\Chsle2022.dump
+
+
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -d ssc2 -t t_je2022_final_marks -F c -f C:\Users\Public\dumpfile.dump
+pg_restore -U postgres -h 10.246.126.166 -p 5432 -d ssc2 -t t_je2022_final_marks C:\Users\Public\je2022dumpfile.dump
+
+-------------------------------------------------------------------------------------------------------------------------
+Taking dump of a db and restore it in local machine
+
+pg_dump -U <username> -h <remote_host> -p <remote_port> -F c -f /path/to/backup.dump <database_name>
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -F c -f C:\Users\Public\stagingbackup.dump ssc2
+
+createdb -U <username> -h <local_host> -p <local_port> <database_name>
+createdb -U postgres -h localhost -p 5432 stagingDB
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -F c -f C:\Users\Public\alloc_ctgd2022_allocation_finalbackup.dump alloc_ctgd2022_allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final C:\Users\Public\alloc_ctgd2022_allocation_finalbackup.dump
+
+pg_restore -U <username> -h <local_host> -p <local_port> -d <database_name> /path/to/backup.dump
+pg_restore -U postgres -h localhost -p 5432 -d alloc_ctgd2022_petpst_result C:\Users\Public\ctdg2022_petpst_backup.dump
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d stagingDB C:\Users\Public\stagingbackup.dump
+
+pg_dump -U postgres -h localhost -p 5432 -F c -f C:\Users\Public\alloc_steno2020.dump ssc2
+pg_dump -U postgres -h localhost -p 5432 -F c -f C:\Users\Public\alloc_steno2020.dump alloc_steno2020_allocation_final
+
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d test C:\Users\Public\alloc_steno2020.dump
+
+--------------------------------------------------------------------------------------------------------
+select * from m_gd22candidatesdtls_ssc
+select * from t_constablegd22_petpst
+
+--------------------------------------------------------------------------------------------------
+SHOW server_encoding;
+SET client_encoding to 'UTF8';
+---------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_petpst_result
+\copy t_constablegd22_petpst from 'C:\Users\Public\t_constablegd22_petpst.csv' csv header;
+\copy vacancy_table from 'C:\Users\Public\vacancy_06072023.csv' csv header;
+"C:\Users\Public\vacancy_06072023.csv"
+------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy m_department_master_dv from 'C:\Users\Public\Table-Data\m_department_master_dv.csv' csv header;
+\copy t_appl_biometric_data_table_ssc from 'C:\Users\Public\Table-Data\t_appl_biometric_data_table_ssc.csv' csv header;
+\copy r_master_audit_mdt from 'C:\Users\Public\Table-Data\r_master_audit_mdt.csv' csv header;
+"C:\Users\Public\Table-Data\t_appl_dv_ro_candidatedata_ssc.csv"
+\copy  exam_wise_candidateresultdata_steno2022 from  'C:\Users\Public\Dossier Data shared\exam_wise_candidateresultdata_steno2022.csv' csv header;
+\copy  exam_wise_vacancy_table_steno2022 from  'C:\Users\Public\Dossier Data shared\exam_wise_vacancy_table_steno2022.csv' csv header;
+"C:\Users\Public\Dossier Data shared\exam_wise_vacancy_table_steno2022.csv"
+\copy  t_dossier_department_list_ssc from  'C:\Users\Public\Dossier Data shared\t_dossier_department_list_ssc.csv' csv header;
+
+
+\copy  t_appl_dossierdynamic_table_ssc from  'C:\Users\Public\Dossier Data shared\t_appl_dossierdynamic_table_ssc.csv' csv header;
+
+"C:\Users\Public\Dossier Data shared\t_dossier_department_list_ssc.csv"
+exam_wise_candidateresultdata_steno2022
+t_appl_dossierdynamic_table_ssc
+
+03:25.3
+2023-06-26  06:03:25 PM
+
+"C:\Users\Public\Table-Data\t_appl_dv_ro_candidatedata_ssc.csv"
+
+"C:\Users\Public\Table-Data\t_appl_biometric_data_table_ssc.csv"
+"C:\Users\Public\Table-Data\m_department_master_dv.csv"
+\copy t_constablegd22_petpst from 'C:\Users\Public\t_constablegd22_petpst.csv' csv header;
+
+psql -U postgres -h 10.246.126.164 -p 5432 -d ssc2
+\copy t_steno2022_final_marks from 'C:\Users\Public\t_steno2022_final_marks.csv' csv header;
+
+t_post_preference_chsle2022_ssc
+
+"C:\Users\Public\t_steno2022_final_marks.csv"
+
+\copy master_table from 'C:\Users\Public\master_table.csv' csv header
+\copy vacancy_table from 'C:\Users\Public\Vacancy_rhqIX_10072023.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2022_x_t1_allocation_additional
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2020_revised_for_selected_posts
+\copy vacancy_table from 'C:\Users\Public\Vacancy_rhqIX_10072023' csv header;
+\copy candidates to 'C:\Users\Public\candidates_selectionPost_ldk_additional.csv' csv header;
+
+"C:\Users\Public\Vacancy_table_rhq20_additional.csv"
+
+\copy candidates to 'C:\Users\Public\candidates_rhqVIII2020_additional_07072023.csv' csv header;
+
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc165.csv' csv header;
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc166.csv' csv header;
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc167.csv' csv header;
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc170.csv' csv header;
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc171.csv' csv header;
+\copy t_post_pref_steno2022_ssc from 'C:\Users\Public\t_post_pref_steno2022_ssc172.csv' csv header;
+
+
+
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc165.csv' csv header;
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc166.csv' csv header;
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc167.csv' csv header;
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc170.csv' csv header;
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc171.csv' csv header;
+\copy t_post_pref_steno2022_ssc to 'C:\Users\Public\t_post_pref_steno2022_ssc172.csv' csv header;
+
+
+
+psql -U postgres -h localhost -p 5432 -d postgres
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2022allocation_final
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2021_ix_t1_all_allocation_additional
+\copy candidates to 'C:\Users\Public\candidates_rhqIX2021_additional_10072023.csv' csv header;
+\copy vacancy_table from 'C:\Users\Public\VACANCY_TABLE_ADDITIONALdp21.csv' csv header;
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t exam_wise_candidateresultdata_mts2022 -F c -f C:\Users\Public\tempsteno.dump alloc_mts2022_t2_allocation
+pg_restore -U postgres -h 10.246.126.167 -p 5432 -d alloc_mts2022_t1_allocation C:\Users\Public\tempsteno.dump
+
+COPY table_name (column1, column2, column3)
+FROM 'path/to/data.txt'
+WITH (FORMAT CSV, DELIMITER E'\t', HEADER);
+
+
+COPY table_name (column1, column2, column3)
+FROM 'path/to/data.txt'
+FORMAT CSV
+DELIMITER E'\t'
+HEADER;
+
+\COPY vacancy_table FROM 'C:\Users\Public\vacancy_table_chsle2022_final.txt' FORMAT CSV DELIMITER E'\t' HEADER;
+
+
+\COPY vacancy_table FROM 'C:\Users\Public\Steno2022_vacancy_table.txt' FORMAT CSV DELIMITER E'\t' HEADER;
+
+COPY your_table FROM '/path/to/your/textfile.txt' WITH (FORMAT text, DELIMITER E'\t');
+
+--COPY vacancy_table FROM 'C:\Users\Public\Steno2022_vacancy_table.txt' WITH (FORMAT text, DELIMITER E'\t');
+
+\COPY vacancy_table FROM 'C:\Users\Public\vacancy_table_chsle2022_final.txt' WITH (FORMAT text, DELIMITER E'\t');
+
+"C:\Users\Admin\Downloads\Vacancy Format.csv"
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2022allocation_final
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2022_x_t1_allocation_additional
+
+alloc_selectionpost2022_x_t1_allocation_additional
+\copy vacancy_table from 'C:\Users\Admin\Downloads\Vacancy Format.csv' csv header;
+
+"C:\Users\Public\vacancy_rhqX_additional2.csv"
+
+--\COPY vacancy_table FROM 'C:\Users\Public\vacancy_rhqX_additional2.txt' WITH (FORMAT text, DELIMITER E'\t');
+
+
+
+select count(*) from candidates;
+select count(*) from candidates where allocated_post is not null;
+select sum(initial) as initial,sum(current) as current,sum(allocated) as allocated,sum(left_vacancy)as left_vacancy,count(*) as records from vacancy_table;
+
+
+
+with CTE as 
+(
+select slno,allocated_category,allocated_post,allocated_eq,age_limit,rollno FROM candidates_additional_10072023 where allocated_post is not null
+)
+update candidates
+set
+allocated_category=CTE.allocated_category,
+allocated_post=CTE.allocated_post,
+allocated_eq=CTE.allocated_eq,
+age_limit=CTE.age_limit
+
+from CTE where candidates.slno =CTE.slno;
+
+
+update candidates
+set allocated_post =null,
+allocated_eq=null,
+allocated_category =null,
+age_limit=null;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select rollno,name,father_name,mother_name,null as name_matriculation,null as father_name_matriculation,null as	mother_name_matriculation,tenth_rollno as rollno_matriculation,	gender,dob,is_age_relaxation as agerelax,agerelax_code,cat1, null as change_cat1_reason,cat2,is_ex_serviceman as exs_reservation,joining_date_for_armedforces as exsm_joining_date,discharged_date as	exsm_dschrg_date,serviceperiod as exsm_length_ymd,phy_handicapped,cat3,sub_phcode,region_id as region_code,null as minorcommunity,	null as qualification_code1,null as	qualification_code2,null as	qualification_code3,null as	subject_code1,null as subject_code2,null as	subject_code3,null as percentage1,null as percentage2,null as percentage3,null as medium_code1,null as medium_code2,null as	medium_code3,null as aao_qualify,null as jso_qualifify,null as cpt_qualifify,null as dest_qualifify, null as previous_preference_post,preference_post as	post_preference_original,null as dec_approved,null as is_qualified,null as matriculation_certificate,	null as caste_certificate,null as obc_certificate,null as exs_certificate,null as ph_certificate,null as informed_ofc,null as govt_emp_certificate,null as	photo_doc_signed,null as matric_date,null as eq_group_date,null as caste_date,null as obc_certificate_date,null as exs_certificate_date,null as	ph_certificate_date,null as	informed_offc_date,	null as govt_emp_certificate_date,null as photo_doc_signed_date,rejection_provision,allocated_category,allocated_post,allocated_department as allocated_dept,allocated_against_ur,exam_id	notification_id,null as	rank, emailid as email,	total as totalmarks,allocated_medium
+from exam_wise_candidateresultdata_steno2022 ;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select post_code as dept_code,department,post_code,post_name as post,category,category_code,initial as initial_vacancy,null as current_old,null as allocated_old,null as left_vacancy_old,current,allocated,left_vacancy,null as lowest_total,null as lowest_total_cbe,null as lowest_total_tier2,null as lowest_total_tier1,null as min_marks_cand_dob,'3' as exam_id,'40' as notification_id,medium 
+from vacancy_table;
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+with CTE as
+(
+select reg_no,post_code,allocated_post,allocated_category,allocated_eq,age_limit from candidates where allocated_post is not null
+)
+update candidates_bkp_20072023
+set allocated_post=CTE.allocated_post,
+allocated_category =CTE.allocated_category,
+allocated_eq =CTE.allocated_eq,
+age_limit =cte.age_limit
+from CTE where candidates_bkp_20072023.reg_no =CTE.reg_no and candidates_bkp_20072023.post_code=CTE.post_code;
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join chsl2022_tier2_candidates on t_chsl2022exam_applicant_reg_pu.ear_person_regno = chsl2022_tier2_candidates.regno and ear_isactive = 'true' and ear_application_status = '1') to 'C:\Users\Public\CHSLE2022\165.csv' csv header;
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+with CTE as 
+(
+select slno,allocated_category,allocated_post,allocated_eq,age_limit,rollno FROM candidates where allocated_post is not null
+)
+update rhq2021_complete
+set
+allocated_category=CTE.allocated_category,
+allocated_post=CTE.allocated_post,
+allocated_eq=CTE.allocated_eq,
+age_limit=CTE.age_limit,
+rollno =CTE.rollno
+
+from CTE where rhq2021_complete.slno =CTE.slno;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+\copy t_examsicpo2022_applicant_reg_pu from 'C:\Users\Public\Applicant data\application data 165.csv' csv header;
+
+copy (select a.* from t_examsicpo2022_applicant_reg_pu a inner join t_sicpo_exam_2022_tier2_marks b on a.ear_person_regno=b.regid ::bigint and a.ear_isactive = 'true' and a.ear_application_status = '1') to 'C:\Users\Public\sicpo172.csv' csv header;
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+select rollno,name,father_name,mother_name,null as name_matriculation,null as father_name_matriculation
+,null as mother_name_matriculation,null as rollno_matriculation,gender,dob,is_age_relaxation as agerelax
+,age_relaxation_code as agerelax_code,cat1,null as change_cat1_reason,cat2,is_ex_serviceman as exs_reservation
+,joining_date_for_armedforces as exsm_joining_date,discharged_date as exsm_dschrg_date,service_period as exsm_length_ymd
+,is_physically_handicaped as phy_handicapped,cat3,null as sub_phcode,regionid as region_code,null as minorcommunity
+,null as qualification_code1,null as qualification_code2,null as qualification_code3,null as subject_code1
+,null as subject_code2,null as subject_code3,null as percentage1,null as percentage2,null as percentage3,
+null as aao_qualify,null as jso_qualifify,null as cpt_qualifify, null as dest_qualifify,null as previous_preference_post
+,post_pref_original as post_preference_original,null as dec_approved,null as is_qualified,null as matriculation_certificate
+,null as caste_certificate,null as obc_certificate,null as exs_certificate,null as ph_certificate,null as
+informed_ofc,null as govt_emp_certificate,null as photo_doc_signed,null as matric_date,null as eq_group_date,
+null as caste_date,null as obc_certificate_date,null as exs_certificate_date,null as ph_certificate_date,
+null as informed_offc_date,null as govt_emp_certificate_date,null as photo_doc_signed_date,rejection_provision,allocated_category
+,null as allocated_post,allocated_dept,allocated_against_ur,examid as exam_id,notificationid  as notification_id,null as rank,email_id as email,total as totalmarks
+from candidates where allocated_category is not null;
+
+
+select department_code as dept_code,department_name as department,department_code as post_code,post,
+category,category_code,initial_vacancy,null as current_old,null as allocated_old,null as left_vacancy_old,
+current,allocated,left_vacancy,min_marks as lowest_total,null as lowest_total_cbe,min_marks as lowest_total_tier2,
+null as lowest_total_tier1,min_marks_cand_dob,'2' as exam_id,'46' as notification_id from vacancy_table;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+do
+$$
+begin
+alter table sample add column father_name text;
+alter table sample add column mother_name text;
+alter table sample add column dob date;
+alter table sample add column gender integer;
+alter table sample add column cat1 integer;
+alter table sample add column cat2 integer;
+alter table sample add column cat3 integer;
+alter table sample add column post_pref text;
+alter table sample add column rejection_provision character varying(5);
+alter table sample add column remarks character varying(20);
+alter table sample add column paper1 numeric;
+alter table sample add column section1 numeric;
+alter table sample add column allocated_category character varying(5);
+alter table sample add column allocated_dept character varying(5);
+alter table sample add column allocated_against_ur character varying(5);
+
+end
+$$
+
+
+
+update sample
+set father_name = b.father_name,
+mother_name =b.mother_name,
+dob =b.dob,
+gender=b.gender,
+cat1=b.cat1,
+cat2=b.cat2,
+cat3=b.cat3,
+post_pref=b.post_pref,
+rejection_provision=b.rejection_provision,
+remarks=b.remarks,
+paper1=b.paper1,
+section1=b.section1,
+allocated_category=b.allocated_category,
+allocated_dept=b.allocated_dept,
+allocated_against_ur=b.allocated_against_ur
+from candidates b where sample.rollno=b.rollno and sample.regid::bigint =b.regno;
+
+
+
+select t_examgd2022_applicant_reg_pu.*
+from t_examgd2022_applicant_reg_pu inner join sample
+on t_examgd2022_applicant_reg_pu.ear_person_regno = sample.regno
+and t_examgd2022_applicant_reg_pu.ear_isactive = 'true' and t_examgd2022_applicant_reg_pu.ear_application_status='1';
+
+
+\copy (select * from t_mtsexam2022_applicant_reg_pu where ear_application_status ='1' and ear_isactive='true') to 'C:\Users\Public\t_mtsexam2022_applicant_reg_pu_165.csv' csv header;
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2022_t1_allocation
+
+
+alter table rhq2022_complete add column times character varying;
+
+update rhq2022_complete
+set
+allocated_category=CTE.allocated_category,
+allocated_post=CTE.allocated_post,
+allocated_eq=CTE.allocated_eq,
+age_limit=CTE.age_limit,
+rollno =CTE.rollno
+
+from candidates_additional4 CTE where 
+rhq2022_complete.reg_no||rhq2022_complete.post_code = CTE.reg_no||CTE.post_code and CTE.allocated_post is not null;
+----------------------------------------------------------------------------------------------------------------------------------------
+update rhq2021_complete
+set
+allocated_category=CTE.allocated_category,
+allocated_post=CTE.allocated_post,
+allocated_eq=CTE.allocated_eq,
+age_limit=CTE.age_limit,
+rollno =CTE.rollno,
+times ='Additional5'
+
+from candidates_18072023 CTE where 
+rhq2021_complete.reg_no||rhq2021_complete.post_code = CTE.reg_no||CTE.post_code and CTE.allocated_post is not null;
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+update rhq2022_complete
+set
+allocated_category=CTE.allocated_category,
+allocated_post=CTE.allocated_post,
+allocated_eq=CTE.allocated_eq,
+age_limit=CTE.age_limit,
+rollno =CTE.rollno,
+times ='Additional5'
+
+from candidates CTE where 
+rhq2022_complete.reg_no||rhq2022_complete.post_code = CTE.reg_no||CTE.post_code and CTE.allocated_post is not null;
+
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t t_gd_exam_2022_final_marks -F c -f C:\Users\Public\t_gd_exam_2022_final_marks.dump ssc2
+pg_restore -U postgres -h 10.246.126.165 -p 5432 -d ssc2 -t t_gd_exam_2022_final_marks  C:\Users\Public\t_gd_exam_2022_final_marks.dump
+
+
+SELECT pg_terminate_backend(15296);----to terminate a process
+
+
+alter table t_gd_exam_2022_final_marks add column pet_remarks text;
+update t_gd_exam_2022_final_marks
+set pet_remarks ='ST Category specific relaxation';
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+APPLICATION COUNT:
+
+
+select --ear_regionid,rg_regioncode,
+count(*) filter(where (ear_application_status=0 and ear_noofattempt=1) or(ear_application_status=1) and ear_isactive=true)as total,count((ear_application_status=0 and ear_noofattempt=1) or(ear_application_status=1) and ear_isactive=true) filter(where ear_application_status=1 and ear_isactive=true) as completed from (
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.166 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data1(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  union all
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.167 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data2(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  union all
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.165 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data3(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  union all
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.170 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data4(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  union all
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.171 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data5(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  union all
+  select * from dblink('dbname=ssc2 port=5432 host=10.246.126.172 user=postgres password=Postgre$@12345','select ear_person_regno,ear_application_status,ear_regionid,ear_noofattempt,ear_isactive from t_cedp2023exam_applicant_reg_pu') as data6(ear_person_regno bigint,ear_application_status integer,ear_regionid integer,ear_noofattempt integer,ear_isactive boolean)
+  )
+-- inner join m_regions_gis on rg_regionid=ear_regionid
+-- group by ear_regionid,rg_regioncode
+  order by 1
+  
+-------------------------------------------------------------------------------------------------------------------------------- 
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+\copy (select ear_appl_regid as Registration_No,ear_gender as Gender,ear_categoryid as CAT1,CASE WHEN ear_is_ex_serviceman ='true' then '3' else '0' end as CAT2,ear_ph_code as CAT3,ear_permanent_stateid,ear_permanent_districtid,ear_permanent_pincode as Permanent_PIN, applicationfee as Fee_Payment_Status from t_chsl2023exam_applicant_reg_pu where ear_isactive ='true' and ear_application_status ='1') to 'C:\Users\Public\chsle2023_165.csv' csv header;
+
+psql -U postgres -h localhost -p 5432 -d CHSLE2023
+
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\chsle2023_165.csv' ;
+
+
+select * from vacancy_table_allocated order by post_code,category_code;
+
+create table candidates as (select * from candidates_additional5 where allocated_post is null);
+
+select count(*) from candidates;----508098
+select count(*) from candidates where allocated_post is not null;
+select count(*) from candidates_additional5;----508852
+select count(*) from candidates_additional5 where allocated_post is not null;----754
+
+select * from rhq2022_complete;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2022_x_t1_allocation_additional
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2022_t2_allocation
+
+
+
+=------------------------------------------------------------------------------------------------------------------------------
+
+
+select state_code as dept_code,
+state_name as department,
+post_code,
+post_name as post,
+age_limit,
+category_code,
+initial_vacancy,
+current,
+allocated,
+left_vacancy,
+as examid,
+as notificationid from vacancy_table;
+
+
+select rollno as roll_Number,
+regno as Registration_number,
+name,
+changedname as new_name,
+father_name,
+mother_name,
+dob,
+gender,
+cat1,
+cat2,
+cat3,
+is_ex_serviceman as ear_is_ex_serviceman,
+centerid1 as ear_centerid1,
+center1 as ec_center_name,
+present_address as ear_present_address,
+present_district as present_district_name,
+present_state as present_state_name,
+present_pincode as ear_present_pincode,
+permanent_address as ear_permanent_address,
+permanent_state as permanent_state_name,
+permanent_district as permanent_district_name,
+permanent_pincode as ear_permanent_pincode,
+email_id as ear_email_id,
+mobile_number as ear_mobile_number from candidates where allocated_category is not null;
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+select regno,
+rollno,
+name,
+father_name,
+mother_name,
+gender as genderid,
+cat1 as categoryid,
+dob	,
+is_physically_handicaped as isph,
+cat3 as phcode,
+regionid as examregion_code,
+null as petpstdate,
+null as petpstcentrename,
+null as petpstcentrecode,
+candidateage_ason_date as age
+from candidates where allocated_category is not null;
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -F c -f C:\Users\Public\alloc_cgle2022allocation_final.dump alloc_cgle2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2022allocation_final C:\Users\Public\alloc_cgle2022allocation_final.dump
+
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2023_xi_allocation
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+psql -U postgres -h localhost -p 5432 -d postgres
+
+--------------- Experience column in single line ----------------------------------------------------------------------------------------------------------------------
+
+WITH RankedExperiences AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER (PARTITION BY regno,expd_postid ORDER BY expd_servicefrom) AS experience_number
+  FROM sample
+)
+SELECT
+ regno,name,new_name,father_name,mother_name,dob,age,gender,catgeory,nationality,identification_mark,ear_tenth_education_boardid,
+ tenth_education_board,tenth_roll_no,tenth_yearofpassing,photo_img_url,sign_img_url,ear_centerid1,center1,
+ centerid2,center2,centerid3,center3,regionid,region,regionid_of_post,region_of_post,postid,postcode,postname,
+ levelofpost,is_ex_serviceman,cat2,service_period,joining_date_for_armedforces,joining_date_for_civilpost,
+ discharged_date,isexs_benefit_availed_for_civilpost,exs_reservation,is_physically_handicaped,ear_ph_code,
+ cat3,is_cerebral_palsy,is_physical_limitation,is_scribe_required,own_scribe,scribe_medium,whether_skilltest_required,
+ skilltest_medium,is_age_relaxation,age_relaxation_code,edqualificationid,edqualification_name,edsubject,edsub_name,
+ isactive,ear_ip_address,ear_createdbyid,ear_createdbyrid,ear_updbyid,ear_upddtm,ear_createddtm,ear_notificationid,application_status,
+ ear_is_ews_candidate,ear_share_persinfo_accrossportal,present_address,ear_present_districtid,present_district,ear_present_stateid,
+ present_state,present_pincode,ear_permanent_stateid,permanent_state,ear_permanent_districtid,ear_permanent_pincode,email_id,mobile_number,
+ ear_other_national_address,ear_photo_date,ear_isdate_clear_on_photo,challan_generation_date,challan_downloaded_date,challan_refno,
+ applicationfee,ear_qrcode_path,ear_add_source,ear_upd_source,ear_language_option,ear_highest_edu_qual,ear_is_obc_by_delhi_govt,ear_reg_categoryid,
+ ear_is_delhi_police,ear_is_modified,ear_declaration_for_post,ear_noofattempt,ear_flag,ear_piflag,ear_siflag,ear_piflag_lastupdtm,ear_siflag_lastupdtm,
+ ear_isdraftprint_util_flag,ear_isextended,allocated_category,allocated_post,allocated_eq,age_limit,rollno,expd_postid,
+  MAX(CASE WHEN experience_number = 1 THEN expd_nameof_organization END) AS expd_nameof_organization1,
+  MAX(CASE WHEN experience_number = 1 THEN expd_natureofduty END) AS expd_natureofduty1,
+  MAX(CASE WHEN experience_number = 1 THEN expd_designation END) AS expd_designation1,
+  MAX(CASE WHEN experience_number = 1 THEN expd_servicefrom END) AS expd_servicefrom1,
+  MAX(CASE WHEN experience_number = 1 THEN expd_serviceto END) AS expd_serviceto1,
+  MAX(CASE WHEN experience_number = 2 THEN expd_nameof_organization END) AS expd_nameof_organization2,
+  MAX(CASE WHEN experience_number = 2 THEN expd_natureofduty END) AS expd_natureofduty2,
+  MAX(CASE WHEN experience_number = 2 THEN expd_designation END) AS expd_designation2,
+  MAX(CASE WHEN experience_number = 2 THEN expd_servicefrom END) AS expd_servicefrom2,
+  MAX(CASE WHEN experience_number = 2 THEN expd_serviceto END) AS expd_serviceto2,
+  MAX(CASE WHEN experience_number = 3 THEN expd_nameof_organization END) AS expd_nameof_organization3,
+  MAX(CASE WHEN experience_number = 3 THEN expd_natureofduty END) AS expd_natureofduty3,
+  MAX(CASE WHEN experience_number = 3 THEN expd_designation END) AS expd_designation3,
+  MAX(CASE WHEN experience_number = 3 THEN expd_servicefrom END) AS expd_servicefrom3,
+  MAX(CASE WHEN experience_number = 3 THEN expd_serviceto END) AS expd_serviceto3,
+  MAX(CASE WHEN experience_number = 3 THEN expd_nameof_organization END) AS expd_nameof_organization4,
+  MAX(CASE WHEN experience_number = 3 THEN expd_natureofduty END) AS expd_natureofduty4,
+  MAX(CASE WHEN experience_number = 3 THEN expd_designation END) AS expd_designation4,
+  MAX(CASE WHEN experience_number = 3 THEN expd_servicefrom END) AS expd_servicefrom4,
+  MAX(CASE WHEN experience_number = 3 THEN expd_serviceto END) AS expd_serviceto4,
+  MAX(CASE WHEN experience_number = 3 THEN expd_nameof_organization END) AS expd_nameof_organization5,
+  MAX(CASE WHEN experience_number = 3 THEN expd_natureofduty END) AS expd_natureofduty5,
+  MAX(CASE WHEN experience_number = 3 THEN expd_designation END) AS expd_designation5,
+  MAX(CASE WHEN experience_number = 3 THEN expd_servicefrom END) AS expd_servicefrom5,
+  MAX(CASE WHEN experience_number = 3 THEN expd_serviceto END) AS expd_serviceto5,
+  MAX(CASE WHEN experience_number = 3 THEN expd_nameof_organization END) AS expd_nameof_organization6,
+  MAX(CASE WHEN experience_number = 3 THEN expd_natureofduty END) AS expd_natureofduty6,
+  MAX(CASE WHEN experience_number = 3 THEN expd_designation END) AS expd_designation6,
+  MAX(CASE WHEN experience_number = 3 THEN expd_servicefrom END) AS expd_servicefrom6,
+  MAX(CASE WHEN experience_number = 3 THEN expd_serviceto END) AS expd_serviceto6
+FROM RankedExperiences
+group by regno,name,new_name,father_name,mother_name,dob,age,gender,catgeory,nationality,identification_mark,ear_tenth_education_boardid,
+ tenth_education_board,tenth_roll_no,tenth_yearofpassing,photo_img_url,sign_img_url,ear_centerid1,center1,
+ centerid2,center2,centerid3,center3,regionid,region,regionid_of_post,region_of_post,postid,postcode,postname,
+ levelofpost,is_ex_serviceman,cat2,service_period,joining_date_for_armedforces,joining_date_for_civilpost,
+ discharged_date,isexs_benefit_availed_for_civilpost,exs_reservation,is_physically_handicaped,ear_ph_code,
+ cat3,is_cerebral_palsy,is_physical_limitation,is_scribe_required,own_scribe,scribe_medium,whether_skilltest_required,
+ skilltest_medium,is_age_relaxation,age_relaxation_code,edqualificationid,edqualification_name,edsubject,edsub_name,
+ isactive,ear_ip_address,ear_createdbyid,ear_createdbyrid,ear_updbyid,ear_upddtm,ear_createddtm,ear_notificationid,application_status,
+ ear_is_ews_candidate,ear_share_persinfo_accrossportal,present_address,ear_present_districtid,present_district,ear_present_stateid,
+ present_state,present_pincode,ear_permanent_stateid,permanent_state,ear_permanent_districtid,ear_permanent_pincode,email_id,mobile_number,
+ ear_other_national_address,ear_photo_date,ear_isdate_clear_on_photo,challan_generation_date,challan_downloaded_date,challan_refno,
+ applicationfee,ear_qrcode_path,ear_add_source,ear_upd_source,ear_language_option,ear_highest_edu_qual,ear_is_obc_by_delhi_govt,ear_reg_categoryid,
+ ear_is_delhi_police,ear_is_modified,ear_declaration_for_post,ear_noofattempt,ear_flag,ear_piflag,ear_siflag,ear_piflag_lastupdtm,ear_siflag_lastupdtm,
+ ear_isdraftprint_util_flag,ear_isextended,allocated_category,allocated_post,allocated_eq,age_limit,rollno,expd_postid;
+ 
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t t_cedpexam_2023_tier1_marks -F c -f C:\Users\Public\t_cedpexam_2023_tier1_marks.dump ssc2
+pg_restore -U postgres -h 10.246.126.165 -p 5432 -d ssc2 -t t_cedpexam_2023_tier1_marks C:\Users\Public\t_cedpexam_2023_tier1_marks.dump
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+create table m_states_gis
+(st_stateid integer,
+st_state_name text);
+
+create table m_districts_gis
+(ds_distid integer,
+ds_dist_name text);
+
+alter table candidates_allocated add column permanent_state_name character varying;
+alter table candidates_allocated add column permanent_district_name character varying;
+alter table candidates_allocated add column present_state_name character varying;
+alter table candidates_allocated add column present_district_name character varying;
+
+select * from m_states_gis;
+
+update candidates_allocated a
+set a.permanent_state_name = b.st_state_name
+from m_states_gis b
+where a.advc_permanentstateid::integer =b.st_stateid;
+
+update candidates_allocated a
+set a.present_state_name = b.st_state_name
+from m_states_gis b
+where a.advc_persentstateid::integer =b.st_stateid;
+
+update candidates_allocated a
+set a.permanent_district_name = b.ds_dist_name
+from m_districts_gis b
+where a.advc_permanentdistid::integer =b.ds_distid;
+
+update candidates_allocated a
+set a.present_district_name = b.ds_dist_name
+from m_districts_gis b
+where a.advc_persentdistid::integer =b.ds_distid;
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_selectionpost2023_xi_allocation
+
+
+psql -U username -d dbname -f /path/to/your/file.sql
+
+------dev db------
+
+psql -U sscpgadmin -h 10.192.98.45 -p 5432 -d ssc_db_candidate_portal
+\COPY "chsl2024Tier1Marks_test" FROM 'C:\Users\SalauddinKhan\Desktop\chsle2024Tier1Marks.txt' WITH (FORMAT text, DELIMITER ',');
+
+pg_dump -U sscpgadmin -h 10.192.98.45 -p 5432 -d ssc_db_candidate_portal -t chsl2024tier1marks -F c -f C:\Users\Public\chsl2024dumpfile.dump
+pg_restore -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal -t chsl2024tier1marks C:\Users\Public\chsl2024dumpfile.dump
+
+pg_dump -U sscpgadmin -h 10.192.98.45 -p 5432 -d ssc_db_candidate_portal -t je2024_cand_result_data_dossier -F c -f C:\Users\Public\je2024_cand_result_data_dossier.dump
+pg_restore -U sscpgadmin -h 10.192.97.45 -p 5432 -d ssc_db_regional_officer -t je2024_cand_result_data_dossier C:\Users\Public\je2024_cand_result_data_dossier.dump
+
+pg_dump -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal -t cgl2024tier1marks -F c -f C:\Users\Public\cgl2024dumpfile.dump
+pg_restore -U sscpgadmin -h 10.192.98.45 -p 5432 -d ssc_db_candidate_portal -t cgl2024tier1marks C:\Users\Public\cgl2024dumpfile.dump
+
+
+------cand prod master-------
+
+psql -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal
+\copy "je_2024_tier2_admit_card" from 'C:\Users\Public\admitcard_je2024_paper2_4_changes_NR.csv' csv header;
+
+\copy "chsl_2024_tier2_admit_card" from 'C:\Users\Public\chslt2_sr.csv' csv header;
+
+pg_dump -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal -t chsl_2024_tier2_admit_card -F c -f C:\Users\Public\chsl_2024_tier2_admit_card.dump
+
+
+\copy chsl2024_t2_admit_card_subject_updated from 'C:\Users\SalauddinKhan\Desktop\chsl2024_t2_er_subject_updated.csv' csv header;
+
+
+ \copy "m_challenge_examDateShifts" from 'C:\Users\SalauddinKhan\Desktop\m_challenge_examdateshifts_mts.csv' csv header;
+COPY 141
+
+------------------- regional officer master----------------------------
+
+psql -U sscpgadmin -h 10.192.97.44 -p 5432 -d ssc_db_regional_officer
+
+
+"H:\ADSBackup\ApplicationDataSegregation\D_I_R\gd24final_checks.zip"
+21050004
+
+select * from "m_challenge_examDateShifts" where "examId"='wzeujzxj8ts5z9n';
+
+update "m_challenge_examDateShifts"
+set shift=shift||'04:00 PM' where "examId"='wzeujzxj8ts5z9n'
+AND date like '%Shift3';
+
+
+10.192.97.46
+
+pg_dump -U sscpgadmin -h 10.192.97.46 -p 5432 -d ssc_db_external_agencies -t ctgd2024final -F c -f C:\Users\Public\ctgd2024final.dump
+pg_restore -U sscpgadmin -h 10.192.97.43 -p 5432 -d ssc_db_candidate_portal -t ctgd2024final C:\Users\Public\ctgd2024final.dump
+
+
+"H:\ADSBackup\ApplicationDataSegregation\D_I_R\data_for_EDP_MTS2024_RESULT.zip"
+
+
+
+pg_dump -U sscpgadmin -h 10.192.98.43 -p 5432 -d ssc_db_candidate_portal -t capf_2024_tier2_admit_card -F c -f C:\Users\Public\capf_2024_tier2_admit_card.dump
+
+-------external agenecies PROD----------------------------------------------
+
+psql -U sscpgadmin -h 10.192.97.46 -p 5432 -d ssc_db_external_agencies
+
+pg_dump -U sscpgadmin -h 10.192.97.46 -p 5432 -d ssc_db_external_agencies -t ctgd2024final -F c -f C:\Users\Public\ctgd2024final.dump
+
+------scribe reg no-------------------------------------
+
+
+select a.*,b.* from "chsl2024Applications" a,
+"scribeRegistrations" b
+where a."scribeRegNo"=b."registrationNo" and
+a."isActive"=true and a."statusId"='01' and a."scribeRegNo" is not null and b."isActive"=true ;
+
+--------------------------------------------------------------
+
+update capf_2024_tier2_admit_card
+set remarks='pet/pst_height revised result',
+examdate='2025-04-30',
+examdate2='30/04/2025',
+venue_code='40199',
+venue_name='Antilia Online Exam Center',
+venue_address='AK DEB ROAD KATAHBARI NEAR 1 NO MASJID GARCHUK, Guwahati, Assam, India',
+venue_city='Guwahati',
+venue_state='Assam',
+venue_pincode='781035'
+where reg_number in
+('10002127654','10001646280','10005643140','10000852183','10001456849','10000907646','10002118636','10008500941','10005792542','10000100805','10001658404','10000037144','10001743939','10005733288','10000024963','10006482432','10001243544','10001694989','10001675597','10008390128','10000799389','10005468423','10001061630','10006511400','10001294596','10005939081','10001614429','10005771300','10000882897','10001361395','10001061546','10005893585'
+);--32 NER
+
+--10005808518 SR
+---('10001667633','10001339303','10000972753') NR
+-- 10000085766 WR
+
+select * from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' order by reg_number;
+
+select distinct examdate from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by examdate;--ok
+select distinct gateclose from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by gateclose;---ok
+select distinct repotime from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by repotime;--ok
+select distinct venue_code from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_code;--ok
+select distinct venue_address from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_address;--ok
+select distinct venue_name from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_name;--ok
+select distinct venue_district from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_district;--ok
+select distinct venue_city from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_city;--ok
+select distinct venue_state from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_state;--ok
+select distinct venue_pincode from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by venue_pincode;--ok
+select distinct examdate2 from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' group by examdate2;--ok
+
+select reg_number,dob,to_char(dob,'dd/mm/yyyy'),dob2 from capf_2024_tier2_admit_card where remarks='pet/pst_height revised result' 
+and to_char(dob,'dd/mm/yyyy')<>dob2 order by reg_number;---no record
+
+----court order 22 new ----
+
+'2218000435','5105000732','5501000536','5401000038','2218008638','5107001316','9001000927','5107000800','5501002274','2218004543','5302001366','5501000942','2218000503','5501001361','5401000848','5105005434','5501002882','2218006685','5501002522','5105006178','2218008013','5105006503';
+
+update capf_2024_tier2_admit_card
+set remarks='pet/pst_height revised result',
+examdate='2025-04-30',
+examdate2='30/04/2025',
+venue_code='40199',
+venue_name='Antilia Online Exam Center',
+venue_address='AK DEB ROAD KATAHBARI NEAR 1 NO MASJID GARCHUK, Guwahati, Assam, India',
+venue_city='Guwahati',
+venue_state='Assam',
+venue_pincode='781035'
+where roll_number in ('2218000435','5105000732','5501000536','5401000038','2218008638','5107001316','9001000927','5107000800','5501002274','2218004543','5302001366','5501000942','2218000503','5501001361','5401000848','5105005434','5501002882','2218006685','5501002522','5105006178','2218008013','5105006503');
+
+update capf_2024_tier2_admit_card
+set gateclose='02:30 PM',
+examtime='03:00 PM To 05:00 PM',
+repotime='01:45 PM'
+where roll_number in ('2218000435','5105000732','5501000536','5401000038','2218008638','5107001316','9001000927','5107000800','5501002274','2218004543','5302001366','5501000942','2218000503','5501001361','5401000848','5105005434','5501002882','2218006685','5501002522','5105006178','2218008013','5105006503');
+
+
+
+select a.*,b.roll_number from  "steno2025Applications_20_07_2025" a, steno_2025_tier1_admit_card b where a."registrationNo"=b.reg_number and a."statusId"='01' order by a."registrationNo" 

@@ -1,0 +1,19 @@
+1. Create age relaxation table (arc_table) from notice.
+2. regno_rollno mapping table to be created.(this data will be shared by EDP).
+3. marks data collected from EDP.
+4. Application data+marks data to be dumped in candidates table.
+5. vacancy_table to be created(from candidates section). In this table state_code might differ with what we have configured in m_states_gis table. Compare and          write the state code accordingly in vacancy_table.
+6.Create the cut_off table from notice.
+7. create a new column NCC_marks in candidates table and award the marks as mentioned in notice to those candidates who have NCC certificates.
+(NOTE:ESM candidates will not avail this NCC_marks benifits as per notice)
+8.create merit flags for male and female candidates in candidates table namely merit_flag_male,merit_flag_female;
+9.Create the master_table and add the entries for these two flags.
+10. create dob_flag in candidates table and make an entry in master table.
+11.create catsel_dob_flag in candidates table and add an entry in master table.
+12.run the sp for dob_flag,catsel_dob_flag,cut_off_flag and merit flags;
+13.validate the outcomes in every state.
+14.create catsel flag in candidates table and add an entry in master table.
+15. run the sp for catsel flag and validate the outcome.
+
+
+

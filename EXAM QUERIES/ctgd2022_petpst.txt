@@ -1,0 +1,922 @@
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -F c -f C:\Users\Public\alloc_ctgd2022_petpst_result.dump alloc_ctgd2022_petpst_result
+pg_restore -U postgres -h 10.246.126.164 -p 5432 -d stagingDB C:\Users\Public\stagingbackup.dump
+
+
+
+
+1. Number of vacancies for PET/PST will be *% times for state = 'ALL INDIA'
+   and for all other states, vacancies will be *2 times
+   
+
+------------------------------------------------------------------------------------------------------------------------------------------
+2. 
+
+
+Select * from t_constablegd22_petpst limit 10
+
+
+update candidates
+set 
+pet_status =b.pt_pet_satatus,
+pst_status =b.pt_pst_status,
+seek_height_relax=b.pt_seek_height_relax,
+heightrelaxcode=b.pt_heightrelaxcode,
+height_measure=b.pt_height_measure,
+is_chest_relaxation_availed= b.pt_is_chest_relaxation_availed,
+chestrelax_code=b.pt_chestrelax_code,
+chestexp=b.chestexp,
+chestnotexp=b.chestnotexp,
+weight_measure =b.pt_weight_measure,
+is_qualified_kms5_min24 =b.pt_is_qualified_kms5_min24,
+is_qualified_km16_min630 =b.pt_is_qualified_km16_min630,
+is_qualified_km16_min830=b.pt_is_qualified_km16_min830,
+is_qualified_m800_min4 =b.pt_is_qualified_m800_min4,
+petpst_description =b.pt_description,
+petpst_attendance =b.pt_attendance,
+biometricstatus=b.pt_biometricstatus,
+biometricphoto =b.pt_biometricphoto,
+finalstatus =b.pt_finalstatus,
+centrename =b.pt_centrename,
+centrecode=b.pt_centrecode,
+dateofappear =b.pt_dateofappear
+from t_constablegd22_petpst b where regid =b.regno ::bigint
+
+                                After modification, the command will be:
+
+update candidates
+set 
+pet_status =b.pt_pet_satatus,
+pst_status =b.pt_pst_status,
+seek_height_relax=b.pt_seek_height_relax,
+heightrelaxcode=b.pt_heightrelaxcode,
+height_measure=b.pt_height_measure,
+is_chest_relaxation_availed= b.pt_is_chest_relaxation_availed,
+chestrelax_code=b.pt_chestrelax_code,
+chestexp=b.chestexp,
+chestnotexp=b.chestnotexp,
+weight_measure =b.pt_weight_measure,
+is_qualified_kms5_min24 =b.pt_is_qualified_kms5_min24,
+is_qualified_km16_min630 =b.pt_is_qualified_km16_min630,
+is_qualified_km16_min830=b.pt_is_qualified_km16_min830,
+is_qualified_m800_min4 =b.pt_is_qualified_m800_min4,
+petpst_description =b.pt_description,
+petpst_attendance =b.pt_attendance,
+biometricstatus=b.pt_biometricstatus,
+biometricphoto =b.pt_biometricphoto,
+finalstatus =b.pt_finalstatus,
+centrename =b.pt_centrename,
+centrecode=b.pt_centrecode,
+dateofappear =b.pt_dateofappear,
+domicile_stateid =b.pt_migratedstate,
+domicile_state  =b.pt_migratedstatename,
+domicile_districtid =b.pt_migrateddistrict,
+domicile_district =b.pt_migrateddistrictname,
+ismigrated = b.pt_ismigrated,
+isreservation_availed_candidate = b.pt_isseekingreservation,
+origin_stateid =b.pt_originstate,
+origin_state =b.pt_originstatename,
+origin_districtid =b.pt_origindistrict,
+origin_district  =b.pt_origindistrictname,
+isnaxal_district =b.pt_naxal_district,
+isborder_district =b.pt_border_district,
+stateconsider =b.pt_stateconsider,
+statename_considered =b.pt_stateconsidername,
+districtconsider =b.pt_districtconsider,
+districtname_considered =b.pt_districtconsidername
+from t_constablegd22_petpst b where regid =b.regno ::bigint
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_petpst_result
+\copy candidates from 'C:\Users\Public\candidatedata_final.csv' csv header;
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2021_petpst_result
+\copy m_petpst_states_gis to 'C:\Users\Public\m_petpst_states_gis.csv' csv header;
+
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_petpst_result
+\copy m_petpst_states_gis from 'C:\Users\Public\m_petpst_states_gis.csv' csv header;
+ and Update the notification id and notification year
+Also verify if the state code in notice and the table are same or not
+ 
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_tier1_result
+\copy m_districts_gis to 'C:\Users\Public\m_districts_gis.csv' csv header;
+
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_petpst_result
+\copy m_districts_gis from 'C:\Users\Public\m_districts_gis.csv' csv header;
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+select regid,pet_status,pst_status,seek_height_relax,is_chest_relaxation_availed,finalstatus,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final 
+from candidates limit 10000
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Update m_petpst_states_gis set st_notification_year = '2022'
+Update m_petpst_states_gis set st_notificationid = '45'
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE candidates_bkp_20062023 AS TABLE candidates;
+
+----Created a backup table 
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Update district and state names ---Excel is preapared having the sql
+
+
+Update candidates set domicile_state = '' where domicile_stateid = '';
+
+Update candidates set domicile_district = '' where domicile_districtid = '';
+
+Update candidates set origin_state = '' where origin_stateid = '' and ismigrated= 'true' and isreservation_availed_candidate = 'true';
+
+Update candidates set origin_district = '' where origin_districtid = '' and ismigrated= 'true' and isreservation_availed_candidate = 'true';
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+To Update height_chest_rlx_pet_pst_final:
+
+
+To verify:  (A) Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+				where height_rlx_pet_pst = 'No' and  chest_rlx_pet_pst = 'No' ---Total = 
+
+			(B) Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+				where height_rlx_pet_pst = 'No' and  chest_rlx_pet_pst = 'No' 
+				and height_chest_rlx_pet_pst_final is null  ---Total = 
+
+
+
+
+1.  Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+    where height_rlx_pet_pst = 'No' and  chest_rlx_pet_pst = 'Yes' --Total = 
+
+	Update candidates set height_chest_rlx_pet_pst_final = 'Yes' where regid in (Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+    where height_rlx_pet_pst = 'No' and  chest_rlx_pet_pst = 'Yes')
+	
+2.  Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+	where height_rlx_pet_pst = 'Yes' and  chest_rlx_pet_pst = 'No' --Total =
+
+	Update candidates set height_chest_rlx_pet_pst_final = 'Yes' where regid in (Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+    where height_rlx_pet_pst = 'Yes' and  chest_rlx_pet_pst = 'No')
+
+3.  Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+	where height_rlx_pet_pst = 'Yes' and  chest_rlx_pet_pst = 'Yes' --Total =
+
+	Update candidates set height_chest_rlx_pet_pst_final = 'Yes' where regid in (Select regid,height_rlx_pet_pst,chest_rlx_pet_pst,height_chest_rlx_pet_pst_final from candidates 
+    where height_rlx_pet_pst = 'Yes' and  chest_rlx_pet_pst = 'Yes')
+	
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                                To verify Naxal districts
+
+		select regid,isnaxal_district, naxal_district,isborder_district, border_district from candidates ---370998
+
+		select regid,isnaxal_district, naxal_district,isborder_district, border_district from candidates
+		where isnaxal_district = 'true' and naxal_district = 'Yes' 
+
+		select regid,isnaxal_district, naxal_district,isborder_district, border_district from candidates
+		where isnaxal_district = 'false' and naxal_district = 'No'  
+
+			
+		select regid,isnaxal_district, naxal_district,isborder_district, border_district from candidates
+		where isnaxal_district = 'true' and naxal_district = 'Yes'
+		
+		
+		
+		
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+		
+                                                                    For height relaxation
+
+
+1.	  Number of qualified non-ESM male candidates having height <170 cm. HT_RELAX value was assigned ‘Yes’ to all these candidates. 
+	
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates where height_measure<170 and gender = '2' and is_ex_serviceman <>'3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')--12992
+
+
+	Update candidates set height_rlx_pet_pst = 'Yes' where regid in (select regid from candidates where height_measure<170 and gender = '2' and is_ex_serviceman <>'3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+2.  HT_RELAX was changed to ‘No’ for those male candidates who had qualified PET/ PST and while height_rlx_pet_pst<>’Yes’. Number of such candidates was .
+
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates where height_measure>=170 and gender = '2' and is_ex_serviceman <>'3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates where height_measure>=170 and gender = '2' and is_ex_serviceman <>'3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+3.  Male ESM candidates who had qualified in the PET/ PST. Their height_rlx_pet_pst was changed to “” (i.e. blank). Now the number of candidates having height_rlx_pet_pst=’No’ are .
+
+
+	select regid,height_measure,is_ex_serviceman from candidates where gender = '2' and is_ex_serviceman = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = '' where regid in (select regid from candidates where gender = '2' and is_ex_serviceman = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+	
+4.  Number of qualified male candidates who had availed ‘Hill Area’ Height Relaxation=3. Height of all these candidates was <170 cm but >=165 cm.
+	height_rlx_pet_pst value of these candidates was changed to ‘No’ as this height relaxation is available to candidates of all categories.
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<170 and height_measure>165 and gender = '2' and heightrelaxcode = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<170 and height_measure>165 and gender = '2' and heightrelaxcode = '3' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+
+5. 	Male candidates who had qualified in PET/ PST and had Height Relaxation allowed for Gorkha Territorial Administration (GTA) i.e. heightrelaxcode=’8’.
+	heightrelaxcode value of these candidates was changed to ‘No’ as this height relaxation is available of candidates of all categories.
+
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<170 and height_measure>=157 and gender = '2' and heightrelaxcode = '8'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<170 and height_measure>157 and gender = '2' and heightrelaxcode = '8' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+6.  Male candidates who had qualified in PET/ PST and had availed Height Relaxation benefit allowed for the candidates of the 7 NE States. 
+	heightrelaxcode value of these candidates was changed to ‘No’ as this height relaxation is available of candidates of all categories.
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '4'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '4' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+
+7.  Non-ESM, qualified ST male candidates having height >=165 cm and <170 cm, who have availed height relaxation of ‘ST’ category and belongs to JK (14), Ladakh (18), HP (13), Assam (4) and Uttarakhand (35) should be treated as having not availed height relaxation as 165 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+	a.	Assam (4): 
+	b.	HP (14): 
+	c.	JK (15): 
+	d.	Ladakh (37): 
+	e.	Uttarakhand (35): 
+	f.	Maharashtra (21):
+
+
+	a. select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		 where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '4'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '4')
+	
+	b. select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '14'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '14')
+		
+	c.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '15'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '15')
+		
+		
+	d.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '37'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '37')
+		
+		
+		
+	e.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '35'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '35')
+		
+		
+	f.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '21'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=165 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '21')
+		
+		
+		
+8. 		Non-ESM, qualified ST male candidates having height >=162.5 cm and <170 cm, who have availed height relaxation of ‘ST’ category and belongs to  Arunachal Pradesh (3), Manipur (22), Meghalaya (23), Mizoram (24), Nagaland (25), Sikkim (30) and Tripura (33) should be treated as having not availed height relaxation as 162.5 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+		S No	State	Count of candidates
+		1	Arunachal Pradesh (3)	
+		2	Manipur (22)	
+		3	Meghalaya (23)	
+		4	Mizoram (24)	
+		6	Sikkim (30)	
+		7	Tripura (33)	
+
+
+	a. 	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '3'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '3')
+		
+		
+	b.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '22'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '22')
+		
+	c.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '23'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '23')
+		
+	d.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1' and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '24'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '24')
+		
+	e.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '25'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '25')
+		
+	f.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '30'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '30')
+		
+	g.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '33'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '33')
+		
+		
+		
+		
+9. 		Non-ESM, qualified ST male candidates having height >=162.5 cm and <170 cm, who have availed height relaxation of ‘ST’ of NE States (heightrelaxcode=’6’) should be treated as having not availed height relaxation
+		as 162.5 cm is the height requirement for all candidates of these States. height_rlx_pet_pst value of all these candidates was changed to ‘No’. 
+
+
+		select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '6' and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<170 and height_measure>=162.5 and gender = '2' and heightrelaxcode = '6'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+		
+		                                         Handling of Height Relaxation for Female candidates:
+		
+
+
+
+
+
+1.	 	Number of qualified female candidates having height <157 cm=1522. height_rlx_pet_pst value was assigned ‘Yes’ to all these candidates.
+		
+
+
+		select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates where gender = '1' 
+		and height_measure<157 and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+	
+		Update candidates set height_rlx_pet_pst = 'Yes' where regid in (select regid from candidates where gender = '1' 
+		and height_measure<157 and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+				
+				
+2.	  height_rlx_pet_pst was changed to ‘No’ for those female candidates who had qualified PET/ PST and while height_rlx_pet_pst<>’Yes’. Number of such candidates was .
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates where height_measure>=157 and gender = '1' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates where height_measure>=157 and gender = '1' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+
+3.  Female ESM candidates who had qualified in the PET/ PST. Their height_rlx_pet_pst was changed to “” (i.e. blank). Now the number of candidates having height_rlx_pet_pst=’No’ are .
+
+
+	select regid,height_measure,is_ex_serviceman from candidates where gender = '1' and is_ex_serviceman = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = '' where regid in (select regid from candidates where gender = '1' and is_ex_serviceman = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+	
+4.  Number of qualified Female candidates who had availed ‘Hill Area’ Height Relaxation=3. Height of all these candidates was <157 cm but >=155 cm.
+	height_rlx_pet_pst value of these candidates was changed to ‘No’ as this height relaxation is available to candidates of all categories.
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '3'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '3' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+
+5. 	Female candidates who had qualified in PET/ PST and had Height Relaxation allowed for Gorkha Territorial Administration (GTA) i.e. heightrelaxcode=’8’.
+	heightrelaxcode value of these candidates was changed to ‘No’ as this height relaxation is available of candidates of all categories.
+
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '8'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '8' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+6.  Female candidates who had qualified in PET/ PST and had availed Height Relaxation benefit allowed for the candidates of the 7 NE States. 
+	heightrelaxcode value of these candidates was changed to ‘No’ as this height relaxation is available of candidates of all categories.
+
+	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+	where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '4'
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+	where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '4' and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+
+
+7.  Non-ESM, qualified ST Female candidates having height >=155 cm and <157 cm, who have availed height relaxation of ‘ST’ category and belongs to JK (14), Ladakh (18), HP (13), Assam (4) and Uttarakhand (35) should be treated as having not availed height relaxation as 165 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+	a.	Assam (4): 
+	b.	HP (14): 
+	c.	JK (15): 
+	d.	Ladakh (37): 
+	e.	Uttarakhand (35): 
+	f.	Maharashtra (21):
+
+
+	a. select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		 where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '4'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '4')
+	
+	b. select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '14'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '14')
+		
+	c.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '15'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '15')
+		
+		
+	d.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '37'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '37')
+		
+		
+		
+	e.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '35'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '35')
+		
+		
+	f.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '21'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=155 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '21')
+		
+		
+		
+8. 		Non-ESM, qualified ST Female candidates having height >=152.5 cm and <157 cm, who have availed height relaxation of ‘ST’ category and belongs to  
+		Arunachal Pradesh (3), Manipur (22), Meghalaya (23), Mizoram (24), Nagaland (25), Sikkim (30) and Tripura (33) should be treated as having not availed height relaxation as 162.5 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+		S No	State	Count of candidates
+		1	Arunachal Pradesh (3)	
+		2	Manipur (22)	
+		3	Meghalaya (23)	
+		4	Mizoram (24)	
+		6	Sikkim (30)	
+		7	Tripura (33)	
+
+
+	a. 	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '3'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '3')
+		
+		
+	b.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '22'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '22')
+		
+	c.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '23'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '23')
+		
+	d.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '24'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '24')
+		
+	e.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '25'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '25')
+		
+	f.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '30'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '30')
+		
+	g.	select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '33'
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regidt from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '1'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit') and stateconsider = '33')
+		
+		
+		
+		
+9. 		Non-ESM, qualified ST Female candidates having height >=152.5 cm and <157 cm, who have availed height relaxation of ‘ST’ of NE States (heightrelaxcode=’6’) should be treated as having not availed height relaxation
+		as 152.5 cm is the height requirement for all candidates of these States. height_rlx_pet_pst value of all these candidates was changed to ‘No’. 
+
+
+		select regid,height_measure,is_ex_serviceman,height_rlx_pet_pst from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '6' and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set height_rlx_pet_pst = 'No' where regid in (select regidt from candidates 
+		where height_measure<157 and height_measure>=152.5 and gender = '1' and heightrelaxcode = '6'and category = '2' and is_ex_serviceman <>'3'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+                                                                    For chest Relaxation - Male
+
+
+
+1.	 Number of qualified non-ESM male candidates having non-expanded chest <80 cm OR expanded chest<85 cm=6599. chest_rlx_pet_pst value was assigned ‘Yes’ to all these candidates.
+
+	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+	where (chestexp<85 or chestnotexp<80) and gender = '2' and is_ex_serviceman <>'3' 
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set chest_rlx_pet_pst = 'Yes' where regid in (select regid from candidates
+	where (chestexp<85 or chestnotexp<80) and gender = '2' and is_ex_serviceman <>'3' 
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+	
+	
+2. chest_rlx_pet_pst was changed to ‘No’ for those non-ESM male candidates who had qualified PET/ PST and while chest_rlx_pet_pst<>’Yes’. Number of such candidates was .
+
+
+	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and (chestexp>=85 and chestnotexp>=80)
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and (chestexp>=85 and chestnotexp>=80)
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+	
+3.  Number of qualified non-ESM male candidates who had availed ‘Hill Area’ Chest Relaxation=. 
+
+	 select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '10' and chestnotexp>=78 and chestexp>=83 
+	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '10' and chestnotexp>=78  and chestexp>=83 
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+4.  Non-ESM male candidates who had qualified in PET/ PST and had availed Chest Relaxation allowed for Gorkha Territorial Administration (GTA) 
+	i.e. chestrelax_code=’9’. CH_RELAX value of these candidates was changed to ‘F’ as this chest relaxation is available of candidates of all categories.
+
+
+	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '9' and chestnotexp>=77 and chestexp>=82
+	and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+	Update candidates set chest_rlx_pet_pst = 'No' where regid in ( select regid from candidates
+	where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '9' and chestnotexp>=77 and chestexp>=82 and (chestnotexp<80 OR chestexp<85)
+	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+	
+	
+	
+5.  Non-ESM, qualified ST male candidates having non-exp chest >=78 cm and exp-chest >=83 cm, who have availed chest relaxation of ‘ST’ category
+	and belongs to JK (15), Ladakh (37), HP (14) and Assam (4) should be treated as having not availed chest relaxation as 78-83 cm is the chest requirement for all candidates of these States. State-wise count of such candidates is:
+	a.	Assam (4): 
+	b.	HP (14):
+	c.	JK (15): 
+	d.	Ladakh (37):
+	e.	Uttarakhand (35): 
+	f.	Maharashtra (21):
+
+
+	a.  select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2' and stateconsider = '4'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2' and stateconsider = '4'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+	b.  select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '14'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '14'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+		
+	c. select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '15'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '15'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+		
+	d. select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '37'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '37'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	e. select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '35'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '35'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+		
+	f. select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '21'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit')
+
+
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=78 and chestexp>=83 
+		and (chestnotexp<80 OR chestexp<85) and category = '2'and stateconsider = '21'
+		and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+		
+		
+		
+6.      Non-ESM, qualified ST Male candidates having non-exp chest >=77 cm and exp-chest >=82 cm, who have availed chest relaxation of ‘ST’ category and belongs to the following states of
+		Arunachal Pradesh (3), Manipur (22), Meghalaya (23), Mizoram (24), Nagaland (25), Sikkim (30) and Tripura (33) should be treated as having not availed chest relaxation as 77-82 cm is the chest requirement for all candidates of these States. State-wise count of such candidates is:
+		
+		1.  Arunachal Pradesh (3)	
+		2	Manipur (22)	
+		3	Meghalaya (23)	
+		4	Mizoram (24)	
+		6	Sikkim (30)	
+		7	Tripura (33)	
+		
+		
+	a. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('3') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('3') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	b. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('22')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('22') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	c. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('23')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('23') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	d. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('24')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('24') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	e.  select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('25')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('25') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	f. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('30')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('30') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))
+		
+		
+	f. 	select regid,chestexp,chestnotexp,is_ex_serviceman,chest_rlx_pet_pst from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('33')
+		and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit')
+		
+		Update candidates set chest_rlx_pet_pst = 'No' where regid in (select regid from candidates
+		where gender = '2' and is_ex_serviceman <>'3' and chestrelax_code = '5' and chestnotexp>=77 and chestexp>=82 and category = '2'
+		and stateconsider in ('33') and (chestnotexp<80 OR chestexp<85)	and finalstatus in ('With Held','Qualified','Temporary Unfit'))

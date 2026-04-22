@@ -1,0 +1,159 @@
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t candidatest1_manipur -F c -f C:\Users\Public\candidatest1_manipur.dump alloc_ctgd2022_tier1_result
+pg_restore -U postgres -h 10.246.126.165 -p 5432 -d ssc2 -t candidatest1_manipur C:\Users\Public\candidatest1_manipur.dump
+	
+create table candidates_manipur_pet_dv as
+(with cte as
+(select b.*,a.* from 
+t_constablegd22_petpst a,
+candidatest1_manipur b
+where a.pt_roll_no = b.rollno
+)
+select cte.*,c.*
+from 
+t_appl_dv_ctgd2022candidatedetails_ssc c right join cte on c.advc_rollno::bigint=cte.pt_roll_no)
+
+
+create table candidates_manipur as (
+select a.*,b.* from
+candidates_manipur_pet_dv a left join
+t_gd22exam_medical b
+ on a.rollno::bigint= b.med_roll_no)
+ 
+ 
+ 
+pg_dump -U postgres -h 10.246.126.165 -p 5432 -t candidates_manipur -F c -f C:\Users\Public\candidates_manipur.dump ssc2
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final -t candidates_manipur C:\Users\Public\candidates_manipur.dump
+
+
+alter table candidates_manipur add constraint pk_rollno primary key (rollno);
+
+
+select distinct pt_heightrelaxcode from candidates where merit is not null;--1,4,6,8
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='1'
+and gender='2'
+and pt_height_measure<'162.5'
+order by merit
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='4'
+and gender='2'
+and pt_height_measure<'162.5'
+order by merit
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='6'
+and gender='2'
+and pt_height_measure<'162.5'
+order by merit
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'height relaxation availed'
+where merit is not null and pt_heightrelaxcode='6' and gender='2' and pt_height_measure<'162.5';---155 updates
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='8'
+and gender='2'
+and pt_height_measure<'157.0'
+order by merit;
+
+
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='1'
+and gender='1'
+and pt_height_measure<'152.5'
+order by merit
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='4'
+and gender='1'
+and pt_height_measure<'152.5'
+order by merit
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='6'
+and gender='1'
+and pt_height_measure<'152.5'
+order by merit
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'height relaxation availed'
+where merit is not null and pt_heightrelaxcode='6' and gender='1' and pt_height_measure<'152.5';---7 updates
+
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_heightrelaxcode='8'
+and gender='1'
+and pt_height_measure<'152.5'
+order by merit
+
+select distinct pt_chestrelax_code from candidates where merit is not null;--9,5
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_chestrelax_code='5'
+and gender='2'
+and remarks is null
+and chestnotexp<'77'
+and chestexp<'82'
+order by merit
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'chest relaxation availed'
+where merit is not null and pt_chestrelax_code='5' and gender='2' and chestnotexp<'77' and chestexp<'82' and remarks is null;---8
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'chest relaxation availed'
+where merit is not null and pt_chestrelax_code='5' and gender='2' and chestnotexp<'77'
+--and chestexp<'82' 
+and remarks is null;---13 updates
+
+select rollno,category,gender,remarks,catsel,pt_height_measure,pt_heightrelaxcode,chestexp,chestnotexp,pt_chestrelax_code 
+from candidates where merit is not null and pt_chestrelax_code='9'
+and gender='2'
+and remarks is null
+--and chestnotexp<'77'
+and chestexp<'82'
+order by merit
+
+select rollno,category,catsel,pt_height_measure,pt_heightrelaxcode,remarks from candidates where merit is not null and pt_height_measure<'162.5' and gender='2' order by merit;
+select rollno,category,catsel,pt_height_measure,chestnotexp,pt_chestrelax_code,remarks from candidates where merit is not null and chestnotexp<'77' and gender='2' order by merit;
+select rollno,category,catsel,pt_height_measure,chestnotexp,pt_chestrelax_code,remarks from candidates where merit is not null and chestexp<'82' and gender='2' order by merit;
+
+select advc_categoryid,count(*) from candidates where merit is not null group by advc_categoryid;
+
+2	547
+0	1
+9	36
+6	136
+1	37
+
+
+select key,post_code,force,category,area,vacancies,initial,current,allocated,left_vacancy,min_marks_prev,min_marks from vacancy_table where gender='2' and min_marks_prev is not null and category_code in ('2','9') order by force,area;
+
+select distinct statename_considered,count(*) from candidates where allocated_state='39' group by statename_considered;
+
+select * from candidates where allocated_state='39' and statename_considered='Manipur' limit 10;
+5502000017-----Absent in PET/PST
+5502000012-----Absent in PET/PST
+5501004749-----Absent in PET/PST
+
+
+------debarred checking:--------
+
+select a.regid,a.rollno,a.advc_name,a.advc_father_name,a.advc_mother_name,a.advc_dob,a.advc_genderid,a.cat1,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc_new b where 
+--b.dc_debarred_upto >'2023-08-01' and
+
+--replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)||UPPER(a.advc_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+ 
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_mother_name)),' ','') and a.advc_dob = b.dc_dob_name;
+ 
+replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)),' ','') and a.advc_dob = b.dc_dob_name;
+

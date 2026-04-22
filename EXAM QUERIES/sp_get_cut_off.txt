@@ -1,0 +1,226 @@
+-- FUNCTION: public.sp_get_cut_off(text, integer)
+
+-- DROP FUNCTION IF EXISTS public.sp_get_cut_off(text, integer);
+
+CREATE OR REPLACE FUNCTION public.sp_get_cut_off(
+	par_exam_name text,
+	par_serialid integer)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+
+master_record record;
+
+sccutoff record;
+stcutoff record;
+obccutoff record;
+urcutoff record;
+ewscutoff record;
+esmcutoff record;
+ohcutoff record;
+hhcutoff record;
+vhcutoff record;
+othercutoff record;
+
+loc_query text;
+cut_off_flag text;
+n integer;
+
+par_gender character varying(1);
+
+candidate_record record;
+
+BEGIN
+
+	select flag_name,flag_query,cut_off_clause from master_table where exam_name=par_exam_name and serial=par_serialid into master_record;
+
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='9' and cut_off_name =master_record.cut_off_clause into urcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='0' and cut_off_name =master_record.cut_off_clause into ewscutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='1' and cut_off_name =master_record.cut_off_clause into sccutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='2' and cut_off_name =master_record.cut_off_clause into stcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='6' and cut_off_name =master_record.cut_off_clause into obccutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='3' and cut_off_name =master_record.cut_off_clause into esmcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='4' and cut_off_name =master_record.cut_off_clause into ohcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='5' and cut_off_name =master_record.cut_off_clause into hhcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='7' and cut_off_name =master_record.cut_off_clause into vhcutoff;
+	select paper1::numeric,paper2::numeric,mistakes_ldc::numeric,mistakes_deo::numeric from cut_off_table where  category='8' and cut_off_name =master_record.cut_off_clause into othercutoff;
+
+	for candidate_record in execute master_record.flag_query
+	loop
+
+		--raise info 'rollno-->%',candidate_record.rollno;
+		--raise info 'candidate_record.cat1 ---> %',candidate_record.cat1;
+		--raise info 'candidate_record.paper1 ---> %',candidate_record.paper1;
+		--raise info 'candidate_record.total ---> %',candidate_record.total;
+		raise info 'candidate_record.computer_knowledge_module ---> %',candidate_record.computer_knowledge_module;
+
+		cut_off_flag='';
+
+		if(candidate_record.paper1>=urcutoff.paper1 and candidate_record.total>=urcutoff.paper2 and candidate_record.computer_knowledge_module >='13.5') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=urcutoff.mistakes_ldc) then cut_off_flag='9';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=urcutoff.mistakes_deo) then cut_off_flag='9';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=urcutoff.mistakes_deo) then cut_off_flag='9';
+			end if;
+			else cut_off_flag='9';
+			end if;
+		end if;
+
+		--raise info 'urcutoff.paper1 %'	,urcutoff.paper1;
+		--raise info 'urcutoff.paper2 %'	,urcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat1='0' and candidate_record.paper1>=ewscutoff.paper1 and candidate_record.total>=ewscutoff.paper2 and candidate_record.computer_knowledge_module >='11.25') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=ewscutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'0';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=ewscutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'0';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=ewscutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'0';
+			end if;
+			else cut_off_flag=cut_off_flag||'0';
+			end if;
+		end if;
+
+		--raise info 'ews.paper1 %'	,ewscutoff.paper1;
+		--raise info 'ews.paper2 %'	,ewscutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat1='1' and candidate_record.paper1>=sccutoff.paper1 and candidate_record.total>=sccutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=sccutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'1';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=sccutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'1';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=sccutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'1';
+			end if;
+			else cut_off_flag=cut_off_flag||'1';
+			end if;
+		end if;
+
+		--raise info 'sc.paper1 %'	,sccutoff.paper1;
+		--raise info 'sc.paper2 %'	,sccutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat1='2' and candidate_record.paper1>=stcutoff.paper1 and candidate_record.total>=stcutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=stcutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'2';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=stcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'2';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=stcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'2';
+			end if;
+			else cut_off_flag=cut_off_flag||'2';
+			end if;
+		end if;
+
+		--raise info 'st.paper1 %'	,stcutoff.paper1;
+		--raise info 'st.paper2 %'	,stcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat1='6' and candidate_record.paper1>=obccutoff.paper1 and candidate_record.total>=obccutoff.paper2 and candidate_record.computer_knowledge_module >='11.25') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=obccutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'6';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=obccutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'6';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=obccutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'6';
+			end if;
+			else cut_off_flag=cut_off_flag||'6';
+			end if;
+		end if;
+
+		--raise info 'obccutoff.paper1 %'	,obccutoff.paper1;
+		--raise info 'obccutoff.paper2 %'	,obccutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat2='3' and candidate_record.paper1>=esmcutoff.paper1 and candidate_record.total>=esmcutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=esmcutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'3';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=esmcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'3';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=esmcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'3';
+			end if;
+			else cut_off_flag=cut_off_flag||'3';
+			end if;
+		end if;
+
+		--raise info 'esmcutoff.paper1 %'	,esmcutoff.paper1;
+		--raise info 'esmcutoff.paper2 %'	,esmcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat3='4' and candidate_record.paper1>=ohcutoff.paper1 and candidate_record.total>=ohcutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=ohcutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'4';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=ohcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'4';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=ohcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'4';
+			end if;
+			else cut_off_flag=cut_off_flag||'4';
+			end if;
+		end if;
+
+		--raise info 'ohcutoff.paper1 %'	,ohcutoff.paper1;
+		--raise info 'ohcutoff.paper2 %'	,ohcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat3='5' and candidate_record.paper1>=hhcutoff.paper1 and candidate_record.total>=hhcutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=hhcutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'5';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=hhcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'5';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=hhcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'5';
+			end if;
+			else cut_off_flag=cut_off_flag||'5';
+			end if;
+		end if;
+
+		--raise info 'hhcutoff.paper1 %'	,hhcutoff.paper1;
+		--raise info 'hhcutoff.paper2 %'	,hhcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat3='7' and candidate_record.paper1>=vhcutoff.paper1 and candidate_record.total>=vhcutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=vhcutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'7';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=vhcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'7';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=vhcutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'7';
+			end if;
+			else cut_off_flag=cut_off_flag||'7';
+			end if;
+		end if;
+
+		--raise info 'vhcutoff.paper1 %'	,vhcutoff.paper1;
+		--raise info 'vhcutoff.paper2 %'	,vhcutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		if(candidate_record.cat3='8' and candidate_record.paper1>=othercutoff.paper1 and candidate_record.total>=othercutoff.paper2 and candidate_record.computer_knowledge_module >='9') then
+			if(master_record.cut_off_clause='cutoff_flag_ldc') then if(candidate_record.mistakes_ldc<=othercutoff.mistakes_ldc) then cut_off_flag=cut_off_flag||'8';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deo') then if(candidate_record.mistakes_deo<=othercutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'8';
+			end if;
+			elsif (master_record.cut_off_clause='cutoff_flag_deocag') then if(candidate_record.mistakes_deocag<=othercutoff.mistakes_deo) then cut_off_flag=cut_off_flag||'8';
+			end if;
+			else cut_off_flag=cut_off_flag||'8';
+			end if;
+		end if;
+
+		--raise info 'hhcutoff.paper1 %'	,othercutoff.paper1;
+		--raise info 'hhcutoff.paper2 %'	,othercutoff.paper2;
+		--raise info 'cut_off-->%',cut_off_flag;
+
+		execute 'update candidates set '||master_record.flag_name||'='''||cut_off_flag||''' where rollno='''||candidate_record.rollno||''';';
+		GET DIAGNOSTICS n=ROW_COUNT;
+		raise info 'row updated %',n;
+
+	end loop;
+	return 'Success';
+
+EXCEPTION WHEN OTHERS THEN
+	RETURN SQLSTATE||','||SQLERRM;
+
+END;
+$BODY$;
+
+ALTER FUNCTION public.sp_get_cut_off(text, integer)
+    OWNER TO postgres;

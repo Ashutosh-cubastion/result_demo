@@ -1,0 +1,1460 @@
+select * from t_constablegd24_petpst;---pt_roll_no---351176
+
+select * from t_appl_dv_ctgd2024candidatedetails_ssc limit 10;---advc_rollno---160249
+
+select count(distinct advc_rollno) from t_appl_dv_ctgd2024candidatedetails_ssc;---160243
+
+select distinct advc_isactive,count(*) FROM t_appl_dv_ctgd2024candidatedetails_ssc group by advc_isactive;
+
+select distinct advc_rollno,count(*) from t_appl_dv_ctgd2024candidatedetails_ssc group by advc_rollno having count(*)>1 ;---160243
+
+"6014021543"
+"6005021639"
+"6014008715"------not
+"6014019807"---Not
+"6005052515"---not
+"6005033300"
+
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6014021543');--all details same
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6005021639');--all details same
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6014008715');--all details same
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6014019807');--all details same
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6005052515');--all details same
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('6005033300');--all details same
+
+select * from dme_rme ;----160243
+
+
+select a.*,b.* from m_gd24candidatesdtls_ssc a 
+left join t_constablegd24_petpst b
+on a.rollno=b.pt_roll_no;
+
+
+select a.*,b.*,c.* from m_gd24candidatesdtls_ssc a 
+left join t_constablegd24_petpst b
+on a.rollno=b.pt_roll_no
+left join t_appl_dv_ctgd2024candidatedetails_ssc c 
+on a.rollno=c.advc_rollno::bigint;
+
+---final query---
+
+CREATE table gd24final as 
+(select a.*,b.*,c.*,d.* from m_gd24candidatesdtls_ssc a 
+left join t_constablegd24_petpst b
+on a.rollno=b.pt_roll_no
+left join t_appl_dv_ctgd2024candidatedetails_ssc c 
+on a.rollno=c.advc_rollno::bigint
+left join dme_rme d
+on a.rollno=d.rollno_dmerme::bigint);
+
+
+------------------------------- data sanity --------------------------------------------------------------------------------------------------------------
+
+select pt_attendance,count(*) from t_constablegd24_petpst group by pt_attendance;
+"Absent"			101228
+"Present"			249919
+"Temporary Unfit"	29
+
+
+select distinct a.gender,b.pt_finalstatus,count(*) from m_gd24candidatesdtls_ssc a
+left join t_constablegd24_petpst b on a.rollno=b.pt_roll_no group by a.gender,b.pt_finalstatus;
+
+1	"Not Qualified"		22068
+1	"Qualified"			17051
+1	"Temporary Unfit"	28
+1	"With Held"			293
+2	"Not Qualified"		168840
+2	"Qualified"			141311
+2	"With Held"			1585
+
+
+select * into t_constablegd24_petpst_bkp from t_constablegd24_petpst;
+select * into dme_rme_bkp from dme_rme;
+select * into t_appl_dv_ctgd2024candidatedetails_ssc_bkp from t_appl_dv_ctgd2024candidatedetails_ssc;
+
+
+select * from m_gd24candidatesdtls_ssc where rollno in ('3202000661 3206028614 2405023911 3009067051 6001000448 9009017962 4410091446');
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='OBC',advc_rejectionprovision='QU (Qualified)'
+where advc_rollno in ('2405016091 2201078235 3203009892');
+
+update dme_rme set "dmeFinalStatus"='Unfit'
+where rollno in ('2405016091 2201078235 3203009892');
+
+update dme_rme set "rmeFinalStatus"='Not Qualified',"rmeMedicalStatus"='Unfit'
+where rollno in ('2405016091 2201078235 3203009892');
+
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='OBC',advc_rejectionprovision='QU (Qualified)'
+where advc_rollno in ('4404012004 4410091446');
+
+update dme_rme set "dmeFinalStatus"='Unfit',"rmeFinalStatus"='Fit',"finalStatus"='Qualified'
+where rollno in ('4404012004');
+
+ur to ews
+'5401013471 5701000525 8007029588 6005040557 6005014938 6005016493 6005036255 6005032464 3013036044 3013038748 3013059033 4611002948 4415046573 4410038558 3013036005 3013165751 6001025406 4207021323 4207021507 4207024143 4207019540 4207020293 4207020888 4207021440 4207025116 3206048985 3206038120 4410005826 4410006908 4410020975 4410025878 4410027709 7012005967 7012014722'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='EWS'
+where advc_rollno in ('5401013471 5701000525 8007029588 6005040557 6005014938 6005016493 6005036255 6005032464 3013036044 3013038748 3013059033 4611002948 4415046573 4410038558 3013036005 3013165751 6001025406 4207021323 4207021507 4207024143 4207019540 4207020293 4207020888 4207021440 4207025116 3206048985 3206038120 4410005826 4410006908 4410020975 4410025878 4410027709 7012005967 7012014722');
+
+ur to obc
+
+'6001000448 3206061087 4410007009 4410008464 4410009089 4410091446 3008004838 3202000661 3206026841 3009067051 4205012389 3206028614 4410000540 4410000495 2405016091 2405023911'
+
+---4415027506,7012007415,8009002111 migration issue
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='OBC'
+where advc_rollno in ('6001000448 3206061087 4410007009 4410008464 4410009089 4410091446 3008004838 3202000661 3206026841 3009067051 4205012389 3206028614 4410000540 4410000495 2405016091 2405023911');
+
+
+ews to ur
+5102009427
+
+
+
+8007029588
+
+3202000661
+3206028614
+2405023911
+3009067051
+6001000448
+9009017962
+4410091446
+
+
+
+
+SELECT "dmeFinalStatus",count(*) from dme_rme group by "dmeFinalStatus";
+
+"Fit"				76098
+"Not Applicable"	4595
+"Temporary Unfit"	2
+"Unfit"				79548
+
+SELECT "dmeFinalStatus","finalStatus",count(*) from dme_rme group by "dmeFinalStatus","finalStatus";
+
+"Fit"				"Qualified"			74913
+"Fit"				"With Held"			1185
+"Not Applicable"	"Not Qualified"		4578
+"Not Applicable"	"Temporary Unfit"	17
+"Temporary Unfit"	"Not Qualified"		1
+"Temporary Unfit"	"Temporary Unfit"	1
+"Unfit"				"Not Qualified"		79547
+"Unfit"				"Qualified"			1
+
+
+SELECT "dmeFinalStatus","finalStatus","isAppliedRme","rmeFinalStatus",count(*) from dme_rme group by "dmeFinalStatus","finalStatus","isAppliedRme","rmeFinalStatus";
+
+"Fit"					"Qualified"			false	"With Held"			183
+"Fit"					"Qualified"			false						74730
+"Fit"					"With Held"			false	"With Held"			682
+"Fit"					"With Held"			false						503
+"Not Applicable"	"Not Qualified"			false	"Not Qualified"		18
+"Not Applicable"	"Not Qualified"			false	"With Held"			53
+"Not Applicable"	"Not Qualified"			false						4507
+"Not Applicable"	"Temporary Unfit"		false						17
+"Temporary Unfit"	"Not Qualified"			false						1
+"Temporary Unfit"	"Temporary Unfit"		false	"Temporary Unfit"	1
+"Unfit"				"Not Qualified"			false	"Unfit"				3
+"Unfit"				"Not Qualified"			false	"With Held"			42
+"Unfit"				"Not Qualified"			false						1859
+"Unfit"				"Not Qualified"			true	"Not Qualified"		28794
+"Unfit"				"Not Qualified"			true	"Qualified"			40779
+"Unfit"				"Not Qualified"			true	"Rejected"			7720
+"Unfit"				"Not Qualified"			true	"With Held"			10
+"Unfit"				"Not Qualified"			true	"WithHeld"			294
+"Unfit"				"Not Qualified"			true						46
+"Unfit"				"Qualified"				false	"Fit"				1		
+
+
+
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='1404000061';
+
+select * from t_constablegd24_petpst where pt_roll_no='1404000061';
+
+select * from t_constablegd24_petpst where pt_roll_no='8007016629';
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='8007016629';
+select * from dme_rme where rollno='8007016629';
+
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in ('3202000661',
+'3206028614',
+'2405023911',
+'3009067051',
+'6001000448');
+
+
+select * from dme_rme where rollno in ('3202000661',
+'3206028614',
+'2405023911',
+'3009067051',
+'6001000448');
+
+select distinct "dmeFinalStatus" from dme_rme;
+
+select * from t_constablegd24_petpst where pt_roll_no in ('3202000661',
+'3206028614',
+'2405023911',
+'3009067051',
+'6001000448');
+
+select * from dme_rme where rollno='6205010941';
+
+
+PrdSSC202402
+
+psql -U sscpgadmin -h 10.192.97.46 -p 5432 -d ssc_db_external_agencies
+\COPY gd24final to 'C:\Users\Public\gd24final.csv' csv header;----351183
+
+1404030819
+--------------------------------------------------------------------------------------------------------------
+
+select * from t_constablegd24_petpst where pt_roll_no='3203026131';
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='3203026131';
+select * from dme_rme where rollno='3203026131';---2 records
+delete from dme_rme where id='pht2xj9m3losou6z';
+
+
+select * from t_constablegd24_petpst where pt_roll_no='8007016629';---not qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='8007016629';----qualified in DV
+select * from dme_rme where rollno='8007016629';----Fit
+
+select * from t_constablegd24_petpst where pt_roll_no='6205010941';---qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='6205010941';---qualified in DV
+select * from dme_rme where rollno='6205010941';---temporary unfit
+
+select * from t_constablegd24_petpst where pt_roll_no='8604011521';---qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='8604011521';---qualified in DV
+select * from dme_rme where rollno='8604011521';---temporary unfit
+
+select * from t_constablegd24_petpst where pt_roll_no='9009017962';---qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='9009017962';---qualified in DV
+select * from dme_rme where rollno='9009017962';---not applicable
+UPDATE dme_rme  SET "dmeFinalStatus"='Fit'where rollno='9009017962';
+
+select * from t_constablegd24_petpst where pt_roll_no='4404012004';---qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='4404012004';---qualified in DV
+select * from dme_rme where rollno='4404012004';---unfit in dme ,fit in rme
+UPDATE dme_rme  SET "dmeFinalStatus"='Fit'where rollno='4404012004';
+
+select * from t_constablegd24_petpst where pt_roll_no='4410091446';---qualified
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='4410091446';---qualified in DV
+select * from dme_rme where rollno='4410091446';---entry not found
+
+---entry created with ID pht2xj9m3losou6a
+
+select distinct pt_finalstatus,count(*) from t_constablegd24_petpst group by pt_finalstatus;----29 temp unfit
+
+-----------------------------------------------------------------------------------------------------------------
+
+select * from t_constablegd24_petpst where pt_roll_no='1404000061';----Ranju Bala
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='1404000061';
+select * from dme_rme where rollno='1404000061';
+
+select * from t_constablegd24_petpst where pt_roll_no='8007016629';---savara akhil
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno='8007016629';
+select * from dme_rme where rollno='8007016629';
+
+select * from t_constablegd24_petpst where pt_roll_no in ('2405023911 3009067051 3202000661 3206028614 6001000448');
+select * from t_appl_dv_ctgd2024candidatedetails_ssc where advc_rollno in  ('2405023911 3009067051 3202000661 3206028614 6001000448');
+select * from dme_rme where rollno in ('2405023911 3009067051 3202000661 3206028614 6001000448');
+
+select * from t_constablegd24_petpst where pt_finalstatus='Temporary Unfit';
+
+3003046135--pr
+7207012201--pr
+5105050201--pr
+2404019568--pr
+2003021983--pr
+3206193045--pr
+1404000061---pr
+3206107313--pr
+7006014125--pr
+2201175697--pr
+8007034446--pr
+5102011427--pr
+3010082230--pr
+5111011356--pr
+8604013277--pr
+6006009947--pr
+3206119996--pr
+2201011162--pr
+2201021272--pr
+8003001183--pr
+8207009264--pr
+7205024926--pr
+5401009083--pr
+1004040508--present
+8004006063--pr
+4205085011--pr
+6007051044--pr
+6204020385--pr
+3001076980--pr
+
+4205032261--not pr
+4205045190--not
+
+update t_constablegd24_petpst set pt_finalstatus='Temporary Unfit' pt_roll_no in ('4205032261 4205045190');
+
+---delete duplicate records--------
+
+select * from gd24final where rollno in ('6014021543 6005021639 6014008715 6014019807 6005052515 6005033300') order by rollno;
+
+select * from gd24final where advc_id in ('126994 158131 134868 152427 152835 126817');
+delete from gd24final where advc_id in ('126994 158131 134868 152427 152835 126817');
+
+alter table gd24final add constraint pk_rollno primary key (rollno);
+
+select count(*) from gd24final;---351176
+
+select distinct gender,pt_finalstatus,count(*) from gd24final group by gender,pt_finalstatus ;
+
+1	"Not Qualified"	22065
+1	"Qualified"	17051
+1	"Temporary Unfit"	31
+1	"With Held"	293
+2	"Not Qualified"	168840
+2	"Qualified"	141311
+2	"With Held"	1585
+
+select distinct gender,advc_rejectionprovision,count(*) from gd24final group by gender,advc_rejectionprovision ;
+
+1	"Absent"				15
+1	"NQ (Not Qualified)"	182
+1	"QU (Qualified)"		16592
+1	"Rejected"				298
+1	"TU (Temporary Unfit)"	17
+1	"W (With Held)"			240
+1							22096
+2	"Absent"				299
+2	"NQ (Not Qualified)"	991
+2	"QU (Qualified)"		136667
+2	"Rejected"				2787
+2	"W (With Held)"			2155
+2							168837
+
+4410091446
+"3203009892"
+"2405016091"
+"2201078235"
+
+select "rmeFinalStatus",count(*) from gd24final group by "rmeFinalStatus" ;
+
+"Not Qualified"		28815
+"Qualified"			40780
+"Rejected"			7720
+"Temporary Unfit"	1
+"With Held"			970
+"WithHeld"			294
+					272596
+
+update gd24final set included_in_result='Yes' where "rmeFinalStatus" in ('Qualified Temporary Unfit With Held WithHeld');---42045
+
+select "dmeFinalStatus",count(*) from gd24final group by "dmeFinalStatus" ;
+
+"Fit"				76104
+"Not Applicable"	4589
+"Temporary Unfit"	2
+"Unfit"				79548
+					190933
+					
+update gd24final set included_in_result='Yes' where "dmeFinalStatus" in ('Fit Temporary Unfit');---76106
+
+select count(*) from gd24final where included_in_result='Yes';---117285
+
+					
+select * from gd24final where included_in_result='Yes' and advc_rejectionprovision='Absent';
+UPDATE gd24final set included_in_result=null where included_in_result='Yes' and advc_rejectionprovision='Absent';---9
+
+select * from gd24final where included_in_result='Yes' and pt_finalstatus='Not Qualified';
+UPDATE gd24final set included_in_result=null where included_in_result='Yes' and pt_finalstatus='Not Qualified';---1
+
+select * from gd24final where included_in_result='Yes' and advc_rejectionprovision='NQ (Not Qualified)';
+UPDATE gd24final set included_in_result=null where included_in_result='Yes' and advc_rejectionprovision='NQ (Not Qualified)';---6
+
+
+UPDATE gd24final set included_in_result=null where included_in_result='Yes' and advc_rejectionprovision='Rejected';---6
+
+select count(*) from gd24final where included_in_result='Yes';---117231
+1404030819
+
+update gd24final set included_in_result=null  where included_in_result='Yes' and "dmeFinalStatus"='Unfit' and "rmeMedicalStatus" is null;
+
+
+
+----------NCC CERTIFICATE UPDATE------------------
+----TYPE A----14
+'2003009146 ,''7205008071 ,''8206001693 ,''1401025919 ,''2002006904 ,''2201012317 ,''2201015895 ,''2201041008 ,''2201042705 ,''2201063417 ,''3203026210 ,''4205019024 ,''4205076444 ,''8601052541'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_typeof_ncccertificate='NCC ''A'' Certificate' where
+advc_rollno in ('2003009146 ,''7205008071 ,''8206001693 ,''1401025919 ,''2002006904 ,''2201012317 ,''2201015895 ,''2201041008 ,''2201042705 ,''2201063417 ,''3203026210 ,''4205019024 ,''4205076444 ,''8601052541');
+
+--------TYPE B----- 35
+'5501000825 ,''7001006722 ,''7001015327 ,''7801000123 ,''7801000309 ,''2002004250 ,''2002004674 ,''2003009930 ,''2201005148 ,''2201009726 ,''2201011066 ,''2201012901 ,''2201016322 ,''2201043828 ,''2201066319 ,''2201066686 ,''2201115233 ,''2201118895 ,''2201199112 ,''3003018463 ,''3203025376 ,''3203026085 ,''3205001130 ,''3205001869 ,''3205002482 ,''3205004790 ,''3205058236 ,''3205065430 ,''3206003806 ,''4802000491 ,''7203012257 ,''7801000314 ,''8601014695 ,''8601057246 ,''8601057613'
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_typeof_ncccertificate='NCC ''B'' Certificate' where
+advc_rollno in ('5501000825 ,''7001006722 ,''7001015327 ,''7801000123 ,''7801000309 ,''2002004250 ,''2002004674 ,''2003009930 ,''2201005148 ,''2201009726 ,''2201011066 ,''2201012901 ,''2201016322 ,''2201043828 ,''2201066319 ,''2201066686 ,''2201115233 ,''2201118895 ,''2201199112 ,''3003018463 ,''3203025376 ,''3203026085 ,''3205001130 ,''3205001869 ,''3205002482 ,''3205004790 ,''3205058236 ,''3205065430 ,''3206003806 ,''4802000491 ,''7203012257 ,''7801000314 ,''8601014695 ,''8601057246 ,''8601057613'
+);
+--------TYPE C------38
+'2003009887 ,''5401003386 ,''5501002800 ,''5501005386 ,''7001000490 ,''7001009705 ,''7001024506 ,''7012007057 ,''7801000449 ,''2201006013 ,''2201013720 ,''2201036219 ,''2201039665 ,''2201039944 ,''2201044062 ,''2201044465 ,''2201059999 ,''2201067531 ,''2201069697 ,''2201074202 ,''2201075576 ,''2201077287 ,''2201092278 ,''2201107188 ,''2201109376 ,''2201117629 ,''2201126173 ,''2201138795 ,''2201142085 ,''2201269102 ,''2406030784 ,''3003030224 ,''4604004939 ,''7001003896 ,''7001044518 ,''7203008050 ,''8601016555 ,''8601059878'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_typeof_ncccertificate='NCC ''C'' Certificate' where
+advc_rollno in ('2003009887 ,''5401003386 ,''5501002800 ,''5501005386 ,''7001000490 ,''7001009705 ,''7001024506 ,''7012007057 ,''7801000449 ,''2201006013 ,''2201013720 ,''2201036219 ,''2201039665 ,''2201039944 ,''2201044062 ,''2201044465 ,''2201059999 ,''2201067531 ,''2201069697 ,''2201074202 ,''2201075576 ,''2201077287 ,''2201092278 ,''2201107188 ,''2201109376 ,''2201117629 ,''2201126173 ,''2201138795 ,''2201142085 ,''2201269102 ,''2406030784 ,''3003030224 ,''4604004939 ,''7001003896 ,''7001044518 ,''7203008050 ,''8601016555 ,''8601059878'
+);
+-----NOT PRODUCED-----5
+
+'1401016623 ,''3205004436 ,''5601000360 ,''5601004022 ,''7001009963'
+
+
+
+--------CATEGORY CHANGE FROM UR TO EWS----------43
+9001044361
+9001049725
+9002013675
+9002014378
+9009012799
+9011022087
+9011006642
+9008003716
+9008003572
+9002021927
+9002018257
+1401036934
+1401023619
+1401026313
+1401039954
+1401043016
+1401047509
+1403013743
+1801003512
+2002004409
+1801002252
+1801013600
+1401022851
+1401029544
+1401034062
+1401068324
+1401058921
+1403032757
+1801001561
+1801004514
+1801009447
+1801011775
+1801012597
+1801014562
+2201162847
+1801017032
+1203002353
+1401028865
+1401053108
+1401006616
+1401054805
+1403001625
+1403019977
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='EWS' where advc_rollno in ('9001044361 ,''9001049725 ,''9002013675 ,''9002014378 ,''9009012799 ,''9011022087 ,''9011006642 ,''9008003716 ,''9008003572 ,''9002021927 ,''9002018257 ,''1401036934 ,''1401023619 ,''1401026313 ,''1401039954 ,''1401043016 ,''1401047509 ,''1403013743 ,''1801003512 ,''2002004409 ,''1801002252 ,''1801013600 ,''1401022851 ,''1401029544 ,''1401034062 ,''1401068324 ,''1401058921 ,''1403032757 ,''1801001561 ,''1801004514 ,''1801009447 ,''1801011775 ,''1801012597 ,''1801014562 ,''2201162847 ,''1801017032 ,''1203002353 ,''1401028865 ,''1401053108 ,''1401006616 ,''1401054805 ,''1403001625 ,''1403019977');
+
+
+-------------CATEGORY CHANGE UR TO SC----------------4
+'1203007704 ,''1401002480 ,''1401059241 ,''1401016565'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='SC' where advc_rollno in ('1203007704 ,''1401002480 ,''1401059241 ,''1401016565');
+
+------------CATEGORY CHANGE UR TO OBC---------------51
+'9001002307',
+'9001022801',
+'9001039400',
+'9009017962',
+'9001045298',
+'9001036203',
+'9001032102',
+'9001013501',
+'9011016306',
+'9011014616',
+'9011011968',
+'9011009294',
+'9011009260',
+'9010003625',
+'9010000294',
+'9011020866',
+'9012005625',
+'9011022048',
+'9011020711',
+'9002002281',
+'9009003025',
+'9001023432',
+'9010013520',
+'9001032149',
+'9011000681',
+'9002021119',
+'9011001737',
+'9011002547',
+'9010021892',
+'9002013790',
+'9001046090',
+'9010000627',
+'9001000023',
+'9001008555',
+'9001001914',
+'9001047502',
+'1801007359',
+'1801009186',
+'1801019932',
+'1801011950',
+'1801013909',
+'1801016705',
+'1801016947',
+'2002023776',
+'1401020005',
+'1401020686',
+'1401045312',
+'1401065580',
+'1401009186',
+'1403001046',
+'4404012004'
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='OBC' where advc_rollno in ('9001002307 ,''9001022801 ,''9001039400 ,''9009017962 ,''9001045298 ,''9001036203 ,''9001032102 ,''9001013501 ,''9011016306 ,''9011014616 ,''9011011968 ,''9011009294 ,''9011009260 ,''9010003625 ,''9010000294 ,''9011020866 ,''9012005625 ,''9011022048 ,''9011020711 ,''9002002281 ,''9009003025 ,''9001023432 ,''9010013520 ,''9001032149 ,''9011000681 ,''9002021119 ,''9011001737 ,''9011002547 ,''9010021892 ,''9002013790 ,''9001046090 ,''9010000627 ,''9001000023 ,''9001008555 ,''9001001914 ,''9001047502 ,''1801007359 ,''1801009186 ,''1801019932 ,''1801011950 ,''1801013909 ,''1801016705 ,''1801016947 ,''2002023776 ,''1401020005 ,''1401020686 ,''1401045312 ,''1401065580 ,''1401009186 ,''1403001046 ,''4404012004');
+
+update dme_rme set "rmeMedicalStatus"='Fit',
+"rmeFinalStatus"='Qualified'
+where rollno in ('5105001118 5105000766 5105021783');
+
+
+--------CATEGORY CHANGE UR TO EWS---------------8
+
+'3206202570 ,''1010007764 ,''1010005390 ,''1010005517 ,''1404015609 ,''1404019632 ,''2002000891 ,''2404004199'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='EWS' where advc_rollno in ('3206202570 ,''1010007764 ,''1010005390 ,''1010005517 ,''1404015609 ,''1404019632 ,''2002000891 ,''2404004199');
+
+--------CATEGORY CHANGE UT TO OBC---------------14
+
+'3203009892',
+'3009013695',
+'3009168426',
+'3009164628',
+'3010090684',
+'3013110594',
+'3009026134',
+'3009029794',
+'3009040566',
+'3009072695',
+'3009055032',
+'3009105328',
+'3013018244',
+'3010191114'
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='OBC' where advc_rollno in ('3203009892 ,''3009013695 ,''3009168426 ,''3009164628 ,''3010090684 ,''3013110594 ,''3009026134 ,''3009029794 ,''3009040566 ,''3009072695 ,''3009055032 ,''3009105328 ,''3013018244 ,''3010191114');
+
+--------CATEGORY CHANGE UR TO ST---------------2
+
+'1010010693',
+'4205086397'-----Migration issue
+
+update t_appl_dv_ctgd2024candidatedetails_ssc set advc_categoryid='ST' where advc_rollno in ('1010010693');
+
+
+CREATE table ctgd2024final as 
+(select a.*,b.*,c.*,d.* from m_gd24candidatesdtls_ssc a 
+left join t_constablegd24_petpst b
+on a.rollno=b.pt_roll_no
+left join t_appl_dv_ctgd2024candidatedetails_ssc c 
+on a.rollno=c.advc_rollno::bigint
+left join dme_rme d
+on a.rollno=d.dmerme_rollno::bigint);
+
+delete from ctgd2024final where advc_id in ('126994 158132 134868 152426 152835 126816');
+
+
+update ctgd2024final a
+set a.included_in_result=b.included_in_result
+from gd24final b where
+a.rollno=b.rollno;
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t cut_off_table -F c -f C:\Users\Public\cut_off_table.dump alloc_ctgd2024_tier1_result
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_ctgd2024_tier1_result
+
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_allocation_final -t cut_off_table C:\Users\Public\cut_off_table.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2024_allocation_final -t master_table C:\Users\Public\master_table.dump
+
+pg_dump -U sscpgadmin -h 10.192.97.46 -p 5432 -d ssc_db_external_agencies -t ctgd2024final -F c -f C:\Users\Public\ctgd2024final.dump
+
+pg_restore -U postgres -h  10.246.126.173 -p 5432 -d alloc_ctgd2024_allocation_final -t ctgd2024final C:\Users\Public\ctgd2024final.dump
+
+select * from ctgd2024final where advc_rejectionprovision='Rejected'and included_in_result='Yes';---Munish verma
+
+update ctgd2024final set advc_rejectionprovision='QU (Qualified)'where rollno='1404030819';
+
+select * from ctgd2024final where advc_rejectionprovision is null and included_in_result='Yes';---all temp unfit in pt/pst
+
+update ctgd2024final set advc_rejectionprovision='TU (Temporary Unfit)'
+where advc_rejectionprovision is null and included_in_result='Yes';
+
+update ctgd2024final set included_in_result='Yes'  where rollno in ('2406058805 8204000125 8204000419');
+
+
+48554-2456
+
+create table candidates as
+(select a.*,b.*
+from candidates_tier1 a inner join ctgd2024final b on a.rollno_tier1::bigint=b.rollno)
+;---351176
+
+update candidates set rejection_provision=advc_rejectionprovision;
+
+update candidates set rejection_provison='QU (Qualified)' ,
+remarks='Court Order' where rollno in ('2406058805 8204000125 8204000419');
+
+alter table candidates add column cat1 character varying;
+alter table candidates add column cat2 character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column dob1 date;
+
+
+select distinct rejection_provision,count(*) from candidates where included_in_result='Yes' group by rejection_provision;
+"QU (Qualified)"	115343
+"TU (Temporary Unfit)"	48
+"W (With Held)"	1848
+
+update candidates set cat1=advc_categoryid,
+dob1=advc_dob;
+
+update candidates set cat1=cat1_tier1,
+cat2=cat2_tier1,
+dob1=dob_tier1,
+remarks='temp unfit candidate details updated from tier1'
+where included_in_result='Yes' and rejection_provision='TU (Temporary Unfit)';----48
+
+8007013323
+
+update candidates set cat1='0' where cat1='EWS' and included_in_result='Yes';----15918
+update candidates set cat1='1' where cat1='SC' and included_in_result='Yes';----20639
+update candidates set cat1='2' where cat1='ST' and included_in_result='Yes';----16523
+update candidates set cat1='6' where cat1='OBC' and included_in_result='Yes';----48172
+update candidates set cat1='9' where cat1='UR' and included_in_result='Yes';----15938
+
+update candidates set cat2='0' where included_in_result='Yes';
+SELECT count(*) from candidates where included_in_result='Yes' and advc_isex_serviceman=true ;----806
+update candidates set cat2='3' where included_in_result='Yes' and advc_isex_serviceman=true;
+
+update candidates set exsm_length=substring(lengthofservice,0,3)
+where cat2='3'and included_in_result='Yes' and advc_isex_serviceman=true;
+
+update candidates set exsm_length=trim(exsm_length)
+where cat2='3'and included_in_result='Yes' and advc_isex_serviceman=true;
+
+select rollno,cat2_tier1,cat2,exsm_length_tier1,exsm_length from candidates where included_in_result='Yes' and cat2_tier1<>cat2;---all matched
+
+update candidates set cat1=cat1_tier1,
+cat2=cat2_tier1,
+dob1=dob_tier1
+where rollno in ('2404001391 1004015614 8204000125 8204000419 5105052083 5105049629 5105063752 2406058805');
+
+alter table candidates add column cand_name character varying;
+
+--update candidates set cand_name=advc_name where included_in_result='Yes';
+
+select * from candidates where cand_name is null and included_in_result='Yes';---34
+
+update candidates
+set cand_name=name_tier1 where rollno in 
+(select rollno from candidates where cand_name is null and included_in_result='Yes'
+);
+
+select rollno,name_tier1,ear_changedname,cand_name,advc_name,advc_candidatenameremarks
+from candidates where included_in_result='Yes';
+
+update candidates set cand_name=ear_changedname,
+remarks='changedname considered'where included_in_result='Yes' AND ear_changedname<>'';
+
+7205024926
+
+update candidates set dob1=dob_tier1,
+cat1=cat1_tier1,
+remarks='details received from CRPF'
+where rollno='8007013323';
+
+update candidates set lengthofservice='17 Years 00 Month 14 Days'
+advc_dateofjoining='2003-03-18',
+remarks='details received from CRPF'
+where rollno='8007002828';
+
+select * from candidates where dob1 is null and included_in_result='Yes';---0
+select * from candidates where cat1 is null and included_in_result='Yes';---0
+select * from candidates where cat2 is null and included_in_result='Yes';---0
+select * from candidates where gender<>gender_tier1 and included_in_result='Yes';---0
+
+select count(*) from candidates where included_in_result='Yes' and cat1_tier1<>cat1;-----4466
+
+select distinct cat1_tier1,cat1,count(*) from candidates where included_in_result='Yes' and cat1_tier1<>cat1 group by cat1_tier1,cat1;
+"0"	"9"	1738
+"1"	"9"	126
+"2"	"9"	38
+"6"	"9"	2564
+
+alter table candidates add column agerelax_code character varying;
+
+update candidates set agerelax_code=advc_arccode where included_in_result='Yes';
+
+select distinct cat1,cat2,advc_arccode,count(*) from candidates where included_in_result='Yes' group by cat1,cat2,advc_arccode;
+
+update candidates set agerelax_code=substring(agerelax_code,0,3) where included_in_result='Yes';
+
+update candidates set agerelax_code=null where agerelax_code='NA' and included_in_result='Yes';
+
+
+alter table candidates add column height_relax character varying;
+alter table candidates add column chest_relax character varying;
+alter table candidates add column height_chest_relax character varying;
+
+
+select rollno,gender,cat1,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp
+from candidates where included_in_result='Yes'limit 10;
+
+select rollno,gender,cat1,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp
+from candidates where included_in_result='Yes' and gender='2' and pt_height_measure<'170' and cat2<>'3' ;---16941
+
+update candidates set height_relax='Yes' where included_in_result='Yes' and gender='2' and pt_height_measure<'170' and cat2<>'3';---16941
+update candidates set height_relax='Yes' where included_in_result='Yes' and gender='1' and pt_height_measure<'157' and cat2<>'3';---1884
+
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp
+from candidates where included_in_result='Yes' and gender='2' and pt_height_measure<'170' and pt_heightrelaxcode='' and cat2<>'3';---no such candidates
+
+"1"
+"3"
+"4"
+"6"
+"7"
+"8"
+
+
+select * from candidates where included_in_result='Yes' and gender='1' and pt_height_measure>'157' and pt_heightrelaxcode <>'';---5501006045
+
+--Number of qualified male candidates who had availed ‘Hill Area’ Height Relaxation=. Height of all these candidates was <170 cm but >=165 cm. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available to candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='2'
+and pt_height_measure>='165' and pt_heightrelaxcode='3' and cat2<>'3';---6541
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2'
+and pt_height_measure>='165' and pt_heightrelaxcode='3' and cat2<>'3';---6541 updates
+
+
+--	There were male candidates who had qualified in PET/ PST and had Height Relaxation allowed for Gorkha Territorial Administration (GTA) i.e. PHTR_CODE=’8’. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available of candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='2'
+and pt_height_measure>='157' and pt_heightrelaxcode='8' and cat2<>'3';---30
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2'
+and pt_height_measure>='157' and pt_heightrelaxcode='8' and cat2<>'3';---30 updates
+
+---	There were male candidates who had qualified in PET/ PST and had availed Height Relaxation benefit allowed for the candidates of the seven NE States. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available of candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='4' and cat2<>'3';---1000
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='4' and cat2<>'3';---1000 updates
+
+--	Non-ESM, qualified ST male candidates having height >=165 cm and <170 cm, who have availed height relaxation of ‘ST’ category and belongs to JK (14), Ladakh (18), HP (13), Assam (4) and Uttarakhand (35) should be treated as having not availed height relaxation as 165 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+a.	Assam (4): 7
+b.	HP (14): 8
+c.	JK (15): 117
+d.	Ladakh (37): 19
+e.	Uttarakhand (35): 84
+f.	Maharashtra (21): 171
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2' and cat1='2'
+and pt_height_measure>='165' and pt_heightrelaxcode='1' and cat2<>'3'and statecode_considered in ('4 14 15 35 37 21');---406 updates
+
+---	Non-ESM, qualified ST male candidates having height >=162.5 cm and <170 cm, who have availed height relaxation of ‘ST’ category and belongs to  Arunachal Pradesh (3), Manipur (22), Meghalaya (23), Mizoram (24), Nagaland (25), Sikkim (30) and Tripura (33) should be treated as having not availed height relaxation as 162.5 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+S No	State	Count of candidates
+1	Arunachal Pradesh (3)	: 8
+2	Manipur (22)	: 2
+3	Meghalaya (23)	: 5
+4	Mizoram (24)	: 1
+5	Nagaland (25)	: 8
+6	Sikkim (30)	: 0
+7	Tripura (33) : 2
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='2' and cat1='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='1' and cat2<>'3'and statecode_considered in ('33');
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2' and cat1='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='1' and cat2<>'3'and statecode_considered in ('3 22 23 24 25 30 33');---26 updates
+
+-- non-ESM, qualified ST male candidates having height >=162.5 cm and <170 cm, who have availed height relaxation of ‘ST’ of NE States (PHTR_CODE=’6’) should be treated as having not availed height relaxation as 162.5 cm is the height requirement for all candidates of these States. HT_RELAX value of all these candidates was changed to ‘F’. 
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='2' and cat1='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='6' and cat2<>'3';---2498
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='2' and cat1='2'
+and pt_height_measure>='162.5' and pt_heightrelaxcode='6' and cat2<>'3';---2498 updates
+
+-----------------for female----------------------
+
+--Number of qualified female candidates who had availed ‘Hill Area’ Height Relaxation=. Height of all these candidates was <170 cm but >=165 cm. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available to candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='1'
+and pt_height_measure>='155' and pt_heightrelaxcode='3' and cat2<>'3';---409
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='1'
+and pt_height_measure>='155' and pt_heightrelaxcode='3' and cat2<>'3';---409 updates
+
+	
+
+--	There were female candidates who had qualified in PET/ PST and had Height Relaxation allowed for Gorkha Territorial Administration (GTA) i.e. PHTR_CODE=’8’. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available of candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='1'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='8' and cat2<>'3';----4
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='1'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='8' and cat2<>'3';----4 updates
+
+
+---	There were male candidates who had qualified in PET/ PST and had availed Height Relaxation benefit allowed for the candidates of the seven NE States. HT_RELAX value of these candidates was changed to ‘F’ as this height relaxation is available of candidates of all categories.
+
+select rollno,gender,cat1,cat2,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='1'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='4' and cat2<>'3';---107
+
+update candidates set height_relax=null where included_in_result='Yes' and gender='1'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='4' and cat2<>'3';---107 updates
+
+--	Non-ESM, qualified ST female candidates having height >=155 cm and <157 cm, who have availed height relaxation of ‘ST’ category and belongs to JK (14), Ladakh (18), HP (13), Assam (4) and Uttarakhand (35) should be treated as having not availed height relaxation as 165 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+a.	Assam (4): 0
+b.	HP (14): 0
+c.	JK (15): 8
+d.	Ladakh (37): 4
+e.	Uttarakhand (35): 11
+f.	Maharashtra (21): 9
+
+update candidates set height_relax=null  where included_in_result='Yes' and gender='1' and cat1='2'
+and pt_height_measure>='155' and pt_heightrelaxcode='1' and cat2<>'3'and statecode_considered in ('4 14 15 35 37 21');---32 updates
+
+
+
+
+-- Qualified ST female candidates having height >=152.5 cm and <157 cm, who have availed height relaxation of ‘ST’ category and belongs to  Arunachal Pradesh (3), Manipur (22), Meghalaya (23), Mizoram (24), Nagaland (25), Sikkim (30) and Tripura (33) should be treated as having not availed height relaxation as 152.5 cm is the height requirement for all candidates of these States. State-wise count of such candidates is:
+S No	State	Count of candidates
+1	Arunachal Pradesh (3)	: 0
+2	Manipur (22)	: 0
+3	Meghalaya (23)	: 0
+4	Mizoram (24)	: 0
+5	Nagaland (25)	: 0
+6	Sikkim (30)	: 0
+7	Tripura (33) : 0
+
+
+---qualified ST female candidates having height >=152.5 cm and <157 cm, who have availed height relaxation of ‘ST’ of NE States (PHTR_CODE=’6’) should be treated as having not availed height relaxation as 152.5 cm is the height requirement for all candidates of these States. HT_RELAX value of all these candidates was changed to ‘F’. 
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax
+from candidates where included_in_result='Yes' and gender='1' and cat1='2'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='6' and cat2<>'3';---283
+
+update candidates set height_relax=null  where included_in_result='Yes' and gender='1' and cat1='2'
+and pt_height_measure>='152.5' and pt_heightrelaxcode='6' and cat2<>'3';---283 updates
+
+-------chest relacation for male---------------
+
+---Number of qualified non-ESM male candidates having non-expanded chest <80 cm OR expanded chest<85 cm=. CH_RELAX value was assigned ‘T’ to all these candidates.
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax,chest_relax
+from candidates where included_in_result='Yes' and gender='2' and cat2<>'3'
+and (chestexp<'85' or chestnotexp<'80');---8306
+
+update candidates set chest_relax ='Yes'
+where included_in_result='Yes' and gender='2' and cat2<>'3'
+and (chestexp<'85' or chestnotexp<'80');----8306 updates
+
+
+--Out of the qualified non-ESM male candidates who had availed Chest Relaxation, number of candidates who had their non-exp chest>=80 cm and exp chest>=85 were 16.
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax,chest_relax
+from candidates where included_in_result='Yes' and gender='2' and cat2<>'3' and pt_chestrelax_code='10'
+and (chestexp>='83' and chestnotexp>='78');---3119
+
+update candidates set chest_relax = null
+where included_in_result='Yes' and gender='2' and cat2<>'3' and pt_chestrelax_code='10'
+and (chestexp>='83' and chestnotexp>='78');---3119 updates
+
+
+---There were non-ESM male candidates who had qualified in PET/ PST and had availed Chest Relaxation allowed for Gorkha Territorial Administration (GTA) i.e. PCHR_CODE=’9’. CH_RELAX value of these candidates was changed to ‘F’ as this chest relaxation is available of candidates of all categories.
+
+select rollno,gender,cat1,cat2,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel_tier1,remarks,height_relax,chest_relax
+from candidates where included_in_result='Yes' and gender='2' and cat2<>'3' and pt_chestrelax_code='9'
+and (chestexp>='82' and chestnotexp>='77');----564 updates
+
+update candidates set chest_relax = null
+where included_in_result='Yes' and gender='2' and cat2<>'3' and pt_chestrelax_code='9'
+and (chestexp>='82' and chestnotexp>='77');---564 updates
+
+---	Non-ESM, qualified ST male candidates having non-exp chest >=78 cm and exp-chest >=83 cm, who have availed chest relaxation of ‘ST’ category and belongs to JK (14), Ladakh (18), HP (13) and Assam (4) should be treated as having not availed chest relaxation as 78-83 cm is the chest requirement for all candidates of these States. State-wise count of such candidates is:
+
+a.	Assam (4): 270
+b.	HP (14): 11
+c.	JK (15): 74
+d.	Ladakh (37): 4
+e.	Uttarakhand (35): 32
+f.	Maharashtra (21): 85
+
+update candidates set chest_relax = null
+where included_in_result='Yes' and gender='2' and cat2<>'3' and pt_chestrelax_code='5'
+and (chestexp>='83' and chestnotexp>='78') and statecode_considered in ('4 14 15 35 37 21');----476 updates
+
+
+
+select distinct height_relax,chest_relax,count(*) from candidates where included_in_result='Yes' group by height_relax,chest_relax;
+
+update candidates set height_chest_relax='Yes' where (height_relax='Yes' or chest_relax='Yes');---9152 updates
+
+
+CREATE TABLE IF NOT EXISTS public.vacancy_table
+(
+    state_code character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    state character varying(75) COLLATE pg_catalog."default",
+    gender character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    post_code character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    force character varying(10) COLLATE pg_catalog."default",
+    area character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    category character varying(255) COLLATE pg_catalog."default",
+    category_code character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    vacancies integer,
+    initial integer,
+    current integer,
+    allocated integer,
+    left_vacancy integer,
+    min_marks_tier1 numeric,
+    min_marks_parta_tier1 numeric,
+    min_marks_partb_tier1 numeric,
+    min_marks_cand_dob_tier date,
+	min_marks_prev numeric,
+    min_marks_parta_prev numeric,
+    min_marks_partb_prev numeric,
+    min_marks_cand_dob_prev date,
+    CONSTRAINT vacancy_final_pk PRIMARY KEY (state_code, gender, post_code, area, category_code)
+)
+
+
+alter table candidates add column ncc_marks numeric;
+
+SELECT DISTINCT advc_typeof_ncccertificate,count(*) from candidates where included_in_result='Yes' group by advc_typeof_ncccertificate;
+
+"NCC 'A' Certificate"	2557
+"NCC 'B' Certificate"	3701
+"NCC 'C' Certificate"	5334
+	105652
+	
+update candidates set ncc_marks='8' where advc_typeof_ncccertificate='NCC ''C'' Certificate' 
+and included_in_result='Yes';
+update candidates set ncc_marks='4.8' where advc_typeof_ncccertificate='NCC ''B'' Certificate' 
+and included_in_result='Yes';
+update candidates set ncc_marks='3.2' where advc_typeof_ncccertificate='NCC ''A'' Certificate' 
+and included_in_result='Yes';	
+	
+
+
+'2201047350',
+'8007002828',
+'2405097399',
+'3002021891',
+'3010183022',
+'8007001507',
+'8007014727',
+'4604023375',
+'6007048897',
+'1401056265',
+'3201020870',
+'3207006918',
+'3013016928',
+'8007007988',
+
+
+----8007002828
+-----ESM length of service updates-------
+
+update candidates set lengthofservice='19 YEARS 0 MONTHS 12 DAYS ,'advc_date_of_joining='1999-11-18',	advc_discharged_date='2018-11-30 ,'remarks='details received from CRPF' where rollno='2201047350';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 13 DAYS ,'advc_date_of_joining='2003-03-18',	advc_discharged_date='2020-03-31 ,'remarks='details received from CRPF' where rollno='8007002828';
+update candidates set lengthofservice='17 YEARS 5 MONTHS 28 DAYS ,'advc_date_of_joining='2003-01-02',	advc_discharged_date='2020-06-30 ,'remarks='details received from CRPF' where rollno='2405097399';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 18 DAYS ,'advc_date_of_joining='2003-02-11',	advc_discharged_date='2020-02-29 ,'remarks='details received from CRPF' where rollno='3002021891';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 2 DAYS ,' advc_date_of_joining='2004-07-29',	advc_discharged_date='2021-07-31 ,'remarks='details received from CRPF' where rollno='3010183022';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 15 DAYS ,'advc_date_of_joining='2002-12-16',	advc_discharged_date='2019-12-31 ,'remarks='details received from CRPF' where rollno='8007001507';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 12 DAYS ,'advc_date_of_joining='2005-03-19',	advc_discharged_date='2022-03-31 ,'remarks='details received from CRPF' where rollno='8007014727';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 13 DAYS ,'advc_date_of_joining='2004-09-17',	advc_discharged_date='2021-09-30 ,'remarks='details received from CRPF' where rollno='4604023375';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 5 DAYS ,' advc_date_of_joining='2003-03-26',	advc_discharged_date='2020-03-31 ,'remarks='details received from CRPF' where rollno='6007048897';
+update candidates set lengthofservice='19 YEARS 0 MONTHS 17 DAYS ,'advc_date_of_joining='2003-09-13',	advc_discharged_date='2022-09-30 ,'remarks='details received from CRPF' where rollno='1401056265';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 29 DAYS ,'advc_date_of_joining='2003-01-02',	advc_discharged_date='2020-01-31 ,'remarks='details received from CRPF' where rollno='3201020870';
+update candidates set lengthofservice='24 YEARS 0 MONTHS 29 DAYS ,'advc_date_of_joining='1995-05-02',	advc_discharged_date='2019-05-31 ,'remarks='details received from CRPF' where rollno='3207006918';
+update candidates set lengthofservice='17 YEARS 0 MONTHS 8 DAYS ,' advc_date_of_joining='2002-08-23',	advc_discharged_date='2019-08-31 ,'remarks='details received from CRPF' where rollno='3013016928';
+update candidates set lengthofservice='16 YEARS 4 MONTHS 13 DAYS ,'advc_date_of_joining='2004-01-18',	advc_discharged_date='2020-05-31 ,'remarks='details received from CRPF' where rollno='8007007988';                                                                                                                                         
+
+update candidates set exsm_length=substring(lengthofservice,0,3)
+where cat2='3'and included_in_result='Yes' 
+and rollno in ('2201047350 8007002828 2405097399 3002021891 3010183022 8007001507 8007014727 4604023375 6007048897 1401056265 3201020870 3207006918 3013016928 8007007988');
+
+----------------------NCC TYPE 'A' CERTIFICATE UPDATES ---------------------------
+
+'5601004000 ,''5701007827 ,''2405098246 ,''2201330883 ,''2201335244 ,''2406034410 ,''2201134954 ,''2405192030 ,''8007046274 ,''8003008866 ,''8207004620 ,''8205005228 ,''8207007239 ,''8207015746 ,''8207000132 ,''8205005296 ,''4610010124 ,''4609001648 ,''4609013335 ,''6202008946 ,''6006026415 ,''2201099642 ,''2201052157 ,''2201092278 ,''2003009887 ,''4410115820 ,''4404008513 ,''4410042772 ,''4410030941 ,''4410076534 ,''4410038106 ,''4410041291 ,''4410064828 ,''4410044117 ,''7002005163 ,''7001027305 ,''5401004132 ,''5401002569 ,''5112006461 ,''5105027116 ,''5105031264 ,''5105033301 ,''5105035217 ,''5105012243 ,''8601045102 ,''8601061260 ,''8601012424 ,''8601027834 ,''8601028560 ,''1401032781 ,''1401034690 ,''1010002487 ,''1404020344 ,''1404022724 ,''1404029690 ,''1404014915 ,''1404016642 ,''1404020610 ,''1404023629 ,''1004033359 ,''1404004652 ,''1004021235 ,''1404007128 ,''1004027395 ,''1005001256 ,''5107012917 ,''5107012274 ,''5107009308 ,''5107005831 ,''5102008116 ,''5102001097 ,''3201029139 ,''9213017840 ,''9213016970 ,''3008003555 ,''7203001090 ,''4206033966 ,''4205014990 ,''4204005250 ,''3010120149 ,''8007036599 ,''8007022344 ,''4410133611 ,''4410141189 ,''4410127889 ,''4410132762 ,''4410093428 ,''4410119588 ,''4410135262',
+
+update candidates set advc_typeof_ncccertificate='NCC ''A'' Certificate',
+ncc_marks='3.2',
+remarks='NCC details received from CRPF'
+where included_in_result='Yes' and rollno in 
+('5601004000 ,''5701007827 ,''2405098246 ,''2201330883 ,''2201335244 ,''2406034410 ,''2201134954 ,''2405192030 ,''8007046274 ,''8003008866 ,''8207004620 ,''8205005228 ,''8207007239 ,''8207015746 ,''8207000132 ,''8205005296 ,''4610010124 ,''4609001648 ,''4609013335 ,''6202008946 ,''6006026415 ,''2201099642 ,''2201052157 ,''2201092278 ,''2003009887 ,''4410115820 ,''4404008513 ,''4410042772 ,''4410030941 ,''4410076534 ,''4410038106 ,''4410041291 ,''4410064828 ,''4410044117 ,''7002005163 ,''7001027305 ,''5401004132 ,''5401002569 ,''5112006461 ,''5105027116 ,''5105031264 ,''5105033301 ,''5105035217 ,''5105012243 ,''8601045102 ,''8601061260 ,''8601012424 ,''8601027834 ,''8601028560 ,''1401032781 ,''1401034690 ,''1010002487 ,''1404020344 ,''1404022724 ,''1404029690 ,''1404014915 ,''1404016642 ,''1404020610 ,''1404023629 ,''1004033359 ,''1404004652 ,''1004021235 ,''1404007128 ,''1004027395 ,''1005001256 ,''5107012917 ,''5107012274 ,''5107009308 ,''5107005831 ,''5102008116 ,''5102001097 ,''3201029139 ,''9213017840 ,''9213016970 ,''3008003555 ,''7203001090 ,''4206033966 ,''4205014990 ,''4204005250 ,''3010120149 ,''8007036599 ,''8007022344 ,''4410133611 ,''4410141189 ,''4410127889 ,''4410132762 ,''4410093428 ,''4410119588 ,''4410135262');
+
+----------------------NCC TYPE 'B' CERTIFICATE UPDATES ---------------------------
+'5401000019 2201187881 2201059596 2201160952 2405208041 2201026875 3001046143 3010133741 8204009071 8204009068 8204000505 4610008406 4602015035 4611002751 4604021036 9009012019 9011015131 9001015173 9001005159 9002023096 9002012709 9010001610 6204038475 6001008021 6001009586 6006058003 2201342167 2201046579 2201005148 2201012901 2201115233 2201142085 2201074202 2201066319 2201016322 2201066686 2201199112 2201047648 2405044921 2003002212 2003013202 2201271893 2201211759 2201285170 2201267132 4404007866 4410020253 4419013200 4410096366 4419008523 4419001577 4419018570 4410112995 4410118566 4410093173 4410103804 7001020191 7001023409 7001023436 7001001963 7002010548 7002016149 7002001646 7001003958 7001034397 7001032123 7001046211 7001037619 5701008478 5401003174 5701008301 5401000658 5401000862 5401001543 5401013523 5401012910 5401013305 5111003329 5112000755 5112004453 5105057680 5112003998 5105057076 5105063373 5112002030 5105054615 5105042893 5105030288 5105028130 5105034964 5105038821 5105032097 5105001643 5105025226 5105015699 5105008051 5001004489 8601058748 5501001682 5501001980 5501005386 5501004106 1401061289 1401010030 1401050753 1402019417 1401061233 1801011037 1203007692 1203004032 1404014538 1010005737 1004009914 1004049979 5107010627 5107001056 5107002667 5107005183 5107011359 5107010363 5111001443 5107002169 5111007846 5107006773 5111004096 5111007229 5111003607 5105057452 5112005010 5102011662 5102001383 5102005041 5102001074 5102007422 5102003375 5102003228 5102003572 5102007840 5001001242 5001004542 5001001586 3013188891 3201012952 3013044060 3206125870 3205004061 9213000582 9213013533 9213010040 9213007528 9213016960 9213018411 9213015574 9213006559 9213013989 3013090150 3003019708 7207013781 7202019442 7208033869 7203018343 4205026351 4207000672 4205058301 4207029896 4205018109 4205040273 3010047232 3009151190 3009047122 8601040941 8601001973 8004007254 8004003814 4404021425 4404029389 4404007013 4404000084 4404011321 4410112368 4410124078 4410122273 4410136036 4415002814 4415021628 4415015143 4415069757 4415049359'
+
+update candidates set advc_typeof_ncccertificate='NCC ''B'' Certificate',
+ncc_marks='4.8',
+remarks='NCC details received from CRPF'
+where included_in_result='Yes' and rollno in 
+('5401000019 2201187881 2201059596 2201160952 2405208041 2201026875 3001046143 3010133741 8204009071 8204009068 8204000505 4610008406 4602015035 4611002751 4604021036 9009012019 9011015131 9001015173 9001005159 9002023096 9002012709 9010001610 6204038475 6001008021 6001009586 6006058003 2201342167 2201046579 2201005148 2201012901 2201115233 2201142085 2201074202 2201066319 2201016322 2201066686 2201199112 2201047648 2405044921 2003002212 2003013202 2201271893 2201211759 2201285170 2201267132 4404007866 4410020253 4419013200 4410096366 4419008523 4419001577 4419018570 4410112995 4410118566 4410093173 4410103804 7001020191 7001023409 7001023436 7001001963 7002010548 7002016149 7002001646 7001003958 7001034397 7001032123 7001046211 7001037619 5701008478 5401003174 5701008301 5401000658 5401000862 5401001543 5401013523 5401012910 5401013305 5111003329 5112000755 5112004453 5105057680 5112003998 5105057076 5105063373 5112002030 5105054615 5105042893 5105030288 5105028130 5105034964 5105038821 5105032097 5105001643 5105025226 5105015699 5105008051 5001004489 8601058748 5501001682 5501001980 5501005386 5501004106 1401061289 1401010030 1401050753 1402019417 1401061233 1801011037 1203007692 1203004032 1404014538 1010005737 1004009914 1004049979 5107010627 5107001056 5107002667 5107005183 5107011359 5107010363 5111001443 5107002169 5111007846 5107006773 5111004096 5111007229 5111003607 5105057452 5112005010 5102011662 5102001383 5102005041 5102001074 5102007422 5102003375 5102003228 5102003572 5102007840 5001001242 5001004542 5001001586 3013188891 3201012952 3013044060 3206125870 3205004061 9213000582 9213013533 9213010040 9213007528 9213016960 9213018411 9213015574 9213006559 9213013989 3013090150 3003019708 7207013781 7202019442 7208033869 7203018343 4205026351 4207000672 4205058301 4207029896 4205018109 4205040273 3010047232 3009151190 3009047122 8601040941 8601001973 8004007254 8004003814 4404021425 4404029389 4404007013 4404000084 4404011321 4410112368 4410124078 4410122273 4410136036 4415002814 4415021628 4415015143 4415069757 4415049359');
+
+----------------------NCC TYPE 'B' CERTIFICATE UPDATES ---------------------------
+
+'5601004076 5601000916 5701003083 2201048320 2404015264 2201316660 2201016336 2201015066 2201041140 8007038811 8007034603 8206001324 8207000053 4602000819 4610005267 4605004026 4602004992 9001033923 2201118318 2003009146 4410052827 4410014985 4410033267 4410043834 4410022955 4410060822 4410132958 4410138666 4410118110 7007005019 7007002519 5701006448 5701002989 5105032171 5105057369 5105001010 5105023091 8601026913 8601029386 8601006309 8601029598 8601027432 8601025826 1401027057 1402008169 1203010627 1203000122 1004003677 5302002229 5302002789 3205012381 7203000716 7214017398 7204008368 4204001572 4205061982 4410143892 4415057079'
+
+update candidates set advc_typeof_ncccertificate='NCC ''C'' Certificate',
+ncc_marks='8',
+remarks='NCC details received from CRPF'
+where included_in_result='Yes' and rollno in 
+('5601004076 5601000916 5701003083 2201048320 2404015264 2201316660 2201016336 2201015066 2201041140 8007038811 8007034603 8206001324 8207000053 4602000819 4610005267 4605004026 4602004992 9001033923 2201118318 2003009146 4410052827 4410014985 4410033267 4410043834 4410022955 4410060822 4410132958 4410138666 4410118110 7007005019 7007002519 5701006448 5701002989 5105032171 5105057369 5105001010 5105023091 8601026913 8601029386 8601006309 8601029598 8601027432 8601025826 1401027057 1402008169 1203010627 1203000122 1004003677 5302002229 5302002789 3205012381 7203000716 7214017398 7204008368 4204001572 4205061982 4410143892 4415057079');
+
+-------------------NCC CERTIFICATE NIL/NOT PRODUCED UPDATES--------
+
+'5401006657',
+'5105053884',
+'5501002121',
+'9206004940'
+
+update candidates set advc_typeof_ncccertificate='',
+ncc_marks='0',
+remarks='NCC details received from CRPF'
+where included_in_result='Yes' and rollno in 
+('5401006657 5105053884 5501002121 9206004940');
+
+update candidates set 
+ncc_marks='0'where included_in_result='Yes'  and  ncc_marks is null;
+
+select distinct domicile_district_verified,remarks,count(*) from candidates where included_in_result='Yes'  group by domicile_district_verified,remarks;
+select distinct domicile_state_verified,remarks,count(*) from candidates where included_in_result='Yes'  group by domicile_state_verified,remarks;
+select distinct matriculation_passed_verified,remarks,count(*) from candidates where included_in_result='Yes'  group by matriculation_passed_verified,remarks;
+
+
+select rollno,gender,cat1_tier1,cat1,age_relaxation_code_tier1,advc_arccode,agerelax_code from candidates where included_in_result='Yes'
+and agerelax_code is null and age_relaxation_code_tier1 is not null;----2125 candidates
+
+select cat1,cat2,count(*) from candidates where included_in_result='Yes'
+and agerelax_code is null and age_relaxation_code_tier1 is not null group by cat1,cat2;
+
+"0"	"0"	8
+"1"	"0"	413
+"2"	"0"	544
+"6"	"0"	991
+"9"	"0"	169
+
+update candidates
+set agerelax_code='01',
+remarks=concat(remarks,'agerelaxation given')
+where included_in_result='Yes'
+and agerelax_code is null and age_relaxation_code_tier1 is not null And cat1 in ('1 2');----957 updates
+
+update candidates
+set agerelax_code='02',
+remarks=concat(remarks,'agerelaxation given')
+where included_in_result='Yes'
+and agerelax_code is null and age_relaxation_code_tier1 is not null And cat1 in ('6');---991 updates
+
+select * from candidates where included_in_result='Yes' and cat1 is null limit 10;----0
+select * from candidates where included_in_result='Yes' and dob1 is null limit 10;---0
+select * from candidates where included_in_result='Yes' and cat2='3' and exsm_length is null limit 10;---0
+
+
+alter table candidates add column merit integer;
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+alter table candidates add column cut_off character varying;
+alter table candidates add column catsel character varying;
+
+
+------------dob flag-----------
+
+select * from sp_get_dob_flag('GD24',3);
+
+select distinct dob_flag,count(*) from candidates where included_in_result='Yes' group by dob_flag;
+
+"01"	17023
+"02"	17876
+"03"	803
+"9"	81539
+"99"	3
+
+select * from candidates where dob_flag='99';
+1801008512 ---esm serviceperiod changed from 21 Years 03 Months 17 Days to 14 Years 04 Months 17 Days
+3010037289---OBC to ur
+1801011807---obc TO UR
+
+------------------catsel dob flag---------------------------
+
+select * from sp_get_catseldob_flag('GD24',4);---Sucessful
+
+select distinct dob_flag,catsel_dob,count(*) from  candidates where included_in_result='Yes' group by dob_flag,catsel_dob;
+
+"01"	"1"	9090
+"01"	"2"	7933
+"02"	"6"	17876
+"03"	"3"	803
+"9"	"9"	81539
+"99"		3
+
+------------------------cut off flag -------------------------------------------
+
+select * from sp_get_cut_off('GD24',5);
+
+select rollno,cat1_tier1,cut_off_tier1,cat1,cat2,normalized_score as total from candidates where rejection_provision in ('QU (Qualified) TU (Temporary Unfit) W (With Held)') and included_in_result='Yes'
+and cut_off=''order by rollno;----29 candidates ,category changed to ur
+
+-------------------------merit-------------------------------------------
+
+alter table candidates add column total_marks numeric;
+
+update candidates set total_marks=normalized_score+ncc_marks  where included_in_result='Yes' ;
+
+select * from sp_get_merit('GD24',1);---merit updated successfully for 117215 candidates
+
+SELECT rollno from candidates where total_marks is not null and rejection_provision in ('QU (Qualified) TU (Temporary Unfit) W (With Held)') and included_in_result='Yes'
+and (cut_off is not null and cut_off<>'')  
+order by total_marks DESC,parta_gi DESC,partb_ga DESC,dob1 ASC,UPPER(cand_name)
+
+------------------------------- catsel flag--------------------------------------
+alter table candidates add column exs_reservation character varying;
+
+select distinct exs_reservation_tier1,advc_is_eligible_exsvc_reservation,count(*) from candidates where included_in_result='Yes'  and cat2='3' group by exs_reservation_tier1,advc_is_eligible_exsvc_reservation limit 10;
+"Yes" "true"
+
+update candidates set exs_reservation='Yes' where cat2='3' and included_in_result='Yes';
+
+select * from sp_get_catsel('GD24',6);---Successfully updated catsel
+
+alter table candidates add column catsel_bkp character varying;
+update candidates set catsel_bkp=catsel;
+
+1801008512
+1801011807
+3010037289
+
+
+
+
+
+2201245646
+6006048455---tripura candidates category cahnged to UR but opted 1 pt_heightrelax
+
+
+update candidates set chest_relax=null where included_in_result='Yes' AND statecode_considered in ('3 22 23 24 25 30 33')
+and (chestexp>='82' and chestnotexp>='77') ;
+
+
+update candidates set chest_relax=null where included_in_result='Yes' AND statecode_considered in ('4 14 15 21 35 37')
+and (chestexp>='83' and chestnotexp>='78') ;
+
+update candidates set height_chest_relax='Yes' where (height_relax='Yes' or chest_relax='Yes');
+
+--- //Select MERIT,rollno,gender,cat1,cat1_tier1,cat2,districtname_considered,statecode_considered,statename_considered,pt_height_measure,pt_seek_height_relax,pt_heightrelaxcode,pt_chestrelax_code,chestexp,chestnotexp,catsel,remarks,height_relax,chest_relax,height_chest_relax,remarks2 
+--from candidates where included_in_result='Yes' AND ROLLNO IN ('4205086397 2405075227');
+
+'8201005302 8201004605 8201003865 8006002137 8201003377 8006002313 8201003617 8201002944 8603013369 8601048296 9001008629 9002023074 9011017380 9001048156 9001039374 9011007412 9001000587 9001026963 2002005567 2002022488 2006004358 2201053708 2201061310 2201114784 2201031262 2201069081 2201107209 2201107654 2201206956 2201309973 2201192653 2201252310 2201288945 2201311011 2201325759 2201325789 2201376003 2201382509 2201003140 2201033477 2201101604 2201109494 2201109713 2201147554 2201154925 2201155291 2201162474 2201193011 2201193935 2201245467 2201267782 2201297828 2201313031 2201356698 2201064879 2201073720 2201089121 2201095718 2201118316 2201142429 2201164684 2201165453 2201179737 2201180309 2201202184 2201224986 2201232085 2201247932 2201277849 2201291571 2201292384 2201299987 2201313625 2201314615 2201320815 2201335477 2201335998 2201358492 2201365468 2201385792 2201059314 2201066786 2201143791 2201150704 2201150722 2201166094 2201173337 2201264173 2201271313 2201285613 2201315139 2201322462 2201337380 2201351809 2201358808 2201360217 2201037675 2201060373 2201257625 2201345540 2201345592 2201137389 2201144688 2201144872 2201221298 2401000408 2405155616 2405226214 2405005655 2405038591 2405056820 2405137129 2405141770 2405151283 2405193345 2405236503 2405015567 2405081525 2405086129 2405109662 2405194245 2405194418 2405175874 2405063145 2405086781 2405147905 2405021294 2405054103 2405068341 2405115395 2405167301 2405040944 2405059441 2405096870 2405101640 2405111263 2405148927 2405112541 2405210744 2406041387 2406043759 2406046112 2406048648 2406007116 2406022628 2406027326 2201346415 2201129975 2201024254 2201245068 2405004677 2201023811 2201243954 2201207757 2201011752 2201240283 2201298628 2201075095 2201205839 2201361052 2002015725 2405230299 2201133078 2201255976 2201176285 2201325604 2201063218 2201334066 2201141546 2201089861 2201344536 2201345531 2201243129 2405083105 2405201027 2405051427 2003005213 2003018070 2405052615 2405090745 2201364721 2201387325 2201020128 2405073409 2201076858 2201326346 2406043918 2406049314 2201127343 2201359836 7204009690 7007008565 7001039675 7001046123 7007003914 7007003807 7007003703 7007008370 7007008633 7007008859 7007010070 7007013154 7007013184 7007013314 7007013473 7007008418 7203010393 7203010981 7214018348 7001025178 7001027247 7801000569 7007002554 7001011177 7001021778 7001038721 7001052255 7007002273 7007004071 7007009703 7012008842 7203001406 7203003403 7203005555 7203006058 7203006133 7203006232 7203006660 7203006784 7203008032 7203008272 7203008440 7203009249 7203011140 7203011320 7203011586 7203012223 7203012738 7203012788 7203014063 7203014400 7203014766 7203015088 7203015107 7203015370 7203016197 7203016686 7203016975 7203017006 7203017340 7203018212 7203019767 7203020860 7203020999 7203021207 7203021613 7203022009 7203022095 7203022191 7203022206 7203022730 7203023169 7203023369 7203023618 7203024033 7203024182 7203025749 7204011247 7207012991 7207014715 7208001744 7208002180 7208012979 7208014514 7208025949 7208029672 7208033504 7214001941 7801000414 7001001406 7001006000 7001007156 7001007351 7001007502 7001008952 7001012278 7001015956 7001017174 7001023520 7001024760 7001029657 7001029913 7001032884 7001034804 7001034904 7001036877 7001037046 7001039237 7001040554 7001049095 7001052237 7002004110 7002005633 7002010711 7002011556 7002013550 7002013879 7006002434 7006004913 7006010615 7007002934 7007003193 7007005463 7007007245 7007007539 7012002654 7012008564 7012012184 7012015355 7201002088 7201026697 7202007829 7202020009 7203012680 7203019724 7204010988 7205011326 7205021722 7205024005 7205024036 7205037186 7206000306 7206001216 7206009877 7207023063 7208005661 7208018954 7208022862 7208024766 7214021729 7205005980 1801018607 1404012772 1401000384 1401000786 1401002735 1401020976 1401037687 1401050297 1401050870 1401058198 1401059874 1202009443 1202010036 1402010551 1004021780 1004041126 1004041594 1403012197 1403013023 1403014870 1403020499 1403021773 1010007673 1203007639 1203009632 1401012995 1401014154 1401022579 1401059377 1401059561 1401062792 1404018339 1404009985 1404021099 1404025025 1402003116 1402001646 1403012227 1403019946 1203001018 1203009824 1203010825 1402016086 1801003983 1401027771 1403032091 1801009977 3206210074 3209034453 3003100126 3003098194 3205054127 3003082720 3003083487 3003083025 3001089185 3001092798 3009107690 3009092861 3013086418 3202003845 3205022615 3001007084 3001036033 3001049840 3001118051 3001050802 3002001115 3002003193 3002017412 3002021415 3007015783 3007029921 3009072053 3009102974 3009167592 3009107811 3009014721 3010130331 3010073027 3011062369 3015005234 3003059516 3003019916 3003035356 3013015586 3013166922 3013004538 3013027490 3013178806 3013183100 3013156748 3013066936 3013081772 3013150350 3013033682 3013184927 3207007618 3207008307 3202004133 3203018435 3203002807 3203021176 3203025742 3206185693 3206209737 3209005517 3209021467 3001007100 3001028568 3001033073 3001033273 3001037824 3001042437 3001051964 3001051992 3001061542 3001063907 3001080179 3001089795 3001113031 3001115434 3001115602 3001002860 3001003001 3001005054 3001005146 3001007519 3001009917 3001010129 3001012383 3001014801 3001019358 3001028764 3001033578 3001033675 3001035908 3001038079 3001038398 3001045484 3001047833 3001052289 3001052394 3001052520 3001054752 3001056904 3001068932 3001071055 3001071319 3001073609 3001075953 3001078102 3001085176 3001092420 3001092557 3001099367 3001099570 3001101935 3001101937 3001104295 3001106350 3001106606 3001108827 3001113396 3001116058 3001118406 3001000730 3001021994 3001040898 3001059767 3001101990 3001118637 3001120874 3001008092 3001008532 3001010579 3001020376 3001039132 3001048284 3001050612 3001055619 3001062360 3001062448 3001067315 3001069585 3001071634 3001074416 3001074552 3001074597 3001083901 3001085839 3001086225 3001090525 3001090631 3001093128 3001098148 3001099908 3001100250 3001106958 3001109478 3001109768 3001114104 3001114483 3001114586 3001116451 3001118966 3001118978 3001121268 3001001750 3001001780 3001011121 3001022873 3001060534 3001060572 3001070147 3001077161 3001079492 3001084110 3001086601 3001110045 3001119464 3001004290 3001008973 3001027930 3001046674 3001048971 3001051491 3001056134 3001060810 3001063102 3001063180 3001063196 3001074881 3001074890 3001077412 3001093810 3001112571 3001114990 3001117255 3001002356 3001006879 3001016232 3001028014 3001032954 3001035070 3001051568 3001051850 3001056469 3001061185 3001068265 3001070509 3001072739 3001082230 3001094082 3001096489 3001098719 3001103461 3001110452 3001115253 3001119875 3001119928 3001122402 3002000091 3002000336 3002000936 3002001006 3002001309 3002001775 3002002322 3002002808 3002002957 3002003549 3002004580 3002004787 3002005019 3002005218 3002005370 3002005722 3002005765 3002006115 3002006276 3002006445 3002006592 3002006595 3002006601 3002007082 3002007224 3002007319 3002007374 3002007586 3002008324 3002008355 3002009564 3002009583 3002009690 3002009876 3002009948 3002010365 3002012269 3002013533 3002013563 3002013918 3002013963 3002014123 3002014180 3002014190 3002014376 3002014644 3002014689 3002015208 3002015749 3002016235 3002016280 3002016917 3002017104 3002017628 3002018010 3002018492 3002018794 3002019613 3002019650 3002020084 3002020126 3002020334 3002020975 3002021217 3002021308 3002021416 3002021442 3002021548 3002021605 3002021693 3002022346 3005043534 3005045520 3005003528 3005007784 3005008110 3005008578 3005012671 3005016415 3005020346 3005020907 3005027620 3005030258 3005030802 3005038493 3005038930 3007015792 3007027590 3007034823 3007035940 3007014863 3007036383 3008004049 3008004141 3008005178 3008010778 3008012660 3008025014 3008001798 3008005652 3008007996 3008017060 3008022673 3008026440 3009003918 3009004023 3009030148 3009041227 3009048920 3009048945 3009056465 3009067531 3009075158 3009086364 3009093955 3009135047 3009146233 3009149948 3009157462 3009165012 3009034144 3009060372 3009086691 3009124035 3009131588 3009139002 3009168878 3009168889 3009000849 3009000999 3009008386 3009011836 3009012244 3009030466 3009041715 3009045485 3009049651 3009056731 3009056767 3009056819 3009064595 3009068454 3009072202 3009075867 3009079664 3009079743 3009094772 3009097990 3009105759 3009105823 3009113079 3009116993 3009117067 3009124182 3009124703 3009124730 3009154651 3009158211 3009158380 3009161857 3009161962 3009162007 3009169084 3009169219 3009004902 3009008749 3009016194 3009023637 3009117320 3009165956 3009008897 3009009202 3009012516 3009027658 3009031268 3009031398 3009042726 3009049947 3009050361 3009057449 3009057530 3009057852 3009057853 3009061507 3009061572 3009065340 3009069110 3009072690 3009091505 3009095011 3009095049 3009095152 3009095431 3009110375 3009121252 3009121308 3009128879 3009132834 3009140148 3009140161 3009140354 3009143848 3009158764 3009158777 3009166483 3009170038 3009002101 3009013015 3009017023 3009039321 3009046800 3009046843 3009046845 3009046996 3009057930 3009069250 3009073296 3009076768 3009077026 3009080531 3009084464 3009084500 3009092147 3009095801 3009099412 3009102985 3009106965 3009110655 3009114299 3009114334 3009132962 3009133311 3009136640 3009136840 3009144419 3009147958 3009148114 3009151986 3009155443 3009159144 3009166876 3009170599 3009032355 3009043377 3009058488 3009065973 3009077262 3009092324 3009111048 3009122195 3009126056 3009137177 3009140951 3009148386 3009006428 3009010253 3009013767 3009013846 3009017733 3009032539 3009036154 3009047643 3009054946 3009066243 3009066487 3009070153 3009070227 3009073866 3009077802 3009077841 3009081159 3009085317 3009099976 3009100264 3009107510 3009111352 3009111428 3009114865 3009115146 3009119001 3009122728 3009126255 3009130039 3009130231 3009144822 3009152357 3009152702 3009156169 3009156452 3009167678 3009171192 3009006824 3009007062 3009010466 3009010526 3009014189 3009014218 3009025705 3009032854 3009036954 3009040390 3009040643 3009044322 3009047876 3009051960 3009059356 3009059485 3009062988 3009066799 3009074153 3009081859 3009085477 3009104284 3009108019 3009119067 3009119139 3009122974 3009137789 3009137836 3009141882 3009145239 3009145244 3009145278 3009145319 3009153134 3009160216 3009167926 3009171802 3009171870 3009003651 3009010978 3009029945 3009029949 3009033392 3009040774 3009040960 3009063288 3009074823 3009093693 3009097065 3009097193 3009097399 3009112164 3009119676 3009123355 3009127075 3009130830 3009134667 3009153301 3009156926 3009156994 3009161011 3010011249 3010107761 3010126491 3010004265 3010007892 3010015440 3010064136 3010078319 3010138061 3010104627 3010123476 3010134677 3010138216 3010145707 3010060772 3010153505 3010161193 3010009076 3010027624 3010075570 3010079085 3010116571 3010127802 3010154073 3010057868 3010065280 3010079694 3010032200 3010035908 3010058203 3010098669 3010113881 3010054991 3010140328 3010033013 3010080977 3010099393 3010099619 3010118287 3010133023 3010014536 3010029374 3010033100 3010166971 3010081310'
+
+alter table candidates add column debarred_final character varying;
+
+update candidates set debarred_final='Yes'
+where rollno in ('8201005302 8201004605 8201003865 8006002137 8201003377 8006002313 8201003617 8201002944 8603013369 8601048296 9001008629 9002023074 9011017380 9001048156 9001039374 9011007412 9001000587 9001026963 2002005567 2002022488 2006004358 2201053708 2201061310 2201114784 2201031262 2201069081 2201107209 2201107654 2201206956 2201309973 2201192653 2201252310 2201288945 2201311011 2201325759 2201325789 2201376003 2201382509 2201003140 2201033477 2201101604 2201109494 2201109713 2201147554 2201154925 2201155291 2201162474 2201193011 2201193935 2201245467 2201267782 2201297828 2201313031 2201356698 2201064879 2201073720 2201089121 2201095718 2201118316 2201142429 2201164684 2201165453 2201179737 2201180309 2201202184 2201224986 2201232085 2201247932 2201277849 2201291571 2201292384 2201299987 2201313625 2201314615 2201320815 2201335477 2201335998 2201358492 2201365468 2201385792 2201059314 2201066786 2201143791 2201150704 2201150722 2201166094 2201173337 2201264173 2201271313 2201285613 2201315139 2201322462 2201337380 2201351809 2201358808 2201360217 2201037675 2201060373 2201257625 2201345540 2201345592 2201137389 2201144688 2201144872 2201221298 2401000408 2405155616 2405226214 2405005655 2405038591 2405056820 2405137129 2405141770 2405151283 2405193345 2405236503 2405015567 2405081525 2405086129 2405109662 2405194245 2405194418 2405175874 2405063145 2405086781 2405147905 2405021294 2405054103 2405068341 2405115395 2405167301 2405040944 2405059441 2405096870 2405101640 2405111263 2405148927 2405112541 2405210744 2406041387 2406043759 2406046112 2406048648 2406007116 2406022628 2406027326 2201346415 2201129975 2201024254 2201245068 2405004677 2201023811 2201243954 2201207757 2201011752 2201240283 2201298628 2201075095 2201205839 2201361052 2002015725 2405230299 2201133078 2201255976 2201176285 2201325604 2201063218 2201334066 2201141546 2201089861 2201344536 2201345531 2201243129 2405083105 2405201027 2405051427 2003005213 2003018070 2405052615 2405090745 2201364721 2201387325 2201020128 2405073409 2201076858 2201326346 2406043918 2406049314 2201127343 2201359836 7204009690 7007008565 7001039675 7001046123 7007003914 7007003807 7007003703 7007008370 7007008633 7007008859 7007010070 7007013154 7007013184 7007013314 7007013473 7007008418 7203010393 7203010981 7214018348 7001025178 7001027247 7801000569 7007002554 7001011177 7001021778 7001038721 7001052255 7007002273 7007004071 7007009703 7012008842 7203001406 7203003403 7203005555 7203006058 7203006133 7203006232 7203006660 7203006784 7203008032 7203008272 7203008440 7203009249 7203011140 7203011320 7203011586 7203012223 7203012738 7203012788 7203014063 7203014400 7203014766 7203015088 7203015107 7203015370 7203016197 7203016686 7203016975 7203017006 7203017340 7203018212 7203019767 7203020860 7203020999 7203021207 7203021613 7203022009 7203022095 7203022191 7203022206 7203022730 7203023169 7203023369 7203023618 7203024033 7203024182 7203025749 7204011247 7207012991 7207014715 7208001744 7208002180 7208012979 7208014514 7208025949 7208029672 7208033504 7214001941 7801000414 7001001406 7001006000 7001007156 7001007351 7001007502 7001008952 7001012278 7001015956 7001017174 7001023520 7001024760 7001029657 7001029913 7001032884 7001034804 7001034904 7001036877 7001037046 7001039237 7001040554 7001049095 7001052237 7002004110 7002005633 7002010711 7002011556 7002013550 7002013879 7006002434 7006004913 7006010615 7007002934 7007003193 7007005463 7007007245 7007007539 7012002654 7012008564 7012012184 7012015355 7201002088 7201026697 7202007829 7202020009 7203012680 7203019724 7204010988 7205011326 7205021722 7205024005 7205024036 7205037186 7206000306 7206001216 7206009877 7207023063 7208005661 7208018954 7208022862 7208024766 7214021729 7205005980 1801018607 1404012772 1401000384 1401000786 1401002735 1401020976 1401037687 1401050297 1401050870 1401058198 1401059874 1202009443 1202010036 1402010551 1004021780 1004041126 1004041594 1403012197 1403013023 1403014870 1403020499 1403021773 1010007673 1203007639 1203009632 1401012995 1401014154 1401022579 1401059377 1401059561 1401062792 1404018339 1404009985 1404021099 1404025025 1402003116 1402001646 1403012227 1403019946 1203001018 1203009824 1203010825 1402016086 1801003983 1401027771 1403032091 1801009977 3206210074 3209034453 3003100126 3003098194 3205054127 3003082720 3003083487 3003083025 3001089185 3001092798 3009107690 3009092861 3013086418 3202003845 3205022615 3001007084 3001036033 3001049840 3001118051 3001050802 3002001115 3002003193 3002017412 3002021415 3007015783 3007029921 3009072053 3009102974 3009167592 3009107811 3009014721 3010130331 3010073027 3011062369 3015005234 3003059516 3003019916 3003035356 3013015586 3013166922 3013004538 3013027490 3013178806 3013183100 3013156748 3013066936 3013081772 3013150350 3013033682 3013184927 3207007618 3207008307 3202004133 3203018435 3203002807 3203021176 3203025742 3206185693 3206209737 3209005517 3209021467 3001007100 3001028568 3001033073 3001033273 3001037824 3001042437 3001051964 3001051992 3001061542 3001063907 3001080179 3001089795 3001113031 3001115434 3001115602 3001002860 3001003001 3001005054 3001005146 3001007519 3001009917 3001010129 3001012383 3001014801 3001019358 3001028764 3001033578 3001033675 3001035908 3001038079 3001038398 3001045484 3001047833 3001052289 3001052394 3001052520 3001054752 3001056904 3001068932 3001071055 3001071319 3001073609 3001075953 3001078102 3001085176 3001092420 3001092557 3001099367 3001099570 3001101935 3001101937 3001104295 3001106350 3001106606 3001108827 3001113396 3001116058 3001118406 3001000730 3001021994 3001040898 3001059767 3001101990 3001118637 3001120874 3001008092 3001008532 3001010579 3001020376 3001039132 3001048284 3001050612 3001055619 3001062360 3001062448 3001067315 3001069585 3001071634 3001074416 3001074552 3001074597 3001083901 3001085839 3001086225 3001090525 3001090631 3001093128 3001098148 3001099908 3001100250 3001106958 3001109478 3001109768 3001114104 3001114483 3001114586 3001116451 3001118966 3001118978 3001121268 3001001750 3001001780 3001011121 3001022873 3001060534 3001060572 3001070147 3001077161 3001079492 3001084110 3001086601 3001110045 3001119464 3001004290 3001008973 3001027930 3001046674 3001048971 3001051491 3001056134 3001060810 3001063102 3001063180 3001063196 3001074881 3001074890 3001077412 3001093810 3001112571 3001114990 3001117255 3001002356 3001006879 3001016232 3001028014 3001032954 3001035070 3001051568 3001051850 3001056469 3001061185 3001068265 3001070509 3001072739 3001082230 3001094082 3001096489 3001098719 3001103461 3001110452 3001115253 3001119875 3001119928 3001122402 3002000091 3002000336 3002000936 3002001006 3002001309 3002001775 3002002322 3002002808 3002002957 3002003549 3002004580 3002004787 3002005019 3002005218 3002005370 3002005722 3002005765 3002006115 3002006276 3002006445 3002006592 3002006595 3002006601 3002007082 3002007224 3002007319 3002007374 3002007586 3002008324 3002008355 3002009564 3002009583 3002009690 3002009876 3002009948 3002010365 3002012269 3002013533 3002013563 3002013918 3002013963 3002014123 3002014180 3002014190 3002014376 3002014644 3002014689 3002015208 3002015749 3002016235 3002016280 3002016917 3002017104 3002017628 3002018010 3002018492 3002018794 3002019613 3002019650 3002020084 3002020126 3002020334 3002020975 3002021217 3002021308 3002021416 3002021442 3002021548 3002021605 3002021693 3002022346 3005043534 3005045520 3005003528 3005007784 3005008110 3005008578 3005012671 3005016415 3005020346 3005020907 3005027620 3005030258 3005030802 3005038493 3005038930 3007015792 3007027590 3007034823 3007035940 3007014863 3007036383 3008004049 3008004141 3008005178 3008010778 3008012660 3008025014 3008001798 3008005652 3008007996 3008017060 3008022673 3008026440 3009003918 3009004023 3009030148 3009041227 3009048920 3009048945 3009056465 3009067531 3009075158 3009086364 3009093955 3009135047 3009146233 3009149948 3009157462 3009165012 3009034144 3009060372 3009086691 3009124035 3009131588 3009139002 3009168878 3009168889 3009000849 3009000999 3009008386 3009011836 3009012244 3009030466 3009041715 3009045485 3009049651 3009056731 3009056767 3009056819 3009064595 3009068454 3009072202 3009075867 3009079664 3009079743 3009094772 3009097990 3009105759 3009105823 3009113079 3009116993 3009117067 3009124182 3009124703 3009124730 3009154651 3009158211 3009158380 3009161857 3009161962 3009162007 3009169084 3009169219 3009004902 3009008749 3009016194 3009023637 3009117320 3009165956 3009008897 3009009202 3009012516 3009027658 3009031268 3009031398 3009042726 3009049947 3009050361 3009057449 3009057530 3009057852 3009057853 3009061507 3009061572 3009065340 3009069110 3009072690 3009091505 3009095011 3009095049 3009095152 3009095431 3009110375 3009121252 3009121308 3009128879 3009132834 3009140148 3009140161 3009140354 3009143848 3009158764 3009158777 3009166483 3009170038 3009002101 3009013015 3009017023 3009039321 3009046800 3009046843 3009046845 3009046996 3009057930 3009069250 3009073296 3009076768 3009077026 3009080531 3009084464 3009084500 3009092147 3009095801 3009099412 3009102985 3009106965 3009110655 3009114299 3009114334 3009132962 3009133311 3009136640 3009136840 3009144419 3009147958 3009148114 3009151986 3009155443 3009159144 3009166876 3009170599 3009032355 3009043377 3009058488 3009065973 3009077262 3009092324 3009111048 3009122195 3009126056 3009137177 3009140951 3009148386 3009006428 3009010253 3009013767 3009013846 3009017733 3009032539 3009036154 3009047643 3009054946 3009066243 3009066487 3009070153 3009070227 3009073866 3009077802 3009077841 3009081159 3009085317 3009099976 3009100264 3009107510 3009111352 3009111428 3009114865 3009115146 3009119001 3009122728 3009126255 3009130039 3009130231 3009144822 3009152357 3009152702 3009156169 3009156452 3009167678 3009171192 3009006824 3009007062 3009010466 3009010526 3009014189 3009014218 3009025705 3009032854 3009036954 3009040390 3009040643 3009044322 3009047876 3009051960 3009059356 3009059485 3009062988 3009066799 3009074153 3009081859 3009085477 3009104284 3009108019 3009119067 3009119139 3009122974 3009137789 3009137836 3009141882 3009145239 3009145244 3009145278 3009145319 3009153134 3009160216 3009167926 3009171802 3009171870 3009003651 3009010978 3009029945 3009029949 3009033392 3009040774 3009040960 3009063288 3009074823 3009093693 3009097065 3009097193 3009097399 3009112164 3009119676 3009123355 3009127075 3009130830 3009134667 3009153301 3009156926 3009156994 3009161011 3010011249 3010107761 3010126491 3010004265 3010007892 3010015440 3010064136 3010078319 3010138061 3010104627 3010123476 3010134677 3010138216 3010145707 3010060772 3010153505 3010161193 3010009076 3010027624 3010075570 3010079085 3010116571 3010127802 3010154073 3010057868 3010065280 3010079694 3010032200 3010035908 3010058203 3010098669 3010113881 3010054991 3010140328 3010033013 3010080977 3010099393 3010099619 3010118287 3010133023 3010014536 3010029374 3010033100 3010166971 3010081310'
+);
+
+'3010122475 3010156020 3011023810 3011031149 3011052589 3011087478 3011018734 3011024182 3011036855 3011045842 3011064082 3011002552 3011020764 3011044306 3011084381 3011093540 3011012550 3011030246 3011037746 3011037833 3011039356 3011045076 3011057512 3015000730 3015004569 3015005045 3015008057 3015008136 3015008159 3015008816 3015010798 3015012259 3015013672 3015017250 3015017529 3015018261 3015020807 3015020896 3016002366 3016003056 3016010621 3016022295 3003051251 3003055568 3003062197 3003095607 3003099940 3003002542 3003020203 3003031456 3003053505 3003007313 3003036384 3003073783 3003009956 3003069875 3003081029 3003003527 3003016717 3003072289 3003078921 3003019324 3003032613 3003034722 3003070241 3003076975 3003083585 3003081572 3003024040 3003050777 3003070651 3003095104 3003024365 3003026519 3003037532 3003044382 3003057619 3003086445 3003088622 3003093215 3013019090 3013034592 3013038251 3013049723 3013068718 3013121260 3013124864 3013143951 3013038663 3013046292 3013076148 3013099246 3013125718 3013110764 3013122256 3013133685 3013167821 3013186766 3013190576 3013001408 3013058467 3013095686 3013024298 3013088352 3013107429 3013028388 3013039855 3013070337 3013118949 3013126579 3013107778 3013096544 3013115593 3013115622 3013146140 3013077916 3013165197 3013002620 3013017910 3013089529 3013097002 3013100985 3013131435 3013173135 3013025885 3013131631 3013022670 3013026176 3013041727 3013041747 3013053125 3013071224 3013132183 3013139485 3013147364 3013177611 3013003725 3013151394 3013193184 3207001965 3207005124 3207005388 3207010190 3207011696 3201000632 3201010135 3201014967 3201015534 3201002245 3201005001 3201005750 3201007525 3201014126 3201014776 3201016310 3201016544 3201020120 3201023249 3201023346 3201023820 3201025340 3203001077 3203003244 3203003647 3203004154 3203014368 3203015716 3203016398 3203016746 3203019813 3203025003 3203002971 3203003467 3203003853 3203003974 3203006325 3203008521 3203012522 3203017094 3203019696 3203021703 3203022073 3205029602 3205046329 3205061676 3205029684 3205042727 3205060619 3205007030 3205040473 3205045677 3205054653 3205054707 3205061142 3205003547 3205011154 3205011166 3205016649 3205017557 3205019203 3205022930 3205024007 3205035739 3205042141 3205054798 3205060092 3205062636 3206017141 3206055042 3206067667 3206080244 3206084677 3206101526 3206105902 3206122504 3206152173 3206021655 3206046999 3206068202 3206110299 3206110300 3206207156 3206005261 3206017911 3206030334 3206043119 3206060066 3206102192 3206106492 3206135832 3206136059 3206190609 3206199084 3206051832 3206072870 3206148902 3206152994 3206157301 3206182583 3206207846 3206068907 3206073196 3206085644 3206115343 3206136477 3206140523 3206140831 3206153222 3206170058 3206186979 3206031385 3206094515 3206128268 3206145148 3206166279 3206216788 3206019089 3206095242 3206103645 3206112158 3206162709 3206053234 3206141919 3206145905 3206184044 3206200895 3206217682 3206032519 3206036629 3206044961 3206053546 3206061886 3206070659 3206112479 3206116849 3206129333 3206167603 3206070748 3206079136 3206159424 3206176164 3206007860 3206071144 3206100656 3206108921 3206121816 3206138477 3206159531 3206159536 3206189040 3206025109 3206029362 3206050611 3206067432 3206071603 3206088610 3206113775 3206151712 3206155904 3206206566 3209003329 3209004792 3209007369 3209008220 3209008646 3209008902 3209012837 3209012897 3209013042 3209015343 3209019991 3209021950 3209024827 3209025579 3209029621 3209030328 3209033362 3209012532 3209012586 3209019208 3209023185 3209024525 3209029737 3209032507 6001000254 6001001676 6001001679 6001003138 6001003252 6001003978 6001004442 6001004565 6001005282 6001005362 6001005518 6001005684 6001005697 6001006639 6001006647 6001007111 6001008002 6001008059 6001008572 6001009792 6001010460 6001010969 6001011104 6001013057 6001013245 6001013629 6001015121 6001015766 6001017129 6001018375 6001018612 6001018725 6001019781 6001021266 6001021531 6001022231 6001022234 6001022386 6001022452 6001023753 6001023787 6001024111 6001024140 6001024258 6001024740 6001024998 6001025047 6001025072 6001026649 6001026995 6001027214 6001029362 6001029486 6001029822 6001030659 6001030764 6001030939 6001031856 6001032187 6001032208 6001032369 6001033081 6001033265 6001034778 6001034976 6001035089 6001035155 6001036002 6001036251 6001038972 6001041109 6001042886 6001043709 6001043870 6001044140 6001044232 6001045540 6001046154 6001046335 6001046516 6001047354 6001047426 6001047940 6001048738 6001049218 6001050194 6001050654 6001052542 6001052579 6001052675 6001052794 6001053224 6001054395 6001054632 6001055549 6001057146 6001057772 6001058125 6001058220 6001058480 6001059234 6001059399 6001059578 6001060568 6001060761 6001061806 6001062933 6001063055 6001064206 6001064636 6001064769 6001064925 6001065720 6001065735 6001065979 6001002215 6001002330 6001002446 6001002537 6001003720 6001003778 6001006245 6001008746 6001008968 6001009058 6001011618 6001011643 6001011679 6001013902 6001014025 6001014046 6001014294 6001015359 6001016663 6001019327 6001020423 6001021894 6001022956 6001023229 6001026232 6001027517 6001029004 6001029106 6001030127 6001030205 6001030388 6001031694 6001033885 6001034107 6001034322 6001035371 6001036486 6001036846 6001038200 6001039186 6001039513 6001040487 6001040637 6001040676 6001041840 6001041963 6001042010 6001042033 6001043082 6001043286 6001044620 6001046983 6001047251 6001048276 6001048351 6001048360 6001049466 6001049583 6001050936 6001052097 6001053442 6001053587 6001054719 6001056073 6001056169 6001056292 6001058663 6001060112 6001060275 6001061380 6001062628 6001062755 6001063822 6001065414 6001066323 6001066722 6202000330 6202000333 6202000894 6202001185 6202002286 6202003105 6202003162 6202003909 6202005922 6202006352 6202006810 6202007089 6202007925 6202008512 6202008644 6202009976 6202009977 6202010630 6202013292 6202013385 6202013715 6202014829 6202014847 6202015269 6202015768 6202016573 6202016785 6202017029 6202017036 6202017491 6202017704 6202018162 6202019995 6202020444 6202020637 6202020726 6202021933 6202022043 6205001416 6205006701 6205016441 6205017420 6205018464 6205020865 6005000020 6005000585 6005001132 6005001461 6005001601 6005001605 6005001819 6005001951 6005002265 6005002283 6005002336 6005002341 6005002657 6005002866 6005002870 6005002876 6005002964 6005002986 6005003100 6005003386 6005003428 6005003553 6005003666 6005003682 6005003704 6005003748 6005003752 6005004205 6005004320 6005004448 6005004503 6005004526 6005004668 6005004765 6005004973 6005005008 6005005027 6005005135 6005005259 6005005427 6005005443 6005005552 6005005565 6005005606 6005005736 6005006052 6005006259 6005006391 6005006445 6005006737 6005006896 6005006930 6005007150 6005007317 6005007358 6005007808 6005007959 6005008165 6005008200 6005008389 6005008594 6005008791 6005008880 6005008973 6005009006 6005009087 6005009236 6005009261 6005009265 6005009287 6005009492 6005009564 6005009581 6005009886 6005009908 6005010123 6005010453 6005010778 6005010794 6005010811 6005011216 6005011553 6005011555 6005011877 6005012005 6005012084 6005012431 6005012792 6005013017 6005013112 6005013144 6005013326 6005013467 6005013528 6005013530 6005013697 6005013743 6005013772 6005013950 6005014158 6005014419 6005014445 6005014594 6005014851 6005014852 6005015066 6005015139 6005015345 6005015614 6005015719 6005015770 6005016011 6005016134 6005016170 6005016319 6005016623 6005016624 6005016694 6005016873 6005016928 6005017001 6005017044 6005017085 6005017196 6005017460 6005017634 6005017978 6005018066 6005018336 6005018337 6005018456 6005018588 6005018657 6005018733 6005019286 6005019445 6005019448 6005019498 6005019528 6005019742 6005020186 6005020198 6005020214 6005020237 6005020239 6005020396 6005020413 6005020450 6005020745 6005020807 6005021196 6005021373 6005021537 6005021631 6005021769 6005021876 6005022052 6005022216 6005022342 6005022385 6005022417 6005022520 6005022548 6005022637 6005022760 6005022831 6005022879 6005023461 6005023470 6005023788 6005023834 6005024031 6005024078 6005024151 6005024362 6005024366 6005024414 6005024488 6005024995 6005025086 6005025544 6005025738 6005026013 6005026042 6005026109 6005026122 6005026150 6005026195 6005026198 6005026881 6005026987 6005026997 6005027029 6005027048 6005027234 6005027700 6005027907 6005028124 6005028267 6005028400 6005028468 6005028478 6005028484 6005028952 6005028962 6005029057 6005029338 6005029406 6005029509 6005029531 6005029565 6005030079 6005030410 6005030633 6005030668 6005030683 6005030722 6005030729 6005030853 6005030935 6005031359 6005031588 6005031650 6005031856 6005032947 6005032997 6005033133 6005033307 6005033351 6005033385 6005033558 6005033653 6005033839 6005033955 6005034075 6005034149 6005034240 6005034298 6005034388 6005034390 6005034495 6005034496 6005034600 6005034720 6005034961 6005034983 6005034987 6005035236 6005035449 6005035665 6005035768 6005035769 6005035951 6005036305 6005036380 6005036723 6005036761 6005036837 6005036862 6005037041 6005037279 6005037539 6005037606 6005037709 6005037898 6005037949 6005037989 6005038160 6005038458 6005038576 6005038635 6005038639 6005038786 6005038838 6005039033 6005039227 6005039444 6005039489 6005039622 6005039677 6005039859 6005039968 6005040063 6005040184 6005040403 6005040622 6005040916 6005041093 6005041113 6005041141 6005041177 6005041205 6005041362 6005041392 6005041451 6005041721 6005041760 6005041820 6005042413 6005042425 6005042531 6005042654 6005042854 6005043055 6005043810 6005043856 6005044017 6005044276 6005044399 6005044415 6005044600 6005044866 6005045169 6005045193 6005045278 6005045698 6005045849 6005045869 6005046218 6005046377 6005046715 6005046791 6005046917 6005046964 6005046967 6005047018 6005047025 6005047065 6005047227 6005047306 6005047393 6005047435 6005047439 6005047446 6005047593 6005047656 6005047677 6005047894 6005047969 6005047988 6005048031 6005048526 6005048571 6005048578 6005048580 6005048795 6005049241 6005049284 6005049339 6005049480 6005049508 6005049772 6005049900 6005049990 6005050009 6005050101 6005050152 6005050258 6005050384 6005050405 6005050839 6005050856 6005050957 6005050971 6005051045 6005051221 6005051236 6005051403 6005051501 6005052015 6005052057 6005052078 6005052088 6005052351 6005053056 6005053064 6005053335 6005053346 6005053438 6005053475 6005053614 6005053854 6005054255 6005054256 6005054445 6005054637 6005054821 6005055072 6005055095 6005055270 6005055575 6005055771 6005055819 6005055889 6005055947 6005056008 6005056181 6005056185 6005056238 6005056952 6005056987 6005057077 6005057143 6005057186 6005057254 6005057331 6005057342 6005057367 6005057429 6005057701 6005057778 6005057822 6005058302 6005058373 6005058376 6005058386 6005058423 6005058622 6005058715 6005058810 6005059024 6005059029 6005059294 6005059510 6005059735 6005059780 6005059922 6005059939 6005059987 6005060004 6005060021 6006000611 6006001190 6006001312 6006003405 6006004991 6006008259 6006010765 6006016327 6006017463 6006020906'
+
+update candidates set debarred_final='Yes'
+where rollno in ('3010122475 3010156020 3011023810 3011031149 3011052589 3011087478 3011018734 3011024182 3011036855 3011045842 3011064082 3011002552 3011020764 3011044306 3011084381 3011093540 3011012550 3011030246 3011037746 3011037833 3011039356 3011045076 3011057512 3015000730 3015004569 3015005045 3015008057 3015008136 3015008159 3015008816 3015010798 3015012259 3015013672 3015017250 3015017529 3015018261 3015020807 3015020896 3016002366 3016003056 3016010621 3016022295 3003051251 3003055568 3003062197 3003095607 3003099940 3003002542 3003020203 3003031456 3003053505 3003007313 3003036384 3003073783 3003009956 3003069875 3003081029 3003003527 3003016717 3003072289 3003078921 3003019324 3003032613 3003034722 3003070241 3003076975 3003083585 3003081572 3003024040 3003050777 3003070651 3003095104 3003024365 3003026519 3003037532 3003044382 3003057619 3003086445 3003088622 3003093215 3013019090 3013034592 3013038251 3013049723 3013068718 3013121260 3013124864 3013143951 3013038663 3013046292 3013076148 3013099246 3013125718 3013110764 3013122256 3013133685 3013167821 3013186766 3013190576 3013001408 3013058467 3013095686 3013024298 3013088352 3013107429 3013028388 3013039855 3013070337 3013118949 3013126579 3013107778 3013096544 3013115593 3013115622 3013146140 3013077916 3013165197 3013002620 3013017910 3013089529 3013097002 3013100985 3013131435 3013173135 3013025885 3013131631 3013022670 3013026176 3013041727 3013041747 3013053125 3013071224 3013132183 3013139485 3013147364 3013177611 3013003725 3013151394 3013193184 3207001965 3207005124 3207005388 3207010190 3207011696 3201000632 3201010135 3201014967 3201015534 3201002245 3201005001 3201005750 3201007525 3201014126 3201014776 3201016310 3201016544 3201020120 3201023249 3201023346 3201023820 3201025340 3203001077 3203003244 3203003647 3203004154 3203014368 3203015716 3203016398 3203016746 3203019813 3203025003 3203002971 3203003467 3203003853 3203003974 3203006325 3203008521 3203012522 3203017094 3203019696 3203021703 3203022073 3205029602 3205046329 3205061676 3205029684 3205042727 3205060619 3205007030 3205040473 3205045677 3205054653 3205054707 3205061142 3205003547 3205011154 3205011166 3205016649 3205017557 3205019203 3205022930 3205024007 3205035739 3205042141 3205054798 3205060092 3205062636 3206017141 3206055042 3206067667 3206080244 3206084677 3206101526 3206105902 3206122504 3206152173 3206021655 3206046999 3206068202 3206110299 3206110300 3206207156 3206005261 3206017911 3206030334 3206043119 3206060066 3206102192 3206106492 3206135832 3206136059 3206190609 3206199084 3206051832 3206072870 3206148902 3206152994 3206157301 3206182583 3206207846 3206068907 3206073196 3206085644 3206115343 3206136477 3206140523 3206140831 3206153222 3206170058 3206186979 3206031385 3206094515 3206128268 3206145148 3206166279 3206216788 3206019089 3206095242 3206103645 3206112158 3206162709 3206053234 3206141919 3206145905 3206184044 3206200895 3206217682 3206032519 3206036629 3206044961 3206053546 3206061886 3206070659 3206112479 3206116849 3206129333 3206167603 3206070748 3206079136 3206159424 3206176164 3206007860 3206071144 3206100656 3206108921 3206121816 3206138477 3206159531 3206159536 3206189040 3206025109 3206029362 3206050611 3206067432 3206071603 3206088610 3206113775 3206151712 3206155904 3206206566 3209003329 3209004792 3209007369 3209008220 3209008646 3209008902 3209012837 3209012897 3209013042 3209015343 3209019991 3209021950 3209024827 3209025579 3209029621 3209030328 3209033362 3209012532 3209012586 3209019208 3209023185 3209024525 3209029737 3209032507 6001000254 6001001676 6001001679 6001003138 6001003252 6001003978 6001004442 6001004565 6001005282 6001005362 6001005518 6001005684 6001005697 6001006639 6001006647 6001007111 6001008002 6001008059 6001008572 6001009792 6001010460 6001010969 6001011104 6001013057 6001013245 6001013629 6001015121 6001015766 6001017129 6001018375 6001018612 6001018725 6001019781 6001021266 6001021531 6001022231 6001022234 6001022386 6001022452 6001023753 6001023787 6001024111 6001024140 6001024258 6001024740 6001024998 6001025047 6001025072 6001026649 6001026995 6001027214 6001029362 6001029486 6001029822 6001030659 6001030764 6001030939 6001031856 6001032187 6001032208 6001032369 6001033081 6001033265 6001034778 6001034976 6001035089 6001035155 6001036002 6001036251 6001038972 6001041109 6001042886 6001043709 6001043870 6001044140 6001044232 6001045540 6001046154 6001046335 6001046516 6001047354 6001047426 6001047940 6001048738 6001049218 6001050194 6001050654 6001052542 6001052579 6001052675 6001052794 6001053224 6001054395 6001054632 6001055549 6001057146 6001057772 6001058125 6001058220 6001058480 6001059234 6001059399 6001059578 6001060568 6001060761 6001061806 6001062933 6001063055 6001064206 6001064636 6001064769 6001064925 6001065720 6001065735 6001065979 6001002215 6001002330 6001002446 6001002537 6001003720 6001003778 6001006245 6001008746 6001008968 6001009058 6001011618 6001011643 6001011679 6001013902 6001014025 6001014046 6001014294 6001015359 6001016663 6001019327 6001020423 6001021894 6001022956 6001023229 6001026232 6001027517 6001029004 6001029106 6001030127 6001030205 6001030388 6001031694 6001033885 6001034107 6001034322 6001035371 6001036486 6001036846 6001038200 6001039186 6001039513 6001040487 6001040637 6001040676 6001041840 6001041963 6001042010 6001042033 6001043082 6001043286 6001044620 6001046983 6001047251 6001048276 6001048351 6001048360 6001049466 6001049583 6001050936 6001052097 6001053442 6001053587 6001054719 6001056073 6001056169 6001056292 6001058663 6001060112 6001060275 6001061380 6001062628 6001062755 6001063822 6001065414 6001066323 6001066722 6202000330 6202000333 6202000894 6202001185 6202002286 6202003105 6202003162 6202003909 6202005922 6202006352 6202006810 6202007089 6202007925 6202008512 6202008644 6202009976 6202009977 6202010630 6202013292 6202013385 6202013715 6202014829 6202014847 6202015269 6202015768 6202016573 6202016785 6202017029 6202017036 6202017491 6202017704 6202018162 6202019995 6202020444 6202020637 6202020726 6202021933 6202022043 6205001416 6205006701 6205016441 6205017420 6205018464 6205020865 6005000020 6005000585 6005001132 6005001461 6005001601 6005001605 6005001819 6005001951 6005002265 6005002283 6005002336 6005002341 6005002657 6005002866 6005002870 6005002876 6005002964 6005002986 6005003100 6005003386 6005003428 6005003553 6005003666 6005003682 6005003704 6005003748 6005003752 6005004205 6005004320 6005004448 6005004503 6005004526 6005004668 6005004765 6005004973 6005005008 6005005027 6005005135 6005005259 6005005427 6005005443 6005005552 6005005565 6005005606 6005005736 6005006052 6005006259 6005006391 6005006445 6005006737 6005006896 6005006930 6005007150 6005007317 6005007358 6005007808 6005007959 6005008165 6005008200 6005008389 6005008594 6005008791 6005008880 6005008973 6005009006 6005009087 6005009236 6005009261 6005009265 6005009287 6005009492 6005009564 6005009581 6005009886 6005009908 6005010123 6005010453 6005010778 6005010794 6005010811 6005011216 6005011553 6005011555 6005011877 6005012005 6005012084 6005012431 6005012792 6005013017 6005013112 6005013144 6005013326 6005013467 6005013528 6005013530 6005013697 6005013743 6005013772 6005013950 6005014158 6005014419 6005014445 6005014594 6005014851 6005014852 6005015066 6005015139 6005015345 6005015614 6005015719 6005015770 6005016011 6005016134 6005016170 6005016319 6005016623 6005016624 6005016694 6005016873 6005016928 6005017001 6005017044 6005017085 6005017196 6005017460 6005017634 6005017978 6005018066 6005018336 6005018337 6005018456 6005018588 6005018657 6005018733 6005019286 6005019445 6005019448 6005019498 6005019528 6005019742 6005020186 6005020198 6005020214 6005020237 6005020239 6005020396 6005020413 6005020450 6005020745 6005020807 6005021196 6005021373 6005021537 6005021631 6005021769 6005021876 6005022052 6005022216 6005022342 6005022385 6005022417 6005022520 6005022548 6005022637 6005022760 6005022831 6005022879 6005023461 6005023470 6005023788 6005023834 6005024031 6005024078 6005024151 6005024362 6005024366 6005024414 6005024488 6005024995 6005025086 6005025544 6005025738 6005026013 6005026042 6005026109 6005026122 6005026150 6005026195 6005026198 6005026881 6005026987 6005026997 6005027029 6005027048 6005027234 6005027700 6005027907 6005028124 6005028267 6005028400 6005028468 6005028478 6005028484 6005028952 6005028962 6005029057 6005029338 6005029406 6005029509 6005029531 6005029565 6005030079 6005030410 6005030633 6005030668 6005030683 6005030722 6005030729 6005030853 6005030935 6005031359 6005031588 6005031650 6005031856 6005032947 6005032997 6005033133 6005033307 6005033351 6005033385 6005033558 6005033653 6005033839 6005033955 6005034075 6005034149 6005034240 6005034298 6005034388 6005034390 6005034495 6005034496 6005034600 6005034720 6005034961 6005034983 6005034987 6005035236 6005035449 6005035665 6005035768 6005035769 6005035951 6005036305 6005036380 6005036723 6005036761 6005036837 6005036862 6005037041 6005037279 6005037539 6005037606 6005037709 6005037898 6005037949 6005037989 6005038160 6005038458 6005038576 6005038635 6005038639 6005038786 6005038838 6005039033 6005039227 6005039444 6005039489 6005039622 6005039677 6005039859 6005039968 6005040063 6005040184 6005040403 6005040622 6005040916 6005041093 6005041113 6005041141 6005041177 6005041205 6005041362 6005041392 6005041451 6005041721 6005041760 6005041820 6005042413 6005042425 6005042531 6005042654 6005042854 6005043055 6005043810 6005043856 6005044017 6005044276 6005044399 6005044415 6005044600 6005044866 6005045169 6005045193 6005045278 6005045698 6005045849 6005045869 6005046218 6005046377 6005046715 6005046791 6005046917 6005046964 6005046967 6005047018 6005047025 6005047065 6005047227 6005047306 6005047393 6005047435 6005047439 6005047446 6005047593 6005047656 6005047677 6005047894 6005047969 6005047988 6005048031 6005048526 6005048571 6005048578 6005048580 6005048795 6005049241 6005049284 6005049339 6005049480 6005049508 6005049772 6005049900 6005049990 6005050009 6005050101 6005050152 6005050258 6005050384 6005050405 6005050839 6005050856 6005050957 6005050971 6005051045 6005051221 6005051236 6005051403 6005051501 6005052015 6005052057 6005052078 6005052088 6005052351 6005053056 6005053064 6005053335 6005053346 6005053438 6005053475 6005053614 6005053854 6005054255 6005054256 6005054445 6005054637 6005054821 6005055072 6005055095 6005055270 6005055575 6005055771 6005055819 6005055889 6005055947 6005056008 6005056181 6005056185 6005056238 6005056952 6005056987 6005057077 6005057143 6005057186 6005057254 6005057331 6005057342 6005057367 6005057429 6005057701 6005057778 6005057822 6005058302 6005058373 6005058376 6005058386 6005058423 6005058622 6005058715 6005058810 6005059024 6005059029 6005059294 6005059510 6005059735 6005059780 6005059922 6005059939 6005059987 6005060004 6005060021 6006000611 6006001190 6006001312 6006003405 6006004991 6006008259 6006010765 6006016327 6006017463 6006020906'
+);
+
+'6006021925 6006022866 6006026458 6006027370 6006027375 6006029376 6006031819 6006032832 6006038825 6006040975 6006041234 6006046652 6006048769 6006051074 6006051212 6006055390 6006056898 6006058015 6006001851 6006002994 6006003192 6006007478 6006017850 6006023289 6006034707 6006052778 6006054776 6006057000 6006007742 6006008973 6006021417 6006023644 6006027044 6006046203 6006048433 6006049463 6006051798 6007002128 6007002321 6007002594 6007003064 6007003089 6007003843 6007004076 6007004546 6007005208 6007006579 6007006698 6007007144 6007008041 6007008453 6007009086 6007009398 6007010307 6007010457 6007011469 6007012300 6007012703 6007012800 6007013337 6007013412 6007013693 6007014868 6007015790 6007016298 6007016342 6007016629 6007016643 6007016804 6007017008 6007019012 6007019298 6007019792 6007020476 6007020576 6007020710 6007022149 6007023310 6007023670 6007023783 6007024179 6007024942 6007025763 6007026015 6007026905 6007029855 6007032288 6007032517 6007032571 6007032860 6007033998 6007034456 6007034826 6007035651 6007035931 6007036406 6007036538 6007036596 6007037113 6007038362 6007038566 6007040028 6007041115 6007041728 6007041975 6007042071 6007042172 6007044215 6007044220 6007044363 6007046402 6007046480 6007046664 6007047052 6007048014 6007049383 6007049792 6007050388 6007050525 6007050956 6007051188 6007052302 6007052473 6007052581 6007052943 6007052951 6007054050 6007054867 6007055620 6007055798 6007056554 6007056872 6007056971 6007057184 6204000355 6204000924 6204001067 6204001743 6204003586 6204005066 6204006112 6204006798 6204010314 6204011728 6204015873 6204015962 6204020654 6204020719 6204021453 6204024533 6204025969 6204026754 6204027712 6204028773 6204028890 6204030668 6204031687 6204031822 6204032653 6204032688 6204032739 6204033612 6204034543 6204036457 6204037068 6204037463 6204037747 6204037881 6204038264 6204042796 6204043728 6204044234 6015000189 6015000997 6015002529 6015003034 6015003249 6015003689 6015005067 6015007026 6015007340 6015007366 6015007548 6015007910 6015008117 6014002251 6014003215 6014003320 6014003465 6014003478 6014005444 6014005716 6014005947 6014006305 6014006698 6014007547 6014009605 6014009700 6014010391 6014010934 6014011034 6014011810 6014011839 6014014244 6014015073 6014015840 6014017056 6014019339 6014020497 6014021558 6014022144 6014023011 6014023083 6014023460 6014024055 6016000737 6016001174 6016002573 6016002705 6016002863 6016003285 6016004049 6016004546 6016005819 6016006558 6016006659 6016007395 6016008056 6016008170 6016008635 6016009142 6016009260 6016009678 6016009768 6016010390 6016010440 6016010462 6016012351 6016012459 6016012603 6016013166 6016013260 6016013781 6016013877 6016013939 6016016754 6016018438 6016018847 6016021508 6016022019 6016022780 8001003990 8007021496 8012010053 8601032917 8603008788 8603009908 8604007980 8006005552 8204011831 8004004506 8006006014 8010001642 8201004849 8601041745 8601042140 8001006098 8004005216 8006006723 8006007122 8012016454 8012017241 8601044899 8601045215 8601045297 8601046278 8001006549 8003012332 8004005640 8009005749 8009005933 8010002186 8012017679 8012019120 8601049768 8604012820 8003014029 8006008574 8007038194 8001008075 8007040112 8007042326 8012021321 8012022307 8201007765 8601054627 8601055384 8601056027 8004007199 8007045498 8006005790 8201001496 8201002802 8201003175 8201003617 8201003760 8201003865 8601004378 8601011236 8601020065 8601039389 8601043133 8603005505 8003007838 8007020873 8007021409 8007000091 4205000123 4205002021 4205002173 4205005057 4205006817 4205009279 4205009542 4205012491 4205013327 4205027922 4205035019 4205036216 4205037149 4205042028 4205047730 4205049471 4205050585 4205051361 4205051553 4205053313 4205056040 4205060594 4205062707 4205062838 4205080391 4205082185 4205083643 4205084001 4205087788 4206007930 4206008409 4206011739 4206011756 4206011867 4206013642 4206014123 4206014578 4206017923 4206018486 4206027398 4206027579 4206029766 4206031228 4206031261 4206033845 4206034071 4206034725 4207006521 4207009699 4207031642 4404004720 4404007649 4404013488 4404026440 4410000900 4410003599 4410006414 4410007363 4410010875 4410012667 4410014749 4410017174 4410018151 4410019072 4410019987 4410022322 4410022590 4410023565 4410023834 4410024952 4410025282 4410026778 4410026877 4410030056 4410030807 4410031070 4410033325 4410039063 4410039563 4410039754 4410042073 4410044200 4410044440 4410044719 4410045078 4410046758 4410048930 4410050708 4410052429 4410055488 4410057166 4410057735 4410058888 4410059028 4410059471 4410062404 4410062576 4410064665 4410065544 4410068083 4410071494 4410071691 4410074011 4410077602 4410077869 4410080440 4410082264 4410083193 4410083879 4410085011 4410086030 4410086299 4410086958 4410088380 4410091271 4410092485 4410093919 4410096133 4410097249 4410098991 4410099747 4410101228 4410103694 4410105331 4410107185 4410109808 4410110483 4410112259 4410113952 4410114249 4410114295 4410115228 4410115313 4410119298 4410125130 4410127304 4410129259 4410130676 4410133171 4410135058 4410140618 4410142711 4415015507 4415015546 4415021185 4415030026 4415042548 4415048789 4415053134 4415056865 4415060733 4415063420 4415064160 4419004876 4419009464 4419012771 4604002556 4610003999 4610006484 4610017320 4404001572 4404001576 4404000995 4404000960 4404001489 4404001495 4410017926 4410017931 4410032008 4410032028 4419004090 4204002478 4204002467 4404014375 4415067098 4415067438 4415067153 4415068556 4415067808 4410137603 4205039558 4410066842 4609010545 4410069213 4410074515 4419012055 4205051437 4410080301 4410088989 4610012019 4410100072 4205062880 4205069070 4410104350 4205072348 4205072355 4205075889 4410120905 4419019731 4205079336 4410128466 4419020586 4419020723 4205028741 4205072452 4206000370 4206003406 4206025614 4207017219 4404027890 4410013253 4410017110 4410018322 4410046548 4410115906 4410118403 4410143195 4415009493 4415030725 4415062284 4415063278 4604007705'
+
+update candidates set debarred_final='Yes'
+where rollno in ('6006021925 6006022866 6006026458 6006027370 6006027375 6006029376 6006031819 6006032832 6006038825 6006040975 6006041234 6006046652 6006048769 6006051074 6006051212 6006055390 6006056898 6006058015 6006001851 6006002994 6006003192 6006007478 6006017850 6006023289 6006034707 6006052778 6006054776 6006057000 6006007742 6006008973 6006021417 6006023644 6006027044 6006046203 6006048433 6006049463 6006051798 6007002128 6007002321 6007002594 6007003064 6007003089 6007003843 6007004076 6007004546 6007005208 6007006579 6007006698 6007007144 6007008041 6007008453 6007009086 6007009398 6007010307 6007010457 6007011469 6007012300 6007012703 6007012800 6007013337 6007013412 6007013693 6007014868 6007015790 6007016298 6007016342 6007016629 6007016643 6007016804 6007017008 6007019012 6007019298 6007019792 6007020476 6007020576 6007020710 6007022149 6007023310 6007023670 6007023783 6007024179 6007024942 6007025763 6007026015 6007026905 6007029855 6007032288 6007032517 6007032571 6007032860 6007033998 6007034456 6007034826 6007035651 6007035931 6007036406 6007036538 6007036596 6007037113 6007038362 6007038566 6007040028 6007041115 6007041728 6007041975 6007042071 6007042172 6007044215 6007044220 6007044363 6007046402 6007046480 6007046664 6007047052 6007048014 6007049383 6007049792 6007050388 6007050525 6007050956 6007051188 6007052302 6007052473 6007052581 6007052943 6007052951 6007054050 6007054867 6007055620 6007055798 6007056554 6007056872 6007056971 6007057184 6204000355 6204000924 6204001067 6204001743 6204003586 6204005066 6204006112 6204006798 6204010314 6204011728 6204015873 6204015962 6204020654 6204020719 6204021453 6204024533 6204025969 6204026754 6204027712 6204028773 6204028890 6204030668 6204031687 6204031822 6204032653 6204032688 6204032739 6204033612 6204034543 6204036457 6204037068 6204037463 6204037747 6204037881 6204038264 6204042796 6204043728 6204044234 6015000189 6015000997 6015002529 6015003034 6015003249 6015003689 6015005067 6015007026 6015007340 6015007366 6015007548 6015007910 6015008117 6014002251 6014003215 6014003320 6014003465 6014003478 6014005444 6014005716 6014005947 6014006305 6014006698 6014007547 6014009605 6014009700 6014010391 6014010934 6014011034 6014011810 6014011839 6014014244 6014015073 6014015840 6014017056 6014019339 6014020497 6014021558 6014022144 6014023011 6014023083 6014023460 6014024055 6016000737 6016001174 6016002573 6016002705 6016002863 6016003285 6016004049 6016004546 6016005819 6016006558 6016006659 6016007395 6016008056 6016008170 6016008635 6016009142 6016009260 6016009678 6016009768 6016010390 6016010440 6016010462 6016012351 6016012459 6016012603 6016013166 6016013260 6016013781 6016013877 6016013939 6016016754 6016018438 6016018847 6016021508 6016022019 6016022780 8001003990 8007021496 8012010053 8601032917 8603008788 8603009908 8604007980 8006005552 8204011831 8004004506 8006006014 8010001642 8201004849 8601041745 8601042140 8001006098 8004005216 8006006723 8006007122 8012016454 8012017241 8601044899 8601045215 8601045297 8601046278 8001006549 8003012332 8004005640 8009005749 8009005933 8010002186 8012017679 8012019120 8601049768 8604012820 8003014029 8006008574 8007038194 8001008075 8007040112 8007042326 8012021321 8012022307 8201007765 8601054627 8601055384 8601056027 8004007199 8007045498 8006005790 8201001496 8201002802 8201003175 8201003617 8201003760 8201003865 8601004378 8601011236 8601020065 8601039389 8601043133 8603005505 8003007838 8007020873 8007021409 8007000091 4205000123 4205002021 4205002173 4205005057 4205006817 4205009279 4205009542 4205012491 4205013327 4205027922 4205035019 4205036216 4205037149 4205042028 4205047730 4205049471 4205050585 4205051361 4205051553 4205053313 4205056040 4205060594 4205062707 4205062838 4205080391 4205082185 4205083643 4205084001 4205087788 4206007930 4206008409 4206011739 4206011756 4206011867 4206013642 4206014123 4206014578 4206017923 4206018486 4206027398 4206027579 4206029766 4206031228 4206031261 4206033845 4206034071 4206034725 4207006521 4207009699 4207031642 4404004720 4404007649 4404013488 4404026440 4410000900 4410003599 4410006414 4410007363 4410010875 4410012667 4410014749 4410017174 4410018151 4410019072 4410019987 4410022322 4410022590 4410023565 4410023834 4410024952 4410025282 4410026778 4410026877 4410030056 4410030807 4410031070 4410033325 4410039063 4410039563 4410039754 4410042073 4410044200 4410044440 4410044719 4410045078 4410046758 4410048930 4410050708 4410052429 4410055488 4410057166 4410057735 4410058888 4410059028 4410059471 4410062404 4410062576 4410064665 4410065544 4410068083 4410071494 4410071691 4410074011 4410077602 4410077869 4410080440 4410082264 4410083193 4410083879 4410085011 4410086030 4410086299 4410086958 4410088380 4410091271 4410092485 4410093919 4410096133 4410097249 4410098991 4410099747 4410101228 4410103694 4410105331 4410107185 4410109808 4410110483 4410112259 4410113952 4410114249 4410114295 4410115228 4410115313 4410119298 4410125130 4410127304 4410129259 4410130676 4410133171 4410135058 4410140618 4410142711 4415015507 4415015546 4415021185 4415030026 4415042548 4415048789 4415053134 4415056865 4415060733 4415063420 4415064160 4419004876 4419009464 4419012771 4604002556 4610003999 4610006484 4610017320 4404001572 4404001576 4404000995 4404000960 4404001489 4404001495 4410017926 4410017931 4410032008 4410032028 4419004090 4204002478 4204002467 4404014375 4415067098 4415067438 4415067153 4415068556 4415067808 4410137603 4205039558 4410066842 4609010545 4410069213 4410074515 4419012055 4205051437 4410080301 4410088989 4610012019 4410100072 4205062880 4205069070 4410104350 4205072348 4205072355 4205075889 4410120905 4419019731 4205079336 4410128466 4419020586 4419020723 4205028741 4205072452 4206000370 4206003406 4206025614 4207017219 4404027890 4410013253 4410017110 4410018322 4410046548 4410115906 4410118403 4410143195 4415009493 4415030725 4415062284 4415063278 4604007705'
+);
+
+select count(*) from candidates where debarred_final='Yes' and  included_in_result='Yes';---117
+
+
+2006009185---
+2406023090
+2201069495
+4419017850
+
+update candidates 
+set debarred_final='Suspected debarred' where rollno in ('2006009185 2406023090 2201069495 4419017850');
+
+update vacancy_table
+set initial=vacancies,
+current=vacancies,
+allocated=null,
+left_vacancy=null;
+
+select sum(vacancies),sum(initial),sum(current),sum(left_vacancy) from vacancy_table;---51254,5124,5124,null
+select sum(vacancies),sum(initial),sum(current),sum(left_vacancy) from vacancy_table where category_code in ('0 1 2 6 9');---46617,46617,46617,null
+select sum(vacancies),sum(initial),sum(current),sum(left_vacancy) from vacancy_table where category_code in ('3');---4637,4637,4637,null
+
+update candidates 
+set catsel=replace(catsel,'9 '),
+remarks=concat(remarks,' height_chest_relaxation avalied')
+where included_in_result='Yes' and merit is not null and height_chest_relax='Yes';
+
+select rollno,merit,catsel,catsel_bkp,remarks from candidates where rollno in ('4205086397 2405075227 5401004498');
+ 
+update candidates 
+set merit=null where ollno in ('4205086397 2405075227 5401004498');------instructed by satish sir
+
+
+update candidates set merit=null where debarred_final is not null and included_in_result='Yes';---121
+
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_state character varying;
+alter table candidates add column allocated_area character varying;
+alter table candidates add column allocated_against_ur character varying;
+
+select regno,rollno,cand_name,father_name_tier1,mother_name_tier1,dob,candiateage_ason_date,
+gender,cat1,advc_isex_serviceman,lengthofservice,exs_reservation,cat3,statecode_considered,statename_considered,districtname_considered,
+naxal_district_tier1,border_district_tier1,ear_post_pref,agerelax_code,parta_gi,partb_ga,partc_ma,partd_eng_hin,score_new,normalized_score,ncc_marks,
+total_marks,merit,cut_off,catsel_dob,catsel from candidates where merit is not null order by merit;
+
+select * from vacancy_table order by key,state_code,gender,post_code,area,category_code;
+
+
+select count(*) from candidates where allocated_category='3';---753
+select count(*) from candidates where allocated_post is not null;---37656
+
+select count(*) from candidates where allocated_category is not null;---37656
+select count(*) from candidates where allocated_category is not null;---37225
+
+
+create table candidates_ashu
+(
+	regno character varying,
+	rollno bigint,
+	cand_name character varying,
+	gender  character varying,
+	allocated_category  character varying,
+	allocated_post character varying,
+	allocated_state character varying,
+	allocated_area character varying,
+	allocated_against_ur character varying,
+	key character varying
+
+)
+
+alter table candidates_ashu add constraint pk_r primary key (rollno);
+
+select * from candidates_ashu;---44291
+
+select count(*) from candidates where allocated_category is not null;
+
+update candidates set 
+allocated_category=null,
+allocated_post=null,
+allocated_state =null,
+allocated_area =null,
+allocated_against_ur =null
+where merit is not null;
+
+update candidates a set 
+a.allocated_category=b.allocated_category,
+a.allocated_post=b.allocated_post,
+a.allocated_state =b.allocated_state,
+a.allocated_area =b.allocated_area,
+a.allocated_against_ur =b.allocated_against_ur
+from candidates_ashu b
+where a.rollno=b.rollno and
+a.merit is not null;
+
+
+select regno_tier1 as regno,rollno,name_tier1,ear_changedname as changedname ,
+cand_name,father_name_tier1,mother_name_tier1,gender,cat1_tier1,cat2_tier1,cat1,cat2,lengthofservice,exs_reservation,dob_tier1,dob1,candiateage_ason_date,ear_regionid as region ,
+ear_post_pref as post_pref,ear_share_persinfo_accrossportal,ear_domicile_stateid,ear_domicile_districtid,ear_ismigrated_candidate,ear_isreservation_availed_candidate,
+ear_origin_stateid,ear_origin_districtid,ear_email_id,ear_mobile_number ,
+stateconsidered_tier1 as statecode_considered,statename_considered,districtconsidered_tier1 as districtcode_considered,
+districtname_considered,border_district_tier1 as border_district,naxal_district_tier1 as naxal_district,parta_gi,partb_ga,partc_ma,partd_eng_hin,score_new as score,normalized_score,total_marks ,
+pst_center_name,pst_date_appeared,pst_center_code,pt_seek_height_relax,pt_height_measure,pt_heightrelaxcode,pt_is_chest_relaxation_availed,
+pt_weight_measure,chestexp,chestnotexp,pt_chestrelax_code,pt_attendance,pt_biometricphoto,pt_finalstatus ,
+agerelax_code,height_relax,chest_relax,height_chest_relax,
+advc_categoryid,advc_isex_serviceman,advc_arccode,advc_rejectionprovision,advc_isncc_certificate,advc_typeof_ncccertificate,
+ncc_marks,domicile_district_verified,domicile_state_verified,matriculation_passed_verified,"dmeFinalStatus","isAppliedRme","rmeMedicalStatus","rmeFinalStatus",
+merit,dob_flag,catsel_dob,cut_off,catsel,rejection_provision,remarks,included_in_result ,withheld,
+debarred_final,allocated_category,allocated_post,allocated_state,allocated_area,allocated_against_ur from candidates order by merit;
+
+
+
+'4205036917 8004000027 8012022090 8009001566 8009000467 8008008908 8008005964 5112009406 2201156977 1801007988 1403032226 3010062931 6014022321 6005001212 6005008426 7001023417 7001021318 5105049389 4205075861 5105049090 3003089966 4419010013 6014020740 6005025067 6005055060 6005002645 6014001771 6014004477 3003078165 3003073647 2404005408 4207000538 8012022853 2405242282 5105004695 2404003433 3203011573 5112003086 5112003847 8007024652 8007014751 6005058174 7001027173 2201331371 2405227887 2404000036 2404020428 4205069500 4419005957 7207021483 6005057809 2404012365 6014007531 9002019815 5111009939 5111009958 5111007400 2404001824 5111004186 4601001408 4410076199 5111003100 4404022862 3003060110 3003041248 6202000334 3206054238 6202005810 6202003585 4404001002 3206044432 3013196027 5112002521 8012023362 8012024386 8012024749 8004004137 8004006756 8007000733 8007001648 8012019027 8012018625 8012016284 8012014999 8207012141 8207013840 9002019593 3205024874 4415063354 4205064112 3206030949 3003028982 4419021777 2405140913 4206018529 8012013760 8012012362 8012014203 8012011313 8012009341 8012011759 8008010371 8012005830 8012007158 8012007508 8012008267 8012009620 8012009718 8012009987 8012010275 8012011149 8012008731 8012008959 3013171107 8012005518 8012005095 8012004761 8012003547 8012003347 8012003180 8012002697 8012002633 8012002579 8012001855 8012001396 8012001182 8012000518 3013163516 9011013416 9010019421 9010018627 6005042511 6005041078 6005040855 6005038101 6005035454 6005031979 6005031021 6005029861 6005028958 6005028812 6005039056 4205057844 4419017858 4205052266 4609000749 2201279808 3003066414 2405123946 4415065096 1801018133 3009036065 2405106531 7007008562 7002016366 3206008975 7202025048 3206020911 3013050512 3001062310 9009014668 9009010265 9008003607 9002018685 9002016529 9002012620 9002008129 9002006901 8208006522 8208009217 7006018577 8012000082 8009007307 8009007130 8009006052 8009005043 8009004352 8009002459 8008006233 8009001161 8009000766 8009000877 8008006160 5112006973 4410107502 4205050019 6005020807 6005020967 4205043876 3010108677 3010097193 2201240818 6006049254 3013102593 3013007290 7202017752 2405141765 3013022132 3013170338 7205003009 7205006152 7205004394 7207020816 1004049208 1004031284 1004025439 1404027625 1404023513 1404020831 7006016255 2405029566 7006014174 2405005731 2401007627 6001022892 8007038031 8007043654 8007046103 8008002040 8204006619 8007037064 8007039911 8008001768 8007040577 8007043436 8008002477 8008003289 2003025102 9001048852 9001029827 9001027901 9001026825 9001022839 9001018864 9001010915 9001009957 9001002986 9001001823 9012005144 9012001313 9011025007 3206000038 1404006232 4207027143 4206012960 7214018855 2201094443 1404027495 2201190593 7214011932 4610007118 4610009826 8003011352 7207004325 6007053252 7207005307 7206019338 6001003376 8012022578 7006003835 4419018664 7006012455 7006003717 7006003891 7006011199 8007017951 8007032594 8007025038 8007023488 8007018884 8007017262 5112000521 3010016679 4410099813 4410098214 4410099804 3207003593 3209027533 9011010993 9011019893 9011014401 9011009453 9011006540 3207007322 3207005849 2201172292 2405123416 2405121522 4604004993 7202023534 3206086135 4410028722 3206082448 7202027582 5401000298 1404009315 1404009228 1404008752 1004006510 1404005259 1404004069 1402000367 3009011908 3010180372 7205038236 3009120809 8001008561 8001005612 7006000472 3203020180 7013003723 7006003091 7006003303 8204009113 7006016937 8007009544 8007015625 8007001805 8007003942 8007015855 8007013371 8007010617 8007005661 8007005145 8007003060 8007007661 8007004834 8007002120 6006012351 2201380066 2201143710 3206128994 9010015325 9010013274 4602006869 5105027330 7001035184 2405099224 2405098865 1404019469 1404019353 1404016296 7202019493 7202006111 7202016660 6005053704 6005056255 6005056049 3013147887 3009100415 9206007380 5105026108 5105039077 8205000367 8207013759 9213012244 7013000743 6204007787 7006009984 4410091019 4410090880 8012011315 8012015167 4604015247 6007053891 7214006122 1401061846 9010000560 9009012490 9010003286 1401070522 1401070372 1401068222 1401065239 1401063103 1401062412 1401061340 1401054421 1401052681 1401049191 1401047186 1401039423 1401038739 1401033133 1401031644 1401030727 1401025123 1401022879 1401021184 1401018232 1401015178 1401011802 1401008229 1401005020 1401002866 4609016314 2404021627 3206125611 3003102719 2002007469 4604018992 4415019642 7207024828 7207022590 4604022194 2003026206 3202001273 4605006518 2404006449 1801021378 4604004711 4207009686 1404024590 6005032979 1404021733 7205019100 4605005071 3011003407 2201133647 3206033937 3206032736 2201253851 7006000343 6205013772 3201008837 3013140950 7207022433 4206030575 4206000232 8008000969 3010181770 7206000954 2405242909 8008007518 2405195724 3206025244 8008009105 8012022392 9002004204 9005001113 6001061598 8012021697 6001061296 2003030647 9011010348 4404027552 1004032420 7204003765 6005033169 3205054330 5401006121 5401010736 1401001474 5401004582 1401065465 1401062586 5401010317 1401058422 6005056083 5401002725 5401005796 5401006542 5401012951 1401030748 5401005741 5401000233 5401008807 1401020622 5401000853 5105048702 1401013352 5401012804 5401012757 5401012894 5401011800 5401012121 5401011686 5401011130 5401010309 5401010478 5401008861 5401008936 5401008761 1401067079 5401007777 5401007132 5401005104 1401057242 1401041209 1401026501 1401014361 1401046188 1401020626 1401013096 5401005627 5401004347 5401001445 5401001007 5401000933 5401000361 5111006179 5401013955 5111009182 5111010019 5401012667 5111003011 5401010129 6204045226 5401008828 5401007150 5401007210 5401006346 5401004479 5401001375 5401003688 5401001867 5401001069 5401003445 5401001701 5401005122 5401002733 5401004796 5401000869 5401004624 5111000815 5111009200 5111002242 5401000484 7204008543 9001037721 9002000082 6005035367 3001047531 2003012596 4419021692 3010112937 4609012021 5105027011 5105048976 5105044572 2405000863 1404023693 7206016191 4609007920 3013025628 3013096763 4419009326 2405033810 3013113461 3009078185 4410001020 2201360244 4604007834 3206201325 1004009596 3205044726 7206016166 1404026337 6005045229 6005045707 1404025123 6005045848 6006021544 1404025654 1404025614 1404025325 2406053649 4419017689 3206192752 2401013571 3007028226 6204032650 4410061538 8205003273 8202002986 7012011204 7001026830 6005049170 1404003795 7214019683 1404003665 4410120362 3209030908 7205010292 9213014799 9213014489 7203020895 4410121297 4205033186 3010071035 2201296037 9010018144 9211003528 6001036933 4410042550 2405124236 2405124146 9010016937 9010013757 9010012056 9010011772 9010010280 4415053243 4415054314 7214017153 2405239558 8001006658 8001004290 8202001172 8207016258 2405145324 7006013522 3010019588 3009142563 3009133298 1401065292 2405143794 4205026874 1401058617 2201231852 1401047361 7205036071 7208021161 7208029912 4204002603 4205029611 4205017083 7202012555 4205086719 3003085388 3003083024 4415061731 1404025030 7007003048 1404024237 2201247797 4204002312 1404023900 1404023743 1401010320 4611001329 2405091478 2201142530 5105047326 2201312019 3203010874 4605008203 5401002943 1404021630 7006002949 1404020929 7205002773 7205039077 7205040105 2003004174 8603009117 1404019690 5111002751 5107011827 8603007670 4415063714 7001028818 2201317882 6016020860 4410081851 4415052460 6001023825 7001024250 1404019708 5107010898 5107009838 4410109027 7006012654 7006011331 9010001606 9010003577 6005001438 7006012584 7006011691 7006012565 9010004320 9009018327 9210000740 6014018237 3013196924 3013193084 4604011988 4604012248 1801011768 5112008253 5112008487 5112007805 3013195854 5112008271 3013193475 9011007103 4410106271 4410037935 9011017281 7001045994 1401058505 1401058280 1401056737 1401055821 1401051509 1401050354 4419008411 3010153687 3009120807 3009192639 2405233035 8007002774 3205043226 3205042279 3003094442 3003088658 3205042369 3003087699 3013193920 8007004998 7206006886 5401000923 5401000715 7205037857 7205037705 6005036837 5105045449 5401014086 6005034757 6005032608 5401003500 6005032968 3003047614 2405146125 5107008450 4410102619 1404016547 9213000589 6204041299 9009005479 9009010645 1004045797 4419013200 5105052195 8207001967 6014005230 8204023150 6016021153 8012012671 4205068267 3013189061 4410102492 6014011070 7006010476 9012001597 8207014033 1004045301 8207013811 6006044414 9011025043 9213002586 9012001966 7001053607 6006048660 1401070678 7001047470 2201376038 3206167010 4205078051 1401043133 8007025416 4206000092 7201024479 7201018020 7001018857 9001041834 7214013079 9206009203 9211004750 9213015718 1404018907 8206004635 1004022524 1404018843 1004045765 1404018762 4205000991 4410033800 2406056639 1404018025 1404017745 1404017859 5102011431 5105005318 4604022484 9213016727 6204027554 2003027943 5105043129 5105037713 1404014161 9011006319 8003008928 1801005681 1404016227 9002023685 6007052970 2201285163 5107008528 6006039838 7214019355 2406002943 3003042704 3003039449 2406002810 9011015058 1404015686 9011015501 2201284572 7202027953 3209020968 1404028967 5105016903 8204021712 9011005869 8204021534 1402027308 9011002802 5105036380 1402003604 6204033687 1404012635 5112001591 5105025268 5105025181 4207003960 7006007764 5105064548 5112006051 5112000991 8007012416 7214010667 8207012773 9011008880 8207012941 5105059116 5105059070 3013176313 4410099444 7006015654 4415062536 9213001781 4205069162 4207000116 7006015737 2201111335 4205062937 3013118316 5105013709 1401041969 4205022055 1401041053 3010184536 4205077588 1401038728 1401038574 4609014536 2003028051 2405137412 1401071191 1401057514 1401071040 4410088634 6005042981 7006017563 1404027563 2405123491 7006017275 1404009661 8007006551 5111005126 4205080814 9213004937 4609006817 2405134127 1404026854 4410132810 1404026354 1401070399 1404009111 9206004563 1401070216 2405130753 2405130754 7001005600 4415047050 1401035270 1401035266 1401033207 1401032145 1401031714 1401031426 1401030942 1401030801 1401026686 1401026466 5105021412 7214007840 7214006701 7214008179 7214006765 3206176727 8204018883 1801020683 8204020122 8204020924 4205070535 6204015665 2201322446 1401003324 4205070164 4205069599 1401060223 1401060064 1401059536 3013196622 9213000698 4205068715 9206001429 5401011961 4205033609 5401011324 8204017603 1004029442 7205032210 7012017154 7012014601 1402017909 7201002850 8204018016 8007023781 6007051063 8007024751 8009004002 7208019318 4410127482 5601005614 7001044503 5107013197 4206024323 4604012912 9213010502 8207008805 9002011924 7006003635 1401035347 1401026342 1401025945 8601047524 1401023888 8601012298 4410093287 4410093050 8207008764 3013114377 7201016165 1401022202 1401021298 4415039733 7202001749 9001005218 8007015833 2405171388 9001043259 7202001349 8007015930 7001043997 1401071283 8008001175 7207017343 6205019995 7206004096 7202026926 8008004423 4206020841 7202026539 5112000969 2405164738 7201018313 5102005224 3005026465 7202023346 8207008271 4410079208 7202011586 4205066229 7202010759 5105017385'
+
+update data_for_edp set withheld='Yes' where rollno in ('4205036917 8004000027 8012022090 8009001566 8009000467 8008008908 8008005964 5112009406 2201156977 1801007988 1403032226 3010062931 6014022321 6005001212 6005008426 7001023417 7001021318 5105049389 4205075861 5105049090 3003089966 4419010013 6014020740 6005025067 6005055060 6005002645 6014001771 6014004477 3003078165 3003073647 2404005408 4207000538 8012022853 2405242282 5105004695 2404003433 3203011573 5112003086 5112003847 8007024652 8007014751 6005058174 7001027173 2201331371 2405227887 2404000036 2404020428 4205069500 4419005957 7207021483 6005057809 2404012365 6014007531 9002019815 5111009939 5111009958 5111007400 2404001824 5111004186 4601001408 4410076199 5111003100 4404022862 3003060110 3003041248 6202000334 3206054238 6202005810 6202003585 4404001002 3206044432 3013196027 5112002521 8012023362 8012024386 8012024749 8004004137 8004006756 8007000733 8007001648 8012019027 8012018625 8012016284 8012014999 8207012141 8207013840 9002019593 3205024874 4415063354 4205064112 3206030949 3003028982 4419021777 2405140913 4206018529 8012013760 8012012362 8012014203 8012011313 8012009341 8012011759 8008010371 8012005830 8012007158 8012007508 8012008267 8012009620 8012009718 8012009987 8012010275 8012011149 8012008731 8012008959 3013171107 8012005518 8012005095 8012004761 8012003547 8012003347 8012003180 8012002697 8012002633 8012002579 8012001855 8012001396 8012001182 8012000518 3013163516 9011013416 9010019421 9010018627 6005042511 6005041078 6005040855 6005038101 6005035454 6005031979 6005031021 6005029861 6005028958 6005028812 6005039056 4205057844 4419017858 4205052266 4609000749 2201279808 3003066414 2405123946 4415065096 1801018133 3009036065 2405106531 7007008562 7002016366 3206008975 7202025048 3206020911 3013050512 3001062310 9009014668 9009010265 9008003607 9002018685 9002016529 9002012620 9002008129 9002006901 8208006522 8208009217 7006018577 8012000082 8009007307 8009007130 8009006052 8009005043 8009004352 8009002459 8008006233 8009001161 8009000766 8009000877 8008006160 5112006973 4410107502 4205050019 6005020807 6005020967 4205043876 3010108677 3010097193 2201240818 6006049254 3013102593 3013007290 7202017752 2405141765 3013022132 3013170338 7205003009 7205006152 7205004394 7207020816 1004049208 1004031284 1004025439 1404027625 1404023513 1404020831 7006016255 2405029566 7006014174 2405005731 2401007627 6001022892 8007038031 8007043654 8007046103 8008002040 8204006619 8007037064 8007039911 8008001768 8007040577 8007043436 8008002477 8008003289 2003025102 9001048852 9001029827 9001027901 9001026825 9001022839 9001018864 9001010915 9001009957 9001002986 9001001823 9012005144 9012001313 9011025007 3206000038 1404006232 4207027143 4206012960 7214018855 2201094443 1404027495 2201190593 7214011932 4610007118 4610009826 8003011352 7207004325 6007053252 7207005307 7206019338 6001003376 8012022578 7006003835 4419018664 7006012455 7006003717 7006003891 7006011199 8007017951 8007032594 8007025038 8007023488 8007018884 8007017262 5112000521 3010016679 4410099813 4410098214 4410099804 3207003593 3209027533 9011010993 9011019893 9011014401 9011009453 9011006540 3207007322 3207005849 2201172292 2405123416 2405121522 4604004993 7202023534 3206086135 4410028722 3206082448 7202027582 5401000298 1404009315 1404009228 1404008752 1004006510 1404005259 1404004069 1402000367 3009011908 3010180372 7205038236 3009120809 8001008561 8001005612 7006000472 3203020180 7013003723 7006003091 7006003303 8204009113 7006016937 8007009544 8007015625 8007001805 8007003942 8007015855 8007013371 8007010617 8007005661 8007005145 8007003060 8007007661 8007004834 8007002120 6006012351 2201380066 2201143710 3206128994 9010015325 9010013274 4602006869 5105027330 7001035184 2405099224 2405098865 1404019469 1404019353 1404016296 7202019493 7202006111 7202016660 6005053704 6005056255 6005056049 3013147887 3009100415 9206007380 5105026108 5105039077 8205000367 8207013759 9213012244 7013000743 6204007787 7006009984 4410091019 4410090880 8012011315 8012015167 4604015247 6007053891 7214006122 1401061846 9010000560 9009012490 9010003286 1401070522 1401070372 1401068222 1401065239 1401063103 1401062412 1401061340 1401054421 1401052681 1401049191 1401047186 1401039423 1401038739 1401033133 1401031644 1401030727 1401025123 1401022879 1401021184 1401018232 1401015178 1401011802 1401008229 1401005020 1401002866 4609016314 2404021627 3206125611 3003102719 2002007469 4604018992 4415019642 7207024828 7207022590 4604022194 2003026206 3202001273 4605006518 2404006449 1801021378 4604004711 4207009686 1404024590 6005032979 1404021733 7205019100 4605005071 3011003407 2201133647 3206033937 3206032736 2201253851 7006000343 6205013772 3201008837 3013140950 7207022433 4206030575 4206000232 8008000969 3010181770 7206000954 2405242909 8008007518 2405195724 3206025244 8008009105 8012022392 9002004204 9005001113 6001061598 8012021697 6001061296 2003030647 9011010348 4404027552 1004032420 7204003765 6005033169 3205054330 5401006121 5401010736 1401001474 5401004582 1401065465 1401062586 5401010317 1401058422 6005056083 5401002725 5401005796 5401006542 5401012951 1401030748 5401005741 5401000233 5401008807 1401020622 5401000853 5105048702 1401013352 5401012804 5401012757 5401012894 5401011800 5401012121 5401011686 5401011130 5401010309 5401010478 5401008861 5401008936 5401008761 1401067079 5401007777 5401007132 5401005104 1401057242 1401041209 1401026501 1401014361 1401046188 1401020626 1401013096 5401005627 5401004347 5401001445 5401001007 5401000933 5401000361 5111006179 5401013955 5111009182 5111010019 5401012667 5111003011 5401010129 6204045226 5401008828 5401007150 5401007210 5401006346 5401004479 5401001375 5401003688 5401001867 5401001069 5401003445 5401001701 5401005122 5401002733 5401004796 5401000869 5401004624 5111000815 5111009200 5111002242 5401000484 7204008543 9001037721 9002000082 6005035367 3001047531 2003012596 4419021692 3010112937 4609012021 5105027011 5105048976 5105044572 2405000863 1404023693 7206016191 4609007920 3013025628 3013096763 4419009326 2405033810 3013113461 3009078185 4410001020 2201360244 4604007834 3206201325 1004009596 3205044726 7206016166 1404026337 6005045229 6005045707 1404025123 6005045848 6006021544 1404025654 1404025614 1404025325 2406053649 4419017689 3206192752 2401013571 3007028226 6204032650 4410061538 8205003273 8202002986 7012011204 7001026830 6005049170 1404003795 7214019683 1404003665 4410120362 3209030908 7205010292 9213014799 9213014489 7203020895 4410121297 4205033186 3010071035 2201296037 9010018144 9211003528 6001036933 4410042550 2405124236 2405124146 9010016937 9010013757 9010012056 9010011772 9010010280 4415053243 4415054314 7214017153 2405239558 8001006658 8001004290 8202001172 8207016258 2405145324 7006013522 3010019588 3009142563 3009133298 1401065292 2405143794 4205026874 1401058617 2201231852 1401047361 7205036071 7208021161 7208029912 4204002603 4205029611 4205017083 7202012555 4205086719 3003085388 3003083024 4415061731 1404025030 7007003048 1404024237 2201247797 4204002312 1404023900 1404023743 1401010320 4611001329 2405091478 2201142530 5105047326 2201312019 3203010874 4605008203 5401002943 1404021630 7006002949 1404020929 7205002773 7205039077 7205040105 2003004174 8603009117 1404019690 5111002751 5107011827 8603007670 4415063714 7001028818 2201317882 6016020860 4410081851 4415052460 6001023825 7001024250 1404019708 5107010898 5107009838 4410109027 7006012654 7006011331 9010001606 9010003577 6005001438 7006012584 7006011691 7006012565 9010004320 9009018327 9210000740 6014018237 3013196924 3013193084 4604011988 4604012248 1801011768 5112008253 5112008487 5112007805 3013195854 5112008271 3013193475 9011007103 4410106271 4410037935 9011017281 7001045994 1401058505 1401058280 1401056737 1401055821 1401051509 1401050354 4419008411 3010153687 3009120807 3009192639 2405233035 8007002774 3205043226 3205042279 3003094442 3003088658 3205042369 3003087699 3013193920 8007004998 7206006886 5401000923 5401000715 7205037857 7205037705 6005036837 5105045449 5401014086 6005034757 6005032608 5401003500 6005032968 3003047614 2405146125 5107008450 4410102619 1404016547 9213000589 6204041299 9009005479 9009010645 1004045797 4419013200 5105052195 8207001967 6014005230 8204023150 6016021153 8012012671 4205068267 3013189061 4410102492 6014011070 7006010476 9012001597 8207014033 1004045301 8207013811 6006044414 9011025043 9213002586 9012001966 7001053607 6006048660 1401070678 7001047470 2201376038 3206167010 4205078051 1401043133 8007025416 4206000092 7201024479 7201018020 7001018857 9001041834 7214013079 9206009203 9211004750 9213015718 1404018907 8206004635 1004022524 1404018843 1004045765 1404018762 4205000991 4410033800 2406056639 1404018025 1404017745 1404017859 5102011431 5105005318 4604022484 9213016727 6204027554 2003027943 5105043129 5105037713 1404014161 9011006319 8003008928 1801005681 1404016227 9002023685 6007052970 2201285163 5107008528 6006039838 7214019355 2406002943 3003042704 3003039449 2406002810 9011015058 1404015686 9011015501 2201284572 7202027953 3209020968 1404028967 5105016903 8204021712 9011005869 8204021534 1402027308 9011002802 5105036380 1402003604 6204033687 1404012635 5112001591 5105025268 5105025181 4207003960 7006007764 5105064548 5112006051 5112000991 8007012416 7214010667 8207012773 9011008880 8207012941 5105059116 5105059070 3013176313 4410099444 7006015654 4415062536 9213001781 4205069162 4207000116 7006015737 2201111335 4205062937 3013118316 5105013709 1401041969 4205022055 1401041053 3010184536 4205077588 1401038728 1401038574 4609014536 2003028051 2405137412 1401071191 1401057514 1401071040 4410088634 6005042981 7006017563 1404027563 2405123491 7006017275 1404009661 8007006551 5111005126 4205080814 9213004937 4609006817 2405134127 1404026854 4410132810 1404026354 1401070399 1404009111 9206004563 1401070216 2405130753 2405130754 7001005600 4415047050 1401035270 1401035266 1401033207 1401032145 1401031714 1401031426 1401030942 1401030801 1401026686 1401026466 5105021412 7214007840 7214006701 7214008179 7214006765 3206176727 8204018883 1801020683 8204020122 8204020924 4205070535 6204015665 2201322446 1401003324 4205070164 4205069599 1401060223 1401060064 1401059536 3013196622 9213000698 4205068715 9206001429 5401011961 4205033609 5401011324 8204017603 1004029442 7205032210 7012017154 7012014601 1402017909 7201002850 8204018016 8007023781 6007051063 8007024751 8009004002 7208019318 4410127482 5601005614 7001044503 5107013197 4206024323 4604012912 9213010502 8207008805 9002011924 7006003635 1401035347 1401026342 1401025945 8601047524 1401023888 8601012298 4410093287 4410093050 8207008764 3013114377 7201016165 1401022202 1401021298 4415039733 7202001749 9001005218 8007015833 2405171388 9001043259 7202001349 8007015930 7001043997 1401071283 8008001175 7207017343 6205019995 7206004096 7202026926 8008004423 4206020841 7202026539 5112000969 2405164738 7201018313 5102005224 3005026465 7202023346 8207008271 4410079208 7202011586 4205066229 7202010759 5105017385');
+
+'5105017385 8207008704 2201199054 5105037972 2201292740 5105015865 4205078895 5601010077 1401000691 4410132199 4410080689 7201008884 6007050083 4205065021 7202005780 7202004942 5401001553 5701006209 5601005661 5601004339 4415005160 7201008317 5601000670 5401013978 5501001611 8007019704 5701007059 5401012710 1404025531 1404025185 8007019070 5107012224 8007017739 5105031829 1404022381 5601006567 1404021147 1404020736 1404020714 5107010408 4205054105 1401014008 3009058180 2201164901 7001027645 6204041872 7205021180 3003022496 3003012104 3206062573 2201160201 1004014049 7214006366 4415042500 6005000079 6016000076 3205031162 7001039857 6014023724 3007029577 6007035820 1004008353 3009052620 7205027859 7205026990 2201021837 4410140955 7006002631 5105031407 8601018907 3003002599 3201030166 5401007398 7001042737 3013105370 7214003057 9011021013 3206170875 7006002969 1403007514 2405012011 8006009758 7207023488 9011009064 5107008554 7207019641 5401007533 4410139712 8007012870 8007013711 7001027603 9010009849 1401058172 5105065564 7207014661 5105065659 7206016728 4205025764 4205022628 1401065000 9001018653 7001035051 8207007789 7206015962 4404018217 7202002957 5107000464 8207002065 7203016718 8207003102 8207001691 7202004882 5107013510 4205059892 6014017472 7202023765 7012004918 1404001443 2201235068 8207005015 2003014024 9206006301 4410125834 4410083670 3005035877 6202017791 6202015670 8601059926 2003017664 3205001654 4410144245 1401071029 6014005118 1401068923 5105034388 8601029001 3003006621 4205058757 5302002700 2201156760 3206058637 7012004728 5105034297 4410014459 3001010110 7201012740 4410056984 4415034079 8601029079 8601020100 8601016640 7001051961 4205054121 8601028905 7006000043 7001050698 4415040831 7001052115 7208006095 5111006670 3013128189 7208005618 7001053226 7001052775 4205051015 7006000415 2201075248 1401010386 4609021532 5105027670 7006000427 4415040507 7006000449 5105033105 2201337000 4205049419 4205055371 5601009460 3009042902 4205048944 4410143702 8204014498 3010026828 3206037779 7205019813 2201127164 3010181475 4410144276 5111005744 1010009794 5105013739 3016023062 3001024090 4410003709 2406001159 3016022607 5105013980 4415068979 9001018436 6005053489 7012002420 7203025859 3010162101 5302002206 4410144093 5112002329 5112001955 5302001881 4415065060 9009011038 4410138568 4415064697 7001000553 7203021648 8206006693 8206005687 8206006763 4410135491 8204007097 5102013764 7202024352 4410108067 1401063010 4410108677 3003105529 3003113147 7208031211 3009011121 7205017051 7205018586 3010021655 5111010578 5111010055 9002023594 9002023228 6205006361 4610014007 3206150672 5105054669 1401052566 4410109554 1401066156 1404028006 7203023677 5105005292 4204010634 7201027706 3003107726 8207000545 3003102278 3003103691 2201144847 3003103666 3003101170 3003105596 3003115224 1401046609 3003107700 3003112593 9009008279 4205011452 7001028950 3003112767 9002020797 8007009513 5105062936 3007019597 7001019453 4410029466 4410044130 3003113072 3003113204 3008030974 8204008494 9211006210 9002019905 9002019987 9002019964 9002018940 9002019167 7001028726 8007008892 3003109493 8007006999 5105063946 9211005397 8601008345 8204006835 8204006058 7001022592 3010132620 8204005501 5105062910 3003017381 6005051533 2002028873 1404015692 5111007012 8601016591 4410106671 7214004697 7214008171 7204004260 7214018049 9009009789 1004020588 2201219433 9009014688 3003084468 2201213843 7001034963 4410127259 9009012914 6204040791 1401052621 1401049962 2002029651 2201071811 4605003996 5107010593 7001030763 7205013414 2002029542 6202024016 2002029404 3203025261 5401004281 4204006987 2002029260 4605005792 5111007113 2002028892 5111006628 5111007017 2002027715 8007038880 1401054176 2002028706 8003011730 2002028636 2002028523 2406020584 7001012121 9002004150 2002028343 2002028263 2002027860 7201022100 3205035518 1404007937 6001063815 2002027540 1801018921 7001008858 7001009721 9002000805 9211002896 9002000420 3205013244 9001050466 9001049798 2002027452 8601055147 2003002775 5105058728 1404009028 2002004439 9213007223 5105056562 5105056828 8206001459 8204003756 8206002694 8206003041 8206002366 3203009444 8601028057 1801022702 2201187784 2201083512 3013079206 1801022586 1801022180 1404008878 1801022172 3013072601 7001013509 2201068677 1801012279 1801012247 1801012195 1801012082 1801011962 3205002111 1801021057 1801018166 1801017288 7205016708 3001099191 1801016682 1801016619 9002014557 1801015677 1801015075 1403028759 1801014453 5601006558 1801014407 5601006596 1801014110 1801014014 5601006138 1801013362 1801013075 3201002142 1801020501 1401048998 7205016210 5701002802 5701002716 5701002960 5701001051 7001017976 1404012292 4410133484 1801020376 7205016736 1801009502 1401029958 7203015776 7208021868 1401048136 5001004686 4610008585 1801020021 4404021472 8206004051 6005017341 6005017629 8206005278 1801019771 8206003679 8601045283 7202025036 4204005868 2003001874 2003001111 1401071752 7007005666 3205048923 7007005302 5601010327 1801019154 4204009976 4410133159 1801018999 5302000358 3003042695 2201380047 9002011364 3013118853 5105058951 4207029470 3007038303 4410048506 5601005806 5302000405 3015012061 8003000162 5601005247 6005023037 2201104736 9210004176 5601004545 9210004222 5105038918 5105051569 5105016659 5601004316 5701007595 6005028184 6005029154 4205010478 3016003523 9010020538 5105015339 5601008659 2201037837 1401020618 7205010704 7205011679 9005003424 4204004940 5601008415 7001005000 7001001498 3003066329 5601008230 3003058216 3205010407 5601007647 2201087832 1402012865 5601007620 3003063733 5601008749 3205003980 4410120393 7208014919 2002030377 2002030319 2002029974 2002029934 7214005413 1203010738 1203009564 3013016615 4410127816 5001005945 7201017883 7201016797 7201017091 3010118338 4410104072 3010047229 1801007647 5001005791 1801007313 1403033010 1801006037 1401012857 9001030529 1403029357 9001028979 9001028902 1403028502 1801004092 7208014598 1801002410 3002023608 3003014356 3003021397 4207028523 3003026529 7201007839 7201002197 5111003242 2201018379 1801003135 9210003772 4205001791 2201310908 7201004327 7203011065 1801008800 5105042617 7201003672 7205010076 1801001989 7201001088 7205008892 7208011867 8601039200 7208011757 5001001580 8007000800 7201000361 1801009150 1203009251 4419018485 5107007670 1801000946 1801000940 7001000249 7001053057 6016008392 8007000382 5401002038 9205002008 1801000311 8205004090 8205003802 4415048937 4415048402 4415048274 4415051931 1401017741 1801008074 5501002779 1401015322 1801000059 7001026655 8206000916 1404019701 7201015385 5601001126 7203007154 5001003604 1401006986 7208031381 7205007141 4206004907 6014019149 6005002579 9001027126 8603016841 9205000381 5701005411 5105009657 9001017478 7001036764 1401063742 7201000891 7201022951 7201003271 9001014230 5107010465 7202014623 8205002142 8205002164 5701005582 7214004743 8205000134 4205076893 2201385949 3206162656 5001005222 5301001959 4205035379 5701007020 4205033452 1401067207 1401065317 5501004071 5301001586 4610018502 3206176523 3206192761 7001008990 5111001718 4604003977 7001041207 7001030284 7001028480 7208009768 9001007636 3009067486 1401030251 3009012302 7006008211 3009167706 7006007381 2201267682 5401001422 7006007643 3009164926 3009159591 5102003844 5102003673 9001011212 5105065320 4410105383 7007010319 5105064117 5105065076 8201003941 1401023237 3013148024 8205000714 8205000242 8205001155 2002028071 1801022481 1801021374 1801019809 3001036482 4419015915 4419016224 7203000459 4207005823 8012022187 2002030956 9001020672 9001041924 3009126627 2201258863 1401005250 5001006189 1401004615 4001000094 2404019204 5111011388 4410129154 5111011251 7001019276 9210006284 5102013888 7001038098 7001015749 8601031810 8601031963 4410084066 5111008670 5105035215 8601000392 9210004299 3010053071 4415038178 1004025791 4410023914 7001013326 7203002298 7001042768 7001051313 7001048831 7001037670 5111006752 5001003778 5701002867 8201002851 2406049163 6202022014 9210000532 6007027529 4410137318 1401018238 1401018448 1401004716 4410137989 8007021679 8003013725 8201002608 4205055199 4205053418 8006008733 5107002089 8003000566 1801018508 1801017461 1801016497 5001004824 3010009529 8601053531 9206007462 5111008318 1401057310 5111005978 5001001662 5111005584 7001032123 5111006661 5111006545 5111004904 5111006766 4207027029 1401031289 9002023466 4604016136 4205020344 8007009763 5401012164 8007008545 9213001531 1801015559 2405167944 4207029015 5105057608 6005044833 7208029542 8202001477 4207030936 6005046427 8601025436 1801010610 7203008036 3205004950 5301000093 5107008438 4415066621 8601011803 9213001701 5301000386 9210005302 7001009661 5401013771 4404017461 4410012146 7007008301 8601059940 1801006844 4205044238 4001000176 5401010263 6006003059 5111002228 2406056274 9002011044 6007028145 9002005178 9211007153 6005003934 2406051617 8601057613'
+
+update data_for_edp set withheld='Yes' where rollno in  ('5105017385 8207008704 2201199054 5105037972 2201292740 5105015865 4205078895 5601010077 1401000691 4410132199 4410080689 7201008884 6007050083 4205065021 7202005780 7202004942 5401001553 5701006209 5601005661 5601004339 4415005160 7201008317 5601000670 5401013978 5501001611 8007019704 5701007059 5401012710 1404025531 1404025185 8007019070 5107012224 8007017739 5105031829 1404022381 5601006567 1404021147 1404020736 1404020714 5107010408 4205054105 1401014008 3009058180 2201164901 7001027645 6204041872 7205021180 3003022496 3003012104 3206062573 2201160201 1004014049 7214006366 4415042500 6005000079 6016000076 3205031162 7001039857 6014023724 3007029577 6007035820 1004008353 3009052620 7205027859 7205026990 2201021837 4410140955 7006002631 5105031407 8601018907 3003002599 3201030166 5401007398 7001042737 3013105370 7214003057 9011021013 3206170875 7006002969 1403007514 2405012011 8006009758 7207023488 9011009064 5107008554 7207019641 5401007533 4410139712 8007012870 8007013711 7001027603 9010009849 1401058172 5105065564 7207014661 5105065659 7206016728 4205025764 4205022628 1401065000 9001018653 7001035051 8207007789 7206015962 4404018217 7202002957 5107000464 8207002065 7203016718 8207003102 8207001691 7202004882 5107013510 4205059892 6014017472 7202023765 7012004918 1404001443 2201235068 8207005015 2003014024 9206006301 4410125834 4410083670 3005035877 6202017791 6202015670 8601059926 2003017664 3205001654 4410144245 1401071029 6014005118 1401068923 5105034388 8601029001 3003006621 4205058757 5302002700 2201156760 3206058637 7012004728 5105034297 4410014459 3001010110 7201012740 4410056984 4415034079 8601029079 8601020100 8601016640 7001051961 4205054121 8601028905 7006000043 7001050698 4415040831 7001052115 7208006095 5111006670 3013128189 7208005618 7001053226 7001052775 4205051015 7006000415 2201075248 1401010386 4609021532 5105027670 7006000427 4415040507 7006000449 5105033105 2201337000 4205049419 4205055371 5601009460 3009042902 4205048944 4410143702 8204014498 3010026828 3206037779 7205019813 2201127164 3010181475 4410144276 5111005744 1010009794 5105013739 3016023062 3001024090 4410003709 2406001159 3016022607 5105013980 4415068979 9001018436 6005053489 7012002420 7203025859 3010162101 5302002206 4410144093 5112002329 5112001955 5302001881 4415065060 9009011038 4410138568 4415064697 7001000553 7203021648 8206006693 8206005687 8206006763 4410135491 8204007097 5102013764 7202024352 4410108067 1401063010 4410108677 3003105529 3003113147 7208031211 3009011121 7205017051 7205018586 3010021655 5111010578 5111010055 9002023594 9002023228 6205006361 4610014007 3206150672 5105054669 1401052566 4410109554 1401066156 1404028006 7203023677 5105005292 4204010634 7201027706 3003107726 8207000545 3003102278 3003103691 2201144847 3003103666 3003101170 3003105596 3003115224 1401046609 3003107700 3003112593 9009008279 4205011452 7001028950 3003112767 9002020797 8007009513 5105062936 3007019597 7001019453 4410029466 4410044130 3003113072 3003113204 3008030974 8204008494 9211006210 9002019905 9002019987 9002019964 9002018940 9002019167 7001028726 8007008892 3003109493 8007006999 5105063946 9211005397 8601008345 8204006835 8204006058 7001022592 3010132620 8204005501 5105062910 3003017381 6005051533 2002028873 1404015692 5111007012 8601016591 4410106671 7214004697 7214008171 7204004260 7214018049 9009009789 1004020588 2201219433 9009014688 3003084468 2201213843 7001034963 4410127259 9009012914 6204040791 1401052621 1401049962 2002029651 2201071811 4605003996 5107010593 7001030763 7205013414 2002029542 6202024016 2002029404 3203025261 5401004281 4204006987 2002029260 4605005792 5111007113 2002028892 5111006628 5111007017 2002027715 8007038880 1401054176 2002028706 8003011730 2002028636 2002028523 2406020584 7001012121 9002004150 2002028343 2002028263 2002027860 7201022100 3205035518 1404007937 6001063815 2002027540 1801018921 7001008858 7001009721 9002000805 9211002896 9002000420 3205013244 9001050466 9001049798 2002027452 8601055147 2003002775 5105058728 1404009028 2002004439 9213007223 5105056562 5105056828 8206001459 8204003756 8206002694 8206003041 8206002366 3203009444 8601028057 1801022702 2201187784 2201083512 3013079206 1801022586 1801022180 1404008878 1801022172 3013072601 7001013509 2201068677 1801012279 1801012247 1801012195 1801012082 1801011962 3205002111 1801021057 1801018166 1801017288 7205016708 3001099191 1801016682 1801016619 9002014557 1801015677 1801015075 1403028759 1801014453 5601006558 1801014407 5601006596 1801014110 1801014014 5601006138 1801013362 1801013075 3201002142 1801020501 1401048998 7205016210 5701002802 5701002716 5701002960 5701001051 7001017976 1404012292 4410133484 1801020376 7205016736 1801009502 1401029958 7203015776 7208021868 1401048136 5001004686 4610008585 1801020021 4404021472 8206004051 6005017341 6005017629 8206005278 1801019771 8206003679 8601045283 7202025036 4204005868 2003001874 2003001111 1401071752 7007005666 3205048923 7007005302 5601010327 1801019154 4204009976 4410133159 1801018999 5302000358 3003042695 2201380047 9002011364 3013118853 5105058951 4207029470 3007038303 4410048506 5601005806 5302000405 3015012061 8003000162 5601005247 6005023037 2201104736 9210004176 5601004545 9210004222 5105038918 5105051569 5105016659 5601004316 5701007595 6005028184 6005029154 4205010478 3016003523 9010020538 5105015339 5601008659 2201037837 1401020618 7205010704 7205011679 9005003424 4204004940 5601008415 7001005000 7001001498 3003066329 5601008230 3003058216 3205010407 5601007647 2201087832 1402012865 5601007620 3003063733 5601008749 3205003980 4410120393 7208014919 2002030377 2002030319 2002029974 2002029934 7214005413 1203010738 1203009564 3013016615 4410127816 5001005945 7201017883 7201016797 7201017091 3010118338 4410104072 3010047229 1801007647 5001005791 1801007313 1403033010 1801006037 1401012857 9001030529 1403029357 9001028979 9001028902 1403028502 1801004092 7208014598 1801002410 3002023608 3003014356 3003021397 4207028523 3003026529 7201007839 7201002197 5111003242 2201018379 1801003135 9210003772 4205001791 2201310908 7201004327 7203011065 1801008800 5105042617 7201003672 7205010076 1801001989 7201001088 7205008892 7208011867 8601039200 7208011757 5001001580 8007000800 7201000361 1801009150 1203009251 4419018485 5107007670 1801000946 1801000940 7001000249 7001053057 6016008392 8007000382 5401002038 9205002008 1801000311 8205004090 8205003802 4415048937 4415048402 4415048274 4415051931 1401017741 1801008074 5501002779 1401015322 1801000059 7001026655 8206000916 1404019701 7201015385 5601001126 7203007154 5001003604 1401006986 7208031381 7205007141 4206004907 6014019149 6005002579 9001027126 8603016841 9205000381 5701005411 5105009657 9001017478 7001036764 1401063742 7201000891 7201022951 7201003271 9001014230 5107010465 7202014623 8205002142 8205002164 5701005582 7214004743 8205000134 4205076893 2201385949 3206162656 5001005222 5301001959 4205035379 5701007020 4205033452 1401067207 1401065317 5501004071 5301001586 4610018502 3206176523 3206192761 7001008990 5111001718 4604003977 7001041207 7001030284 7001028480 7208009768 9001007636 3009067486 1401030251 3009012302 7006008211 3009167706 7006007381 2201267682 5401001422 7006007643 3009164926 3009159591 5102003844 5102003673 9001011212 5105065320 4410105383 7007010319 5105064117 5105065076 8201003941 1401023237 3013148024 8205000714 8205000242 8205001155 2002028071 1801022481 1801021374 1801019809 3001036482 4419015915 4419016224 7203000459 4207005823 8012022187 2002030956 9001020672 9001041924 3009126627 2201258863 1401005250 5001006189 1401004615 4001000094 2404019204 5111011388 4410129154 5111011251 7001019276 9210006284 5102013888 7001038098 7001015749 8601031810 8601031963 4410084066 5111008670 5105035215 8601000392 9210004299 3010053071 4415038178 1004025791 4410023914 7001013326 7203002298 7001042768 7001051313 7001048831 7001037670 5111006752 5001003778 5701002867 8201002851 2406049163 6202022014 9210000532 6007027529 4410137318 1401018238 1401018448 1401004716 4410137989 8007021679 8003013725 8201002608 4205055199 4205053418 8006008733 5107002089 8003000566 1801018508 1801017461 1801016497 5001004824 3010009529 8601053531 9206007462 5111008318 1401057310 5111005978 5001001662 5111005584 7001032123 5111006661 5111006545 5111004904 5111006766 4207027029 1401031289 9002023466 4604016136 4205020344 8007009763 5401012164 8007008545 9213001531 1801015559 2405167944 4207029015 5105057608 6005044833 7208029542 8202001477 4207030936 6005046427 8601025436 1801010610 7203008036 3205004950 5301000093 5107008438 4415066621 8601011803 9213001701 5301000386 9210005302 7001009661 5401013771 4404017461 4410012146 7007008301 8601059940 1801006844 4205044238 4001000176 5401010263 6006003059 5111002228 2406056274 9002011044 6007028145 9002005178 9211007153 6005003934 2406051617 8601057613');
+
+
+'2404004401 8007045874 3203019218 7001004959 6005038338 7001003896 2201214909 5001003138 7001010382 5701007704 9002014821 2201213985 7001013846 8202001835 1401004876 7013005702 9002012753 4205086605 4205082957 9009002052 1401069942 4415053608 1801003679 3003087613 5701001356 3003055828 9206005642 8007004051 7013004402 4410034702 5601009284 6016005843 7208030174 8204001429 2201192540 1401018033 7205024228 5401000548 5107012705 8004001619 9001042097 4410004393 4601005724 8204014396 5112003894 5111000340 5001001484 7203014717 5107000088 5401006496 5401005791 5401006064 5401002322 5401006634 5401003843 5401006417 7001003095 1004004317 3003004767 5401004593 7001046234 7001028786 7001024403 1401021093 1401004424 5105037687 9001026212 9009007928 1402014339 9010013115 8207004123 4410132006 4205041559 5111011164 5401000054 5401000438 1401035281 1203003071 1401058605 2002006398 2002009071 2002017066 2002018528 2003034189 2201016262 2201069697 2201119140 2201120402 2201135417 2201149534 2201156271 2201159064 2201188374 2405007095 2406002090 3003087405 3003089277 3009006666 3009006968 3009027022 3009087631 3009108236 3009111461 3009139348 3010014857 3010086270 3010176155 3010188424 3013100785 3013159332 3013166331 3013168378 3015023454 3201020533 3205029705 3206007954 3206081607 3206093440 3206137691 3206156968 3206170195 3206215078 4205021941 4206013609 4206033491 4207031936 4415049830 4404003292 4410135827 4410089675 4410105826 4419022443 4419018489 4419011990 4410073214 4410045688 4410021054 9010015188 9001008977 9206000586 8204021922 7012005967 7001044094 7208019816 7208007580 7202023955 7202027187 7207000466 7207020917 7202023599 7205030921 5105049712 5105057199 5112006002 5112009026 5105056826 5105005701 5401011869 5401005213 5401014050 5601007747 8003000746 3009103867 3007037535 3007023456 3007008406 2405078069 5105047498 5112002030 8201006817 3206150219 3201014985 3013093027 3013051947 3011088429 3011087771 3011057420 3011024542 3010134428 3010133714 3010122861 3010084020 3009131746 3009002457 3008023178 3007016255 3007010380 3007008372 3007003963 3003063368 3001030236 8012020591 4410047902 4410090208 3010078102 3009096255 3009086704 3009084802 3009060352 3009056505 3009048033 3008032311 3008001558 3003095805 4410051977 5105040492 3209006066 3206029126 3206003064 3206000946 3013189846 3013134384 3013052382 3013049909 3013032572 3011078712 3011078153 3010190369 3010152380 3010139878 3008028965 3008013561 3008010399 3003051379 9011017424 8206000754 4205061455 3206204705 3206194500 3206104527 3206038338 3206033143 3205048252 3205023864 3013194175 3013194155 3013192549 3013191828 3013188961 3013187267 3013184317 3013174502 3013172991 3013171966 3013168091 3013167530 3013163331 3013162919 3013160250 3013157142 3013076577 3010173861 3010128457 3010121599 3010121008 3010115386 3010112548 3010109174 3010102531 3010099759 3010091760 3010059222 3009177686 3009010229 3008003891 3008000304 3003086577 3003074354 3003070702 3003036105 5111010421 5401012632 9210006764 9002020142 7001021221 5111003197 5112006209 3209026811 3209024697 3207000929 3206209882 3205029190 3013190573 3013159876 3013142618 3010074991 3010073863 3010067469 3010067306 3010066957 3010066683 3010063597 3010055963 3009167899 3009135294 3009122690 3009120097 3009091644 3008028830 3008027905 3008023657 3008021713 3008021497 3008021008 3008020508 3008020443 3008019900 3008013583 3008011661 3008005247 3008004038 3008003555 3003007270 2003014464 5401011025 5401012193 3206195145 3206192911 3206187022 3206182869 3206167068 3206165895 3206160687 3206160057 3206156802 3206154915 3206154257 3206152288 3206151282 3206128897 3206120681 3206117918 3206095599 3206094776 3206094619 3206079684 3206078326 3206072495 3206056110 3206050090 3206040308 3206035005 3206023661 3206020233 3205059296 3205049478 3205037672 3205034829 3205032466 3203025534 3203019934 3203009359 3203005441 3203001877 3201029400 3201019377 3201012315 3201009366 3201008752 3201002582 3201000724 3016017982 3016003464 3016002988 3016000597 3015000492 3013184951 3010053712 3010042591 3010042387 3010038630 3010036517 3010036351 3010035591 3010025183 5111001513 7001037144 7001033119 3013177801 3013177403 3010016265 3010011696 3010007639 3010006638 3009163167 3009133502 3009060378 3009033666 3003006567 3001117950 3001059532 3001047140 3001037887 3001025710 1203002721 5401006025 5401006123 5401006419 5401004497 5401005810 5302001717 5111011054 5111008503 4609019627 3206144560 3205055182 3015014010 3013153113 3013026490 3013013017 3010178240 3010159528 3010153884 3010149302 3010147035 3010128905 3010125220 3010102598 3010095133 3010090257 3010088416 3010082615 3010080455 3010080244 3010073099 3010044300 3009186183 3009149904 3009050009 3009031548 3008028657 3005006610 3003104951 3003048682 3003046476 3003010274 3003000149 3002021347 3002011953 3001106017 3001071169 3001027571 3001016423 3001015446 1401060448 5401002535 5107007252 5401003630 5401004015 5401003749 5001000215 5401003247 5401002815 5401002922 7001003267 5105054958 5401002356 4207033238 4207029515 3209021056 3206199251 3206182091 3206127360 3205061392 3205006167 3011082916 3010150704 3010145165 3010142611 3010136968 3010132743 3010112376 3010054697 3010029317 3009109847 3008017737 3005045146 3005042910 3005035842 3001085877 1801015758 1801014837 1801014016 1801008746 1801005533 1401057167 5401000196 4601015089 4601009236 5401007181 5111002144 5111007278 5105064234 5111001922 5111007974 5001004968 5401011393 4410131872 5111001387 7208033461 3209027758 3209019123 3209006608 3207002298 3207000274 3206300041 3206213750 3206212698 3206207026 3206205313 3206204428 3206199117 3206138247 3206132923 3206036650 3206019743 3205052889 3205027987 3205020430 3201025911 3201014224 3016012823 3015006867 3013184914 3013181849 3013176076 3013164509 3013144691 3013135863 3013088574 3013077113 3013030094 3013018031 3013015049 3011012550 3010192948 3010191903 3010102430 3010083277 3010079836 3010065096 3010062065 3009126969 3009029068 3008010920 3007022975 3003039978 3003034171 2002029747 2002028861 2002028655 4601007772 5401003279 8004006204 5111005484 5111002867 5111000789 5111010892 5111001326 5111006967 4601001795 5111005792 5111007575 5105027323 5111006559 5111010828 4601011439 5111006201 7001007356 5111010152 4410119170 5401002980 5401006574 5401002921 5111003046 5107010884 5111005073 5401002743 5401002078 5111000453 4207032618 3206185072 3206184907 3206167532 3206163258 3206163128 3206158887 3206147027 3206147007 3206146159 3206144216 3206143127 3206141565 3206139235 3206134831 3206121614 3206096543 3206094182 3206078085 3206075895 3206071811 3206069355 3206064421 3206055389 3206050819 3206042331 3206041011 3206040107 3206034285 3206028636 3206028035 3206024189 3206015747 3206011488 3205065340 3205065322 3205059837 3205050280 3205027569 3205009850 3202000214 3201016408 3201001553 3016018499 3015014373 3013159662 3010191338 3010150422 3010109100 3010108521 3010101663 3010083745 3010076068 3010072273 3010004475 3010004071 3010002634 3009081673 3009016237 3009011988 3007016732 3007009295 3005028882 3005025371 3003049296 3003011371 3001102379 3001065590 3001054066 3001043820 2406004755 2003012308 2003006728 2003001363 2003000266'
+
+update data_for_edp set withheld='Yes' where rollno in ('2404004401 8007045874 3203019218 7001004959 6005038338 7001003896 2201214909 5001003138 7001010382 5701007704 9002014821 2201213985 7001013846 8202001835 1401004876 7013005702 9002012753 4205086605 4205082957 9009002052 1401069942 4415053608 1801003679 3003087613 5701001356 3003055828 9206005642 8007004051 7013004402 4410034702 5601009284 6016005843 7208030174 8204001429 2201192540 1401018033 7205024228 5401000548 5107012705 8004001619 9001042097 4410004393 4601005724 8204014396 5112003894 5111000340 5001001484 7203014717 5107000088 5401006496 5401005791 5401006064 5401002322 5401006634 5401003843 5401006417 7001003095 1004004317 3003004767 5401004593 7001046234 7001028786 7001024403 1401021093 1401004424 5105037687 9001026212 9009007928 1402014339 9010013115 8207004123 4410132006 4205041559 5111011164 5401000054 5401000438 1401035281 1203003071 1401058605 2002006398 2002009071 2002017066 2002018528 2003034189 2201016262 2201069697 2201119140 2201120402 2201135417 2201149534 2201156271 2201159064 2201188374 2405007095 2406002090 3003087405 3003089277 3009006666 3009006968 3009027022 3009087631 3009108236 3009111461 3009139348 3010014857 3010086270 3010176155 3010188424 3013100785 3013159332 3013166331 3013168378 3015023454 3201020533 3205029705 3206007954 3206081607 3206093440 3206137691 3206156968 3206170195 3206215078 4205021941 4206013609 4206033491 4207031936 4415049830 4404003292 4410135827 4410089675 4410105826 4419022443 4419018489 4419011990 4410073214 4410045688 4410021054 9010015188 9001008977 9206000586 8204021922 7012005967 7001044094 7208019816 7208007580 7202023955 7202027187 7207000466 7207020917 7202023599 7205030921 5105049712 5105057199 5112006002 5112009026 5105056826 5105005701 5401011869 5401005213 5401014050 5601007747 8003000746 3009103867 3007037535 3007023456 3007008406 2405078069 5105047498 5112002030 8201006817 3206150219 3201014985 3013093027 3013051947 3011088429 3011087771 3011057420 3011024542 3010134428 3010133714 3010122861 3010084020 3009131746 3009002457 3008023178 3007016255 3007010380 3007008372 3007003963 3003063368 3001030236 8012020591 4410047902 4410090208 3010078102 3009096255 3009086704 3009084802 3009060352 3009056505 3009048033 3008032311 3008001558 3003095805 4410051977 5105040492 3209006066 3206029126 3206003064 3206000946 3013189846 3013134384 3013052382 3013049909 3013032572 3011078712 3011078153 3010190369 3010152380 3010139878 3008028965 3008013561 3008010399 3003051379 9011017424 8206000754 4205061455 3206204705 3206194500 3206104527 3206038338 3206033143 3205048252 3205023864 3013194175 3013194155 3013192549 3013191828 3013188961 3013187267 3013184317 3013174502 3013172991 3013171966 3013168091 3013167530 3013163331 3013162919 3013160250 3013157142 3013076577 3010173861 3010128457 3010121599 3010121008 3010115386 3010112548 3010109174 3010102531 3010099759 3010091760 3010059222 3009177686 3009010229 3008003891 3008000304 3003086577 3003074354 3003070702 3003036105 5111010421 5401012632 9210006764 9002020142 7001021221 5111003197 5112006209 3209026811 3209024697 3207000929 3206209882 3205029190 3013190573 3013159876 3013142618 3010074991 3010073863 3010067469 3010067306 3010066957 3010066683 3010063597 3010055963 3009167899 3009135294 3009122690 3009120097 3009091644 3008028830 3008027905 3008023657 3008021713 3008021497 3008021008 3008020508 3008020443 3008019900 3008013583 3008011661 3008005247 3008004038 3008003555 3003007270 2003014464 5401011025 5401012193 3206195145 3206192911 3206187022 3206182869 3206167068 3206165895 3206160687 3206160057 3206156802 3206154915 3206154257 3206152288 3206151282 3206128897 3206120681 3206117918 3206095599 3206094776 3206094619 3206079684 3206078326 3206072495 3206056110 3206050090 3206040308 3206035005 3206023661 3206020233 3205059296 3205049478 3205037672 3205034829 3205032466 3203025534 3203019934 3203009359 3203005441 3203001877 3201029400 3201019377 3201012315 3201009366 3201008752 3201002582 3201000724 3016017982 3016003464 3016002988 3016000597 3015000492 3013184951 3010053712 3010042591 3010042387 3010038630 3010036517 3010036351 3010035591 3010025183 5111001513 7001037144 7001033119 3013177801 3013177403 3010016265 3010011696 3010007639 3010006638 3009163167 3009133502 3009060378 3009033666 3003006567 3001117950 3001059532 3001047140 3001037887 3001025710 1203002721 5401006025 5401006123 5401006419 5401004497 5401005810 5302001717 5111011054 5111008503 4609019627 3206144560 3205055182 3015014010 3013153113 3013026490 3013013017 3010178240 3010159528 3010153884 3010149302 3010147035 3010128905 3010125220 3010102598 3010095133 3010090257 3010088416 3010082615 3010080455 3010080244 3010073099 3010044300 3009186183 3009149904 3009050009 3009031548 3008028657 3005006610 3003104951 3003048682 3003046476 3003010274 3003000149 3002021347 3002011953 3001106017 3001071169 3001027571 3001016423 3001015446 1401060448 5401002535 5107007252 5401003630 5401004015 5401003749 5001000215 5401003247 5401002815 5401002922 7001003267 5105054958 5401002356 4207033238 4207029515 3209021056 3206199251 3206182091 3206127360 3205061392 3205006167 3011082916 3010150704 3010145165 3010142611 3010136968 3010132743 3010112376 3010054697 3010029317 3009109847 3008017737 3005045146 3005042910 3005035842 3001085877 1801015758 1801014837 1801014016 1801008746 1801005533 1401057167 5401000196 4601015089 4601009236 5401007181 5111002144 5111007278 5105064234 5111001922 5111007974 5001004968 5401011393 4410131872 5111001387 7208033461 3209027758 3209019123 3209006608 3207002298 3207000274 3206300041 3206213750 3206212698 3206207026 3206205313 3206204428 3206199117 3206138247 3206132923 3206036650 3206019743 3205052889 3205027987 3205020430 3201025911 3201014224 3016012823 3015006867 3013184914 3013181849 3013176076 3013164509 3013144691 3013135863 3013088574 3013077113 3013030094 3013018031 3013015049 3011012550 3010192948 3010191903 3010102430 3010083277 3010079836 3010065096 3010062065 3009126969 3009029068 3008010920 3007022975 3003039978 3003034171 2002029747 2002028861 2002028655 4601007772 5401003279 8004006204 5111005484 5111002867 5111000789 5111010892 5111001326 5111006967 4601001795 5111005792 5111007575 5105027323 5111006559 5111010828 4601011439 5111006201 7001007356 5111010152 4410119170 5401002980 5401006574 5401002921 5111003046 5107010884 5111005073 5401002743 5401002078 5111000453 4207032618 3206185072 3206184907 3206167532 3206163258 3206163128 3206158887 3206147027 3206147007 3206146159 3206144216 3206143127 3206141565 3206139235 3206134831 3206121614 3206096543 3206094182 3206078085 3206075895 3206071811 3206069355 3206064421 3206055389 3206050819 3206042331 3206041011 3206040107 3206034285 3206028636 3206028035 3206024189 3206015747 3206011488 3205065340 3205065322 3205059837 3205050280 3205027569 3205009850 3202000214 3201016408 3201001553 3016018499 3015014373 3013159662 3010191338 3010150422 3010109100 3010108521 3010101663 3010083745 3010076068 3010072273 3010004475 3010004071 3010002634 3009081673 3009016237 3009011988 3007016732 3007009295 3005028882 3005025371 3003049296 3003011371 3001102379 3001065590 3001054066 3001043820 2406004755 2003012308 2003006728 2003001363 2003000266');
+
+select count(*) from data_for_edp where  withheld='Yes' and allocated_category is not null;---812
+
+
+
+
+
+2405200223
+3206113583
+2406006777
+5105009732
+2405148801
+3009006506
+2404014177
+2406021609
+2405219168
+3005035058
+3206112842
+2406059333
+3206202953
+3206193942
+3206127580
+2405066122
+2406010892
+2201001464
+9213006977
+2401001981
+2405225371
+3011049674
+2405101733
+6005005276
+2201373219
+
+select * from candidates where statecode_considered::int<>stateconsidered_tier1 and  included_in_result='Yes';
+select * from candidates where districtcode_considered::int<>districtconsidered_tier1 and  included_in_result='Yes';
+
+select regno,rollno,cand_name,father_name_tier1,mother_name_tier1,dob,candiateage_ason_date,
+gender,cat1,advc_isex_serviceman,lengthofservice,exs_reservation,cat3,stateconsidered_tier1 as statecode_considered,statename_considered,districtconsidered_tier1,districtname_considered,
+naxal_district_tier1,border_district_tier1,ear_post_pref,agerelax_code,parta_gi,partb_ga,partc_ma,partd_eng_hin,score_new,normalized_score,ncc_marks,
+total_marks,merit,cut_off,catsel_dob,catsel from candidates where merit is not null order by merit;
+
+select rollno,pt_attendance,pt_finalstatus,included_in_result,merit,dob_flag,catsel from candidates where rollno in ('4205086397 5401004498 2405075227');
+
+
+3011049674
+3002023752
+3013108548
+3009044614
+3002020364
+2405174331
+2201263438
+2201153147
+2201368697
+2201205380
+2201030763
+8206004805
+7801000100
+5111010746
+9213016270
+9213002290
+4001000174
+5701002189
+5102008515
+5701000992
+4415029024
+
+
+'2405200223 3206113583 2406006777 5105009732 2405148801 3009006506 2404014177 2406021609 2405219168 3005035058 3206112842 2406059333 3206202953 3206193942 3206127580 2405066122 2406010892 2201001464 9213006977 2401001981 2405225371 3011049674 2405101733 6005005276 2201373219'
+
+
+2201001464
+2201107193
+5001003041
+8207006649
+9213006977
+5102007438
+
+-------------------West Benagal High Court Order-----------------------------------
+Update candidates
+set remarks='W.B high court order',
+included_in_result='Yes'
+where rollno in ('4415017232','4410099960','4205057896','4415003249','4410090011','4410119624','4415024786','4415030042','4415031906','4410077980','4415018936','4415020592','4410048524','4410117171','4415016275','4415000142','4415036941','4415017279','4415036766','4419007191','4415013699','4410052023','4415028990','4415024093','4410100769','4410086482','4410061142','4410104592');
+
+
+Update candidates
+set 
+cand_name=name_tier1,
+cat1=cat1_tier1,
+cat2=cat2_tier1,
+dob1=dob_tier1,
+agerelax_code=age_relaxation_code_tier1,
+ncc_marks=ncc_marks_new,
+dob_flag=dob_flag_tier1,
+catsel_dob=catsel_dob_tier1,
+cut_off=cut_off_tier1,
+catsel=catsel_tier1,
+total_marks=total_marks_tier1
+where rollno in ('4415017232','4410099960','4205057896','4415003249','4410090011','4410119624','4415024786','4415030042','4415031906','4410077980','4415018936','4415020592','4410048524','4410117171','4415016275','4415000142','4415036941','4415017279','4415036766','4419007191','4415013699','4410052023','4415028990','4415024093','4410100769','4410086482','4410061142','4410104592');
+
+
+Update candidates
+set remarks='Court Order',
+included_in_result='Yes'
+where rollno in ('2201278571','2405242088','1004023773','5701004224','4205012545','4206034636','4206018161','4205023646');
+
+Update candidates
+set 
+cand_name=name_tier1,
+cat1=cat1_tier1,
+cat2=cat2_tier1,
+dob1=dob_tier1,
+agerelax_code=age_relaxation_code_tier1,
+ncc_marks=ncc_marks_new,
+dob_flag=dob_flag_tier1,
+catsel_dob=catsel_dob_tier1,
+cut_off=cut_off_tier1,
+catsel=catsel_tier1,
+total_marks=total_marks_tier1
+where rollno in ('2201278571','2405242088','1004023773','5701004224','4205012545','4206034636','4206018161','4205023646');
+
+Update candidates
+set 
+cand_name=name_tier1,
+included_in_result='Yes',
+remarks='Court Order',
+cat1='9',
+cat2=cat2_tier1,
+dob1=dob_tier1,
+agerelax_code=age_relaxation_code_tier1,
+ncc_marks=ncc_marks_new,
+dob_flag=dob_flag_tier1,
+catsel_dob=catsel_dob_tier1,
+cut_off=cut_off_tier1,
+catsel=catsel_tier1,
+total_marks=total_marks_tier1
+where rollno in ('2406029028');
+
+---------------MARKS MODULE-----------------------------
+
+update ctgd2024_final_marks_module set cat1='1' where cat1='SC';
+update ctgd2024_final_marks_module set cat1='2' where cat1='ST';
+update ctgd2024_final_marks_module set cat1='6' where cat1='OBC';
+update ctgd2024_final_marks_module set cat1='9' where cat1='UR';
+
+
+

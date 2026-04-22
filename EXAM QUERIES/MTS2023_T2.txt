@@ -1,0 +1,176 @@
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t candidates -F c -f C:\Users\Public\candidates_mtst1.dump alloc_mts2023_t1_allocation
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t2_allocation -t candidates C:\Users\Public\candidates_mtst1.dump
+
+select * into candidates from candidates_t1_havaldar;
+
+alter table candidates add constraint pk1 primary key (rollno);
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_debbaredcandidates_ssc -F c -f C:\Users\Public\debarred_mts_t2.dump alloc_cddp22allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t2_allocation -t m_debbaredcandidates_ssc C:\Users\Public\debarred_mts_t2.dump
+
+
+select a.regno,a.debarred_flag,a.rollno,a.name,b.dc_name,a.father_name,b.dc_father_name,a.mother_name,b.dc_mother_name,a.dob,b.dc_dob_name,a.gender,b.dc_gender,a.cat1,b.dc_category,b.dc_debarred_upto,b.dc_isactive
+from candidates a,m_debbaredcandidates_ssc b where 
+b.dc_isactive ='true' and 
+a.debarred_flag is null and
+replace ((UPPER(a.name)||UPPER(a.father_name)||UPPER(a.mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','')
+and b.dc_debarred_upto >'2023-01-01'
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.mother_name)),' ','') and a.dob = b.dc_dob_name;
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.father_name)),' ','') and a.dob = b.dc_dob_name;
+
+
+3206048138
+1004014368
+2201165368
+6005004114
+
+do
+$$
+BEGIN
+
+ALTER TABLE candidates ADD COLUMN pt_rollno text ;
+ALTER TABLE candidates ADD COLUMN pt_regno bigint;
+ALTER TABLE candidates ADD COLUMN pt_name text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_father_name text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_mother_name text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_genderid integer;
+ALTER TABLE candidates ADD COLUMN pt_categoryid integer;
+ALTER TABLE candidates ADD COLUMN pt_isph boolean;
+ALTER TABLE candidates ADD COLUMN pt_phcode integer;
+ALTER TABLE candidates ADD COLUMN pt_sufferfromaav boolean;
+ALTER TABLE candidates ADD COLUMN pt_multipledisability text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_iswalkingqualified text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_iscyclingqualified text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_ispetqualified text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_ispstattended boolean;
+ALTER TABLE candidates ADD COLUMN pt_heightmeasure double precision;
+ALTER TABLE candidates ADD COLUMN pt_isheightrelxavail boolean;
+ALTER TABLE candidates ADD COLUMN pt_heightrelx text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_chestexp double precision;
+ALTER TABLE candidates ADD COLUMN pt_chestnotexp double precision;
+ALTER TABLE candidates ADD COLUMN pt_ischestrelxavail boolean;
+ALTER TABLE candidates ADD COLUMN pt_chestrelx text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_weightmeasure double precision;
+ALTER TABLE candidates ADD COLUMN pt_pemtstatus text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_petpemtdate timestamp without time zone;
+ALTER TABLE candidates ADD COLUMN pt_petpemtcentrecode text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_petpemtcentrename text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_finalstatus text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_remarks text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_attendance text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_dob date;
+ALTER TABLE candidates ADD COLUMN pt_isweightrelxavail boolean;
+ALTER TABLE candidates ADD COLUMN pt_weightrelx text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_photostatus text COLLATE pg_catalog."default";
+ALTER TABLE candidates ADD COLUMN pt_subcat_of_phtype integer;
+ALTER TABLE candidates ADD COLUMN pt_category_name text COLLATE pg_catalog."default";
+
+end
+$$
+
+update candidates
+SET
+pt_rollno   = b.pt_rollno  ,
+pt_regno  = b.pt_regno ,
+pt_name   = b.pt_name  ,
+pt_father_name   = b.pt_father_name  ,
+pt_mother_name   = b.pt_mother_name  ,
+pt_genderid  = b.pt_genderid ,
+pt_categoryid  = b.pt_categoryid ,
+pt_isph  = b.pt_isph ,
+pt_phcode  = b.pt_phcode ,
+pt_sufferfromaav  = b.pt_sufferfromaav ,
+pt_multipledisability   = b.pt_multipledisability  ,
+pt_iswalkingqualified   = b.pt_iswalkingqualified  ,
+pt_iscyclingqualified   = b.pt_iscyclingqualified  ,
+pt_ispetqualified   = b.pt_ispetqualified  ,
+pt_ispstattended  = b.pt_ispstattended ,
+pt_heightmeasure  = b.pt_heightmeasure ,
+pt_isheightrelxavail  = b.pt_isheightrelxavail ,
+pt_heightrelx   = b.pt_heightrelx  ,
+pt_chestexp  = b.pt_chestexp ,
+pt_chestnotexp  = b.pt_chestnotexp ,
+pt_ischestrelxavail  = b.pt_ischestrelxavail ,
+pt_chestrelx   = b.pt_chestrelx  ,
+pt_weightmeasure  = b.pt_weightmeasure ,
+pt_pemtstatus   = b.pt_pemtstatus  ,
+pt_petpemtdate  = b.pt_petpemtdate ,
+pt_petpemtcentrecode   = b.pt_petpemtcentrecode  ,
+pt_petpemtcentrename   = b.pt_petpemtcentrename  ,
+pt_finalstatus   = b.pt_finalstatus  ,
+pt_remarks   = b.pt_remarks  ,
+pt_attendance   = b.pt_attendance  ,
+pt_dob  = b.pt_dob ,
+pt_isweightrelxavail  = b.pt_isweightrelxavail ,
+pt_weightrelx   = b.pt_weightrelx  ,
+pt_photostatus   = b.pt_photostatus  ,
+pt_subcat_of_phtype  = b.pt_subcat_of_phtype ,
+pt_category_name   = b.pt_category_name  
+from t_appl_mts2023petpst_ssc  b where candidates.regno::bigint = b.pt_regno;---4380 updates
+
+
+select distinct pt_finalstatus,count(*) from candidates group by pt_finalstatus;
+"Not Applicable"	1200
+"Not Qualified"		138
+"Qualified"			3034
+"Temporary Unfit"	1
+"With Held"			7
+null				1070644
+
+
+ALTER table candidates add column allocated_category character varying COLLATE pg_catalog."default";
+ALTER table candidates add column allocated_state character varying COLLATE pg_catalog."default";
+ALTER table candidates add column age_limit character varying COLLATE pg_catalog."default";
+ALTER table candidates add column allocated_against_ur character varying COLLATE pg_catalog."default";
+ALTER table candidates add column post_name character varying COLLATE pg_catalog."default";
+ALTER table candidates add column post_code character varying COLLATE pg_catalog."default";
+ALTER table candidates add column state_name character varying COLLATE pg_catalog."default";
+
+
+"47"
+"52"
+"48"
+"35"
+"19"
+"23"
+"59"
+"18"
+"50"
+"60"
+"43"
+"26"
+"29"
+"58"
+"71"
+"49"
+"57"
+"70"---->states for havaldar
+
+update candidates
+set allocated_category =null,
+allocated_state =null,
+age_limit=null,
+allocated_against_ur= null;
+
+update vacancy_table
+set
+allocated =null,
+left_vacancy =null;
+
+
+select * from vacancy_table order by state_code,age_limit,category_code;
+
+alter table candidates add column state_ut_pref_original text;
+update candidates set state_ut_pref_original =state_ut_pref;
+
+
+ update candidates a
+ set a.state_name = b.state_name,
+ a.post_code= b.post_code,
+ a.post_name= b.post_name,
+ 
+ from vacancy_table b where
+ a.allocated_state = b.state_code;

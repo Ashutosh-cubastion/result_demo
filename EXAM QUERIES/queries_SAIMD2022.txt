@@ -1,0 +1,51 @@
+select * from candidates order by merit;
+select * from master_table;
+select * from sp_get_dob_flag('SAIMD2022',2	);
+Select * from candidates where reg_no ='30002359449';
+--dob_flag <> '9';
+select reg_no,name,dob,dob1,cat1,cat2,cat3,merit,agerelax,agerelax_code_app,agerelax_code,dob_flag from candidates where dob_flag <> '9';
+alter table candidates
+add column catsel_dob character varying;
+
+
+
+select rollno,gender,dob1,cat1,cat2,cat3,dob_flag,catsel_dob from candidates where (catsel_dob is not null or catsel_dob <>'');
+
+select reg_no,rollno,gender,dob1,cat1,cat2,cat3,agerelax_code,dob_flag,catsel_dob from candidates where (catsel_dob is not null or catsel_dob <>'')
+and dob_flag <> catsel_dob;
+select rollno,gender,dob1,cat1,cat2,cat3,dob_flag from candidates where (dob_flag is not null and dob_flag<>'') and merit is not null order by merit
+select rollno,gender,dob1,cat1,cat2,cat3,dob_flag from candidates where (dob_flag is not null and dob_flag<>'') and merit is not null order by merit
+
+
+select rollno,cat1,cat2,exs_reservation,catsel_dob,cutoff_flag as cut_off_flag from candidates where merit is not null and (catsel_dob is not null and catsel_dob<>'') order by merit
+
+select * from candidates where debarred_flag is not null;
+--copy candidates from 'C:\Users\Public\STENO\candidates.csv' csv header;
+select * from master_table order by serial;
+--copy debbaredcandidates from 'C:\Users\Public\STENO\debbaredcandidates.csv' csv header;
+select * from debbaredcandidates;
+--select * from sp_get_merit('STENO2020',1);
+select * from candidates where merit is null;
+select * from candidates order by merit ;
+select * from candidates where dob_flag_d is not null;
+select * from sp_get_dob_flag('STENO2020',3);
+select regno,name,cat1,cat2,cat3,agerelax_code,dob,merit,dob_flag_c,dob_flag_d from candidates 
+where agerelax_code is not null
+order by merit;
+--update candidates set dob_flag_d =null;
+select * from candidates where catsel_dob_d is not null;
+--select * from sp_get_catseldob_flag('STENO2020',5);
+select regno,name,cat1,cat2,cat3,agerelax_code,dob,merit,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d from candidates 
+where catsel_dob_c <> dob_flag_c
+--agerelax_code is not null
+order by merit;
+
+select regno,name,cat1,cat2,cat3,agerelax_code,dob,exsm_length,merit,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d from candidates 
+where 
+dob_flag_c ='06' 
+--and catsel_dob_c ='9'
+ --catsel_dob_c = dob_flag_c
+--agerelax_code is not null
+order by merit;
+
+select * from cut_off_table;

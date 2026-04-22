@@ -1,0 +1,670 @@
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_jht2023exam_applicant_reg_pu where ear_application_status='1' and ear_isactive='true') to 'C:\Users\Public\JHT2023_165.csv' csv header;
+
+CREATE TABLE IF NOT EXISTS public.t_jht2023exam_applicant_reg_pu
+(
+    ear_appl_regid bigint NOT NULL,
+    ear_person_regno bigint NOT NULL,
+    ear_personid integer NOT NULL,
+    ear_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_changedname text COLLATE pg_catalog."default",
+    ear_father_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_mother_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_dob date NOT NULL,
+    ear_candiateage_ason_date real NOT NULL,
+    ear_gender integer NOT NULL,
+    ear_categoryid integer,
+    ear_nationality integer NOT NULL,
+    ear_identification_mark text COLLATE pg_catalog."default" NOT NULL,
+    ear_tenth_education_board integer NOT NULL,
+    ear_tenth_roll_no text COLLATE pg_catalog."default" NOT NULL,
+    ear_tenth_yearofpassing integer NOT NULL,
+    ear_photo_img_url text COLLATE pg_catalog."default" NOT NULL,
+    ear_sign_img_url text COLLATE pg_catalog."default" NOT NULL,
+    ear_centerid1 integer NOT NULL,
+    ear_centerid2 integer NOT NULL,
+    ear_centerid3 integer NOT NULL,
+    ear_regionid integer NOT NULL,
+    ear_is_ex_serviceman boolean NOT NULL,
+    ear_service_period text COLLATE pg_catalog."default",
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_is_cerebral_palsy boolean,
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_is_physical_limitation boolean,
+    ear_is_scribe_required boolean,
+    ear_scribe_medium integer,
+    ear_own_scribe boolean,
+    ear_is_age_relaxation boolean NOT NULL,
+    ear_age_relaxation_code integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text COLLATE pg_catalog."default",
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone DEFAULT now(),
+    ear_notificationid integer NOT NULL,
+    ear_application_status integer,
+    ear_is_ews_candidate boolean,
+    ear_share_persinfo_accrossportal boolean NOT NULL,
+    ear_edqualification integer NOT NULL,
+    ear_present_address text COLLATE pg_catalog."default",
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text COLLATE pg_catalog."default",
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text COLLATE pg_catalog."default" NOT NULL,
+    ear_mobile_number text COLLATE pg_catalog."default" NOT NULL,
+    ear_other_national_address text COLLATE pg_catalog."default",
+    ear_photo_date text COLLATE pg_catalog."default",
+    ear_isdate_clear_on_photo boolean NOT NULL,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text COLLATE pg_catalog."default",
+    applicationfee character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    ear_rollno text COLLATE pg_catalog."default",
+    ear_qrcode_path text COLLATE pg_catalog."default",
+    ear_grad_university text COLLATE pg_catalog."default" NOT NULL,
+    ear_grad_degree integer NOT NULL,
+    ear_grad_rollno text COLLATE pg_catalog."default" NOT NULL,
+    ear_grad_subjects text COLLATE pg_catalog."default" NOT NULL,
+    ear_grad_passingyear text COLLATE pg_catalog."default" NOT NULL,
+    ear_grad_medium text COLLATE pg_catalog."default" NOT NULL,
+    ear_grad_percentage text COLLATE pg_catalog."default",
+    ear_grad_grade text COLLATE pg_catalog."default",
+    ear_postgrad_status text COLLATE pg_catalog."default" NOT NULL,
+    ear_postgrad_university text COLLATE pg_catalog."default" NOT NULL,
+    ear_postgrad_degree integer NOT NULL,
+    ear_postgrad_rollno text COLLATE pg_catalog."default",
+    ear_postgrad_subjects text COLLATE pg_catalog."default" NOT NULL,
+    ear_postgrad_passingyear text COLLATE pg_catalog."default",
+    ear_postgrad_medium text COLLATE pg_catalog."default" NOT NULL,
+    ear_postgrad_percentage text COLLATE pg_catalog."default",
+    ear_postgrad_grade text COLLATE pg_catalog."default",
+    ear_trans_status text COLLATE pg_catalog."default" NOT NULL,
+    ear_trans_university text COLLATE pg_catalog."default",
+    ear_trans_duration text COLLATE pg_catalog."default",
+    ear_trans_rollno text COLLATE pg_catalog."default",
+    ear_trans_passingyear text COLLATE pg_catalog."default",
+    ear_trans_percentage text COLLATE pg_catalog."default",
+    ear_trans_grade text COLLATE pg_catalog."default",
+    ear_workexp_status text COLLATE pg_catalog."default" NOT NULL,
+    ear_add_source character(1) COLLATE pg_catalog."default",
+    ear_upd_source character(1) COLLATE pg_catalog."default",
+    ear_noofattempt integer,
+    ear_blindness boolean,
+    ear_disabilitiessuffered_ohcp boolean,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final
+ \copy t_jht2023exam_applicant_reg_pu from 'C:\Users\Public\JHT2023_172.csv' csv header;
+ 
+ alter table t_jht2023exam_applicant_reg_pu add constraint pk_ear_regno primary key (ear_person_regno);
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table_jht.dump alloc_jht2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t arc_table C:\Users\Public\arc_table_jht.dump
+
+ alter table arc_table add constraint pk_arc primary key (arc_code,age_group);
+
+create table paper1_marks
+(
+	REGID bigint,
+	ROLL character varying,
+	NAME character varying,
+	FATHERNAME character varying,
+	MOTHERNAME character varying,
+	DOB date,
+	GENDER character varying,
+	CAT1 character varying,
+	CAT2 character varying,
+	CAT3 character varying,
+	AGERLXCODE character varying,
+	GEN_ENG numeric,
+	GEN_HINDI numeric,
+	PAPER1 numeric,
+	LANGUAGE character varying
+)
+
+
+\COPY paper1_marks from 'C:\Users\SalauddinKhan\Desktop\To-Cubastion-For-Allocation.DBF.csv' csv header;
+
+ alter table paper1_marks add constraint pk_regid primary key (regid);
+
+create table candidates as (select a.* ,b.roll as rollno,b.gen_eng,b.gen_hindi,b.paper1,b.language
+from t_jht2023exam_applicant_reg_pu a,
+paper1_marks b
+where a.ear_person_regno=b.regid);
+
+alter table candidates add constraint pk_rollno primary key (rollno);
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table_jht.dump alloc_jht2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t master_table C:\Users\Public\master_table_jht.dump
+
+alter table master_table add constraint pk_serial primary key (serial);
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_debbaredcandidates_ssc -F c -f C:\Users\Public\m_debbaredcandidates_ssc.dump alloc_chsl2023allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t m_debbaredcandidates_ssc C:\Users\Public\m_debbaredcandidates_ssc.dump
+
+
+alter table candidates add column cat2 integer;
+alter table candidates add column cat3 integer;
+alter table candidates add column age_relaxation_code character varying;
+alter table candidates add column service_period text;
+
+update candidates
+set cat3 =ear_ph_code
+where ear_ph_code is not null;---87
+
+update candidates
+set cat2 ='3' where ear_is_ex_serviceman='true';---101
+
+
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+alter table candidates add column debarred character varying;
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+
+update candidates
+set service_period = ear_service_period
+where cat2='3';
+
+update candidates
+set exsm_length = substring(service_period,1,3)
+where cat2='3';
+
+update candidates
+set exs_reservation ='Yes'
+where cat2='3';---101
+
+update candidates
+set exs_reservation ='No'
+where cat2='3'and ear_isexs_benefit_availed_for_civilpost='true';---18
+
+update candidates
+set age_relaxation_code= ear_age_relaxation_code;
+
+
+select rollno,cat1,cat2,cat3,ear_candiateage_ason_date,ear_age_relaxation_code,age_relaxation_code from candidates 
+where ear_candiateage_ason_date>='30' and ear_age_relaxation_code is null;
+
+Debarred Checking:
+
+select a.ear_person_regno,a.rollno,a.name,a.ear_father_name,a.ear_mother_name,a.dob,a.gender,a.cat1,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc b where 
+b.dc_debarred_upto >'2023-08-01' and
+
+--replace ((UPPER(a.name)||UPPER(a.ear_father_name)||UPPER(a.ear_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+ 
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.ear_mother_name)),' ','') and a.dob = b.dc_dob_name;
+ 
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.ear_father_name)),' ','') and a.dob = b.dc_dob_name;
+
+select * from sp_get_dob_flag('JHT',2);
+select * from sp_get_catseldob_flag('JHT',3);
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t cut_off_table -F c -f C:\Users\Public\cut_off_table.dump alloc_jht2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t cut_off_table C:\Users\Public\cut_off_table.dump
+
+alter table cut_off_table add constraint pk_category primary key (category);
+
+
+select * from t_jht_descriptivepaper2023_ssc where jh_dummy_number='400153' order by jh_dummy_number ;
+
+
+CREATE TABLE IF NOT EXISTS public.t_post_preference_jht2023_ssc
+(
+    tp_id integer NOT NULL,
+    tp_regno bigint NOT NULL,
+    tp_cand_name text COLLATE pg_catalog."default",
+    tp_cand_father_name text COLLATE pg_catalog."default",
+    tp_cand_mother_name text COLLATE pg_catalog."default",
+    tp_cand_rollno text COLLATE pg_catalog."default",
+    tp_dob date NOT NULL,
+    tp_gender integer NOT NULL,
+    tp_cat1 integer,
+    tp_is_ex_serviceman boolean NOT NULL,
+    tp_cat2 integer,
+    tp_is_physically_handicaped boolean NOT NULL,
+    tp_cat3 integer,
+    tp_is_age_relaxation boolean NOT NULL,
+    tp_age_relaxation_code integer,
+    tp_joining_date_for_armedforces date,
+    tp_discharged_date date,
+    tp_service_period text COLLATE pg_catalog."default",
+    tp_isexs_benefit_availed_for_civilpost boolean,
+    tp_joining_date_for_civilpost date,
+    tp_post_pref text COLLATE pg_catalog."default" NOT NULL,
+    tp_isactive boolean DEFAULT true,
+    tp_ip_address text COLLATE pg_catalog."default",
+    tp_createdbyid integer,
+    tp_createdbyrid integer,
+    tp_updbyid integer,
+    tp_upddtm timestamp without time zone,
+    tp_createddtm timestamp without time zone DEFAULT now(),
+    tp_notificationid integer,
+    tp_examid integer,
+    tp_exam_year integer,
+    tp_qrcode_path text COLLATE pg_catalog."default",
+    tp_remarks text COLLATE pg_catalog."default"
+	)
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy t_post_preference_jht2023_ssc to 'C:\Users\Public\post_pref_jht165.csv' csv header;
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final
+\copy t_post_preference_jht2023_ssc from 'C:\Users\Public\post_pref_jht165.csv' csv header;
+
+
+alter table candidates add column preference_post text;
+
+update candidates
+set preference_post = b.tp_post_pref
+from t_post_preference_jht2023_ssc b where
+candidates.ear_person_regno = b.tp_regno;
+
+create table vacancy
+(
+	post_name text COLLATE pg_catalog."default",
+    department_name text COLLATE pg_catalog."default",
+    department_code text COLLATE pg_catalog."default",
+	post_code text,
+	SC integer,
+	ST integer,
+	OBC integer,
+	EWS integer,
+	UR integer,
+	TotalVacancy integer,
+	EXS integer,
+	OH integer,
+	HH integer,
+	VH integer,
+	Others integer,
+	Whethercolour blind text
+)
+
+CREATE TABLE vacancy_table (
+    post_name text,
+    department_name text,
+    department_code text,
+    post_code text,
+    Category VARCHAR(10),
+	Category_code VARCHAR(10),
+    initial INTEGER
+);
+
+INSERT INTO vacancy_table (post_name, department_name, department_code, post_code, Category, Category_code, initial)
+SELECT 
+    post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'SC' AS Category, 
+	'1' AS Category_code,
+    SC AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'ST' AS Category, 
+	'2' AS Category_code,
+    ST AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'OBC' AS Category, 
+	'6' AS Category_code,
+    OBC AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code,  
+    'EWS' AS Category, 
+	'0' AS Category_code,
+    EWS AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'UR' AS Category, 
+	'9' AS Category_code,
+    UR AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code,  
+    'ESM' AS Category, 
+	'3' AS Category_code,
+    EXS AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code,  
+    'OH' AS Category, 
+	'4' AS Category_code,
+    OH AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'HH' AS Category, 
+	'5' AS Category_code,
+    HH AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code, 
+    'VH' AS Category, 
+	'7' AS Category_code,
+    VH AS initial
+FROM vacancy
+UNION ALL
+SELECT 
+     post_name, 
+    department_name, 
+    department_code, 
+    post_code,  
+    'OTHERS' AS Category, 
+	'8' AS Category_code,
+    OTHERS AS initial
+FROM vacancy;
+
+alter table vacancy_table add column current integer;
+alter table vacancy_table add column allocated integer;
+alter table vacancy_table add column left_vacancy integer;
+alter table vacancy_table add column min_marks double precision;
+alter table vacancy_table add column min_paper2 double precision;
+alter table vacancy_table add column min_part1_gen_hindi double precision;
+alter table vacancy_table add column min_marks_cand_dob date;
+
+alter table vacancy_table add constraint pk_vacancy primary key(dept_code,category);
+
+update vacancy_table
+set current =initial_vacancy;
+
+CREATE TABLE IF NOT EXISTS public.t_jht2023_experience_dtls_ssc
+(
+	ear_person_regno bigint,
+    jhtexd_id integer NOT NULL,
+    jhtexd_applicantid integer,
+    jhtexd_notificationid integer,
+    jhtexd_from date,
+    jhtexd_to date,
+    jhtexd_officename text COLLATE pg_catalog."default",
+    jhtexd_offdeptminname text COLLATE pg_catalog."default",
+    jhtexd_undertaking text COLLATE pg_catalog."default",
+    jhtexd_worknature text COLLATE pg_catalog."default",
+    jhtexd_upddtm timestamp without time zone,
+    jhtexd_createddtm timestamp without time zone DEFAULT now(),
+    jhtexd_isactive boolean DEFAULT true,
+    jhtexd_upd_source character(1) COLLATE pg_catalog."default",
+    jhtexd_add_source character(1) COLLATE pg_catalog."default",
+    jhtexd_noofattempt integer
+)
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select b.ear_person_regno,a.* from t_jht2023_experience_dtls_ssc a,t_jht2023exam_applicant_reg_pu b where b.ear_appl_regid=a.jhtexd_applicantid) to 'C:\Users\Public\t_jht2023_experience_dtls_ssc_165.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final
+\copy t_jht2023_experience_dtls_ssc from 'C:\Users\Public\t_jht2023_experience_dtls_ssc165.csv' csv header;
+
+
+CREATE TABLE IF NOT EXISTS public.m_educational_qual_pu
+(
+    eq_id integer NOT NULL ,
+    eq_ed_qualification text COLLATE pg_catalog."default" NOT NULL,
+    eq_desc text COLLATE pg_catalog."default",
+    eq_createdbyid integer,
+    eq_createdbyrid integer,
+    eq_updbyid integer,
+    eq_upddtm timestamp without time zone,
+    eq_createddtm timestamp without time zone DEFAULT now(),
+    eq_isactive boolean DEFAULT true,
+    eq_ipaddress text COLLATE pg_catalog."default",
+    eq_code text COLLATE pg_catalog."default",
+    eq_notificationid text COLLATE pg_catalog."default",
+    eq_grad_or_postgrad text COLLATE pg_catalog."default"
+   
+)
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy m_educational_qual_pu to 'C:\Users\Public\m_educational_qual_pu.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final
+\copy m_educational_qual_pu from 'C:\Users\Public\m_educational_qual_pu.csv' csv header;
+
+alter table candidates add column ear_postgrad_degreename text;
+
+update candidates
+set ear_postgrad_degreename =b.eq_ed_qualification
+from m_educational_qual_pu b
+where candidates.ear_postgrad_degree =b.eq_id;
+
+
+alter table candidates add column office1 text;
+alter table candidates add column dept1 text;
+alter table candidates add column undertaking1 text;
+alter table candidates add column nature_of_work1 text;
+alter table candidates add column service_from1 text;
+alter table candidates add column service_to1 text;
+alter table candidates add column office2 text;
+alter table candidates add column dept2 text;
+alter table candidates add column undertaking2 text;
+alter table candidates add column nature_of_work2 text;
+alter table candidates add column service_from2 text;
+alter table candidates add column service_to2 text;
+alter table candidates add column office3 text;
+alter table candidates add column dept3 text;
+alter table candidates add column undertaking3 text;
+alter table candidates add column nature_of_work3 text;
+alter table candidates add column service_from3 text;
+alter table candidates add column service_to3 text;
+alter table candidates add column office4 text;
+alter table candidates add column dept4 text;
+alter table candidates add column undertaking4 text;
+alter table candidates add column nature_of_work4 text;
+alter table candidates add column service_from4 text;
+alter table candidates add column service_to4 text;
+
+update candidates
+set office1 =b.jhtexd_officename,
+dept1 =b.jhtexd_offdeptminname,
+undertaking1 =b.jhtexd_undertaking,
+nature_of_work1 =b.jhtexd_worknature,
+service_from1 =b.jhtexd_from,
+service_to1 =b.jhtexd_to
+
+from t_jht2023_experience_dtls_ssc_exp b
+where candidates.ear_person_regno=b.ear_person_regno
+and b.experience_number='1'; ---224 updates
+
+
+update candidates
+set office2 =b.jhtexd_officename,
+dept2 =b.jhtexd_offdeptminname,
+undertaking2 =b.jhtexd_undertaking,
+nature_of_work2 =b.jhtexd_worknature,
+service_from2 =b.jhtexd_from,
+service_to2 =b.jhtexd_to
+
+from t_jht2023_experience_dtls_ssc_exp b
+where candidates.ear_person_regno=b.ear_person_regno
+and b.experience_number='2';---23 updates
+
+update candidates
+set office3 =b.jhtexd_officename,
+dept3 =b.jhtexd_offdeptminname,
+undertaking3 =b.jhtexd_undertaking,
+nature_of_work3 =b.jhtexd_worknature,
+service_from3 =b.jhtexd_from,
+service_to3 =b.jhtexd_to
+
+from t_jht2023_experience_dtls_ssc_exp b
+where candidates.ear_person_regno=b.ear_person_regno
+and b.experience_number='3';---3 updates
+
+update candidates
+set office4 =b.jhtexd_officename,
+dept4 =b.jhtexd_offdeptminname,
+undertaking4 =b.jhtexd_undertaking,
+nature_of_work4 =b.jhtexd_worknature,
+service_from4 =b.jhtexd_from,
+service_to4 =b.jhtexd_to
+
+from t_jht2023_experience_dtls_ssc_exp b
+where candidates.ear_person_regno=b.ear_person_regno
+and b.experience_number='4';---2 updates
+
+
+select distinct ear_trans_status,count(*) from candidates where ear_postgrad_status ='pgAppearing' group by ear_trans_status;
+"tcAppearing"	9
+"tcPassed"		80
+
+select * from candidates where ear_postgrad_status ='pgAppearing' and ear_trans_status<>'tcPassed' ;---9
+
+4410000866---rollno is not eligible for Senior Hindi Translator--- ear_person_regno='40000512983'
+
+create table paper2_marks
+(
+	DummyNumber character varying,
+	Evaluator1Code character varying,
+	Evaluator2Code character varying,
+	Evaluator1Marks	numeric,
+	Evaluator2Marks	numeric,
+	AverageMarksObtained numeric,
+	REJECTIONREASON character varying,
+	rollno character varying
+);
+
+alter table candidates add column paper2 numeric;
+alter table candidates add column total numeric;
+alter table candidates add column merit integer;
+alter table candidates add column cutoff_flag character varying;
+alter table candidates add column catsel character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_dept character varying;
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_against_ur character varying;
+
+update candidates
+set paper2= b.averagemarksobtained
+from paper2_marks b
+where candidates.rollno =b.rollno;--2086
+
+alter table candidates add column rejection_provision character varying;
+alter table candidates add column remarks character varying;
+
+update candidates
+set rejection_provision='R'
+where remarks is not null;---20
+
+update candidates
+set rejection_provision='C'
+where remarks is null;--2254
+
+update candidates
+set total =paper1+paper2;----2274
+
+
+select * from sp_get_merit('JHT',1);----merit updated successfully for 2066 candidates
+
+select * from sp_get_cut_off('JHT',4);---success
+
+select * from sp_get_catsel('JHT',5);---Successfully updatedcatsel
+
+alter table candidates add column preference_post_original text;
+
+update candidates
+set preference_post_original =preference_post;
+
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;--309	296
+
+update candidates
+set allocated_post=null,
+allocated_dept=null,
+allocated_against_ur=null;
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_states_gis -F c -f C:\Users\Public\states_gis.dump alloc_chsl2023allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t m_states_gis C:\Users\Public\states_gis.dump
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_districts_gis -F c -f C:\Users\Public\districts_gis.dump alloc_chsl2023allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_jht2023allocation_final -t m_districts_gis C:\Users\Public\districts_gis.dump
+
+
+
+alter table candidates add column permanent_state_name text;
+alter table candidates add column permanent_district_name text;
+alter table candidates add column present_state_name text;
+alter table candidates add column present_district_name text;
+
+update candidates
+set permanent_state_name = b.st_state_name
+from m_states_gis b
+where candidates.ear_permanent_stateid=b.st_stateid;
+
+update candidates
+set present_state_name = b.st_state_name
+from m_states_gis b
+where candidates.ear_present_stateid=b.st_stateid;
+
+update candidates
+set present_district_name = b.ds_dist_name
+from m_districts_gis b
+where candidates.ear_present_districtid=b.ds_distid;
+
+update candidates
+set permanent_district_name = b.ds_dist_name
+from m_districts_gis b
+where candidates.ear_permanent_districtid=b.ds_distid;
+
+
+
+
+
+
+"\\10.246.126.150\ADSBackup\ApplicationDataSegregation\D_I_R\JHT2023_Final_Result.zip"
+
+https://ssc.nic.in/SSCFileServer/ApplicationDataSegregation/D_I_R/JHT2023_Final_Result.zip 
+
+https://ssc.nic.in/SSCFileServer/ApplicationDataSegregation/D_I_R/JHT2023_Final_Result.zip

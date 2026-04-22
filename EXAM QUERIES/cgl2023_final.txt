@@ -1,0 +1,2256 @@
+---------------------------------Application data -------------------------------------------------------------------- 
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_cgl2023exam_applicant_reg_pu where ear_isactive ='true' and ear_application_status ='1') to 'C:\Users\Public\cgl2023_165.csv' csv header;
+
+165---413
+166---495695
+167---458458
+170---568094
+171---563559
+172---441150
+
+CREATE TABLE IF NOT EXISTS public.t_cgl2023exam_applicant_reg_pu
+(
+    ear_appl_regid bigint NOT NULL,
+    ear_person_regno bigint NOT NULL,
+    ear_personid integer NOT NULL,
+    ear_name text  ,
+    ear_changedname text ,
+    ear_father_name text  ,
+    ear_mother_name text  ,
+    ear_dob date NOT NULL,
+    ear_candiateage_ason_date real NOT NULL,
+    ear_gender integer NOT NULL,
+    ear_categoryid integer,
+    ear_nationality integer NOT NULL,
+    ear_identification_mark text  ,
+    ear_tenth_education_board integer NOT NULL,
+    ear_tenth_roll_no text  ,
+    ear_tenth_yearofpassing integer NOT NULL,
+    ear_photo_img_url text  ,
+    ear_sign_img_url text  ,
+    ear_centerid1 integer NOT NULL,
+    ear_centerid2 integer NOT NULL,
+    ear_centerid3 integer NOT NULL,
+    ear_regionid integer NOT NULL,
+    ear_is_ex_serviceman boolean NOT NULL,
+    ear_service_period text ,
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_is_pwbd_blindness boolean,
+    ear_is_cerebral_palsy boolean,
+    ear_is_physical_limitation boolean,
+    ear_is_scribe_required boolean,
+    ear_scribe_medium integer,
+    ear_own_scribe boolean,
+    ear_is_applying_for_junior_statistical_officer boolean NOT NULL,
+    ear_is_eq_for_junior_statistical_officer boolean,
+    ear_is_applying_for_statistical_investigator boolean NOT NULL,
+    ear_is_eq_for_statistical_investigator boolean,
+    ear_is_age_relaxation boolean NOT NULL,
+    ear_age_relaxation_code integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text ,
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone,
+    ear_notificationid integer NOT NULL,
+    ear_application_status integer,
+    ear_is_ews_candidate boolean,
+    ear_share_persinfo_accrossportal boolean NOT NULL,
+    ear_edqualification integer NOT NULL,
+    ear_education_details text  ,
+    ear_passed_qual_exam text  ,
+    ear_state_for_university integer,
+    ear_eduqual_university_board integer,
+    ear_eduqual_rollno text  ,
+    ear_eduqual_passingyear integer,
+    ear_eduqual_percentage text  ,
+    ear_eduqual_cgpa text  ,
+    ear_present_address text  ,
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text  ,
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text  ,
+    ear_mobile_number text  ,
+    ear_other_national_address text  ,
+    ear_photo_date text  ,
+    ear_isdate_clear_on_photo boolean NOT NULL,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text  ,
+    applicationfee character varying(30)  ,
+    ear_rollno text  ,
+    ear_qrcode_path text  ,
+    ear_add_source character(1)  ,
+    ear_upd_source character(1)  ,
+    ear_noofattempt integer,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean
+	)
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy t_cgl2023exam_applicant_reg_pu from 'C:\Users\Public\cgl2023_165.csv' csv header;
+
+alter table t_cgl2023exam_applicant_reg_pu add constraint pk_regno primary key (ear_person_regno);
+
+------------------------------------ARC TABLE ----------------------------------------------------------------------------------
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_cgle2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t arc_table C:\Users\Public\arc_table.dump
+
+alter table arc_table
+add constraint pk_arc primary key (arc_code,age_group);
+
+--------------------------------------m_post_list -------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.m_post_list
+(
+    post_list_name text COLLATE pg_catalog."default" NOT NULL,
+    posts text[] COLLATE pg_catalog."default",
+    catsel_dob text COLLATE pg_catalog."default",
+    catsel text COLLATE pg_catalog."default",
+    merit text COLLATE pg_catalog."default",
+    CONSTRAINT post_list_pk PRIMARY KEY (post_list_name)
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy m_post_list from 'C:\Users\Public\m_post_list.csv' csv header;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+sp_get_merit();
+sp_get_dob_flag();
+sp_get_catseldob_flag();
+sp_get_cut_off();
+sp_get_catsel();
+
+--------------------------------------- roll+regno mapping ------------------------------------------------------------------------------------------------------
+CREATE TABLE tier2paper1 
+(
+exam_date date,
+shift_timing text,
+registration_no character varying,
+rollno character varying,
+candidate_name character varying,
+region character varying
+)
+
+\copy tier2paper1 from 'C:\Users\Public\Revised_CGLE 2023 TIER II - PAPER I DATA.csv' csv header;
+
+alter table tier2paper1 add constraint pk_2 primary key (registration_no); 
+
+alter table application_data add column rollno character varying;
+
+update application_data a
+set a.rollno = b.rollno
+from tier2paper1 b where a.ear_person_regno::character varying = b.registration_no;
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+select * from t_cgl2023exam_applicant_reg_pu limit 10;
+create table application_data as (
+select a.* from 
+t_cgl2023exam_applicant_reg_pu a,
+tier2paper1 b
+where a.ear_person_regno::character varying = b.registration_no);
+
+93000199652
+94000112867
+30000923657
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t m_states_gis C:\Users\Public\states.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t m_districts_gis C:\Users\Public\districts.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t m_regions_gis C:\Users\Public\m_regions_ssc.dump
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t m_exam_centers_ssc C:\Users\Public\m_exam_centers_ssc.dump
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table application_data add column center1 text;
+alter table application_data add column center2 text;
+alter table application_data add column center3 text;
+alter table application_data add column region text;
+alter table application_data add column present_district text;
+alter table application_data add column present_state text;
+alter table application_data add column permanent_state text;
+alter table application_data add column permanent_district text;
+
+
+update application_data a
+set a.center1 = b.ec_center_name
+from m_exam_centers_ssc b where a.ear_centerid1=b.ec_id;
+
+update application_data a
+set a.center2 = b.ec_center_name
+from m_exam_centers_ssc b where a.ear_centerid2=b.ec_id;
+
+update application_data a
+set a.center3 = b.ec_center_name
+from m_exam_centers_ssc b where a.ear_centerid3=b.ec_id;
+
+update application_data a
+set a.region = b.rg_region_name
+from m_regions_gis b where a.ear_regionid=b.rg_regionid;
+
+update application_data a
+set a.present_state = b.st_state_name
+from m_states_gis b where a.ear_present_stateid=b.st_stateid;
+
+update application_data a
+set a.permanent_state = b.st_state_name
+from m_states_gis b where a.ear_permanent_stateid=b.st_stateid;
+
+update application_data a
+set a.permanent_district = b.ds_dist_name
+from m_districts_gis b where a.ear_permanent_districtid=b.ds_distid;
+
+update application_data a
+set a.present_district = b.ds_dist_name
+from m_districts_gis b where a.ear_present_districtid=b.ds_distid;
+
+---------------------------------------------ckt marks qulaified ------------------------------------------------------------------------------------------------------
+
+update candidates
+set ckt_qly ='No' ;
+
+update candidates
+set ckt_qly ='Yes' where cat1='9' and ckt_marks>='18';
+
+update candidates
+set ckt_qly ='Yes' where cat1 in ('6','0') and ckt_marks>='15';
+
+update candidates
+set ckt_qly ='Yes' where cat1 in ('1','2') and ckt_marks>='12';
+
+update candidates
+set ckt_qly ='Yes' where cat2 in ('3') and ckt_marks>='12';
+
+update candidates
+set ckt_qly ='Yes' where cat3 in ('4','5','7','8') and ckt_marks>='12';
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_cgle2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final -t master_table C:\Users\Public\master_table.dump
+
+alter table master_table add constraint pk_4 primary key (serial);
+
+------------------------------------- vacancy_table -----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.vacancy_table
+(
+    post_code text COLLATE pg_catalog."default" NOT NULL,
+    department text COLLATE pg_catalog."default",
+    post text COLLATE pg_catalog."default",
+    category character varying(30) COLLATE pg_catalog."default",
+    category_code character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    initial_vacancy integer,
+    current integer,
+    allocated integer,
+    left_vacancy integer,
+    CONSTRAINT cgle2023_vacancy_pk PRIMARY KEY (post_code, category_code)
+)
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+ \copy vacancy_table from 'C:\Users\Public\vacancy_cgle2023.csv' csv header;
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is null or cutoff_flag_f='') order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='3' order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 in ('4','5','8') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('1','2') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('6') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('9','0') order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_jso from candidates where merit_r is not null and (cutoff_flag_r is null or cutoff_flag_r='') order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='3' order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 in ('4','5','8') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('1','2') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('6') order by merit_f;
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,cutoff_flag_f from candidates where merit_f is not null and (cutoff_flag_f is not null and cutoff_flag_f<>'') and cat2='' and cat3 NOT in ('4','5','8') AND cat1 in ('9','0') order by merit_f;
+
+------------------------------------vacancy converter ----------------------------------------------------------------------------------------------------------------------------------------
+
+
+SELECT
+    post_code,
+    department,
+	post,
+    'UR' AS category,
+	'9' AS category_code,
+    ur AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+SELECT
+    post_code,
+    department,
+	post,
+    'SC' AS category,
+	'1' AS category_code,
+    sc AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'ST' AS category,
+	'2' AS category_code,
+    st AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'OBC' AS category,
+	'6' AS category_code,
+    obc AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'EWS' AS category,
+	'0' AS category_code,
+    ews AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'EXS' AS category,
+	'3' AS category_code,
+    exs AS initial
+FROM vacancy_table_provided
+
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'OH' AS category,
+	'4' AS category_code,
+    oh AS initial
+FROM vacancy_table_provided
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'HH' AS category,
+	'5' AS category_code,
+    hh AS initial
+FROM vacancy_table_provided
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'VH' AS category,
+	'7' AS category_code,
+    vh AS initial
+FROM vacancy_table_provided
+UNION ALL
+
+SELECT
+    post_code,
+    department,
+	post,
+    'PWD_OTHERS' AS category,
+	'8' AS category_code,
+    pwd_others AS initial
+FROM vacancy_table_provided 
+
+order by post_code,category_code;
+
+---------------------------------------- debarred checking -------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.m_debbaredcandidates_ssc
+(
+    dc_id integer,
+    dc_isactive boolean,
+    dc_rollno text COLLATE pg_catalog."default",
+    dc_name text COLLATE pg_catalog."default",
+    dc_father_name text COLLATE pg_catalog."default",
+    dc_mother_name text COLLATE pg_catalog."default",
+    dc_dob_name date,
+    dc_gender integer,
+    dc_category text COLLATE pg_catalog."default",
+    dc_name_year_exam text COLLATE pg_catalog."default",
+    dc_debarreddate date,
+    dc_debarred_upto date,
+    dc_dc_debbared_reason text COLLATE pg_catalog."default",
+    debarredyear integer,
+    region_code integer
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy m_debbaredcandidates_ssc from 'C:\Users\Public\debarred.csv' csv header;
+
+
+select a.ear_person_regno,a.rollno,a.ear_name,a.ear_father_name,a.ear_mother_name,a.ear_dob,a.ear_gender,a.ear_categoryid,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from application_data a,m_debbaredcandidates_ssc b where 
+b.dc_debarred_upto >'2023-01-01' and
+replace ((UPPER(a.ear_name)||UPPER(a.ear_father_name)||UPPER(a.ear_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.ear_name)||UPPER(a.ear_mother_name)),' ','') and a.ear_dob = b.dc_dob_name;
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.ear_name)||UPPER(a.ear_father_name)),' ','') and a.ear_dob = b.dc_dob_name;
+
+---------------------------------------- post preference data -------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.t_post_preference_cgle2023_ssc
+(
+    tp_regno bigint NOT NULL,
+    tp_cand_name text COLLATE pg_catalog."default",
+    tp_cand_father_name text COLLATE pg_catalog."default",
+    tp_cand_mother_name text COLLATE pg_catalog."default",
+    tp_cand_rollno text COLLATE pg_catalog."default",
+    tp_dob date NOT NULL,
+    tp_gender integer NOT NULL,
+    tp_cat1 integer,
+    tp_is_ex_serviceman boolean NOT NULL,
+    tp_cat2 integer,
+    tp_is_physically_handicaped boolean NOT NULL,
+    tp_cat3 integer,
+    tp_is_age_relaxation boolean NOT NULL,
+    tp_age_relaxation_code integer,
+    tp_joining_date_for_armedforces date,
+    tp_discharged_date date,
+    tp_service_period text COLLATE pg_catalog."default",
+    tp_isexs_benefit_availed_for_civilpost boolean,
+    tp_joining_date_for_civilpost date,
+    tp_post_pref text COLLATE pg_catalog."default" NOT NULL,
+    tp_isactive boolean DEFAULT true,
+    tp_ip_address text COLLATE pg_catalog."default",
+    tp_createdbyid integer,
+    tp_createdbyrid integer,
+    tp_updbyid integer,
+    tp_upddtm timestamp without time zone,
+    tp_createddtm timestamp without time zone DEFAULT now(),
+    tp_notificationid integer,
+    tp_examid integer,
+    tp_exam_year integer,
+    tp_qrcode_path text COLLATE pg_catalog."default",
+    tp_remarks text COLLATE pg_catalog."default"
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy t_post_preference_cgle2023_ssc from 'C:\Users\Public\CGLE2023_Post_Preference_Data_24112023.csv' csv header;
+
+alter table t_post_preference_cgle2023_ssc add constraint pk_1 primary key (tp_regno);
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table application_data add column post_preference_original text;
+
+update application_data a
+set a.post_preference_original = b.tp_post_pref
+from t_post_preference_cgle2023_ssc b where a.ear_person_regno = b.tp_regno
+and a.rollno = b.tp_cand_rollno;
+
+-------------------------------edp marks ---------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE IF NOT EXISTS public.edp_marks
+(
+    regid text COLLATE pg_catalog."default",
+    roll text COLLATE pg_catalog."default",
+    name text COLLATE pg_catalog."default",
+    fname text COLLATE pg_catalog."default",
+    mname text COLLATE pg_catalog."default",
+    dob text COLLATE pg_catalog."default",
+    gender text COLLATE pg_catalog."default",
+    cat1 text COLLATE pg_catalog."default",
+    cat2 text COLLATE pg_catalog."default",
+    cat3 text COLLATE pg_catalog."default",
+    forjso text COLLATE pg_catalog."default",
+    eqjso text COLLATE pg_catalog."default",
+	forsi text COLLATE pg_catalog."default",
+    eqsi text COLLATE pg_catalog."default",
+    agerlxcode text COLLATE pg_catalog."default",
+    tier1 text COLLATE pg_catalog."default",
+    t1q_aao text COLLATE pg_catalog."default",
+    t1q_jso text COLLATE pg_catalog."default",
+	t1q_si text COLLATE pg_catalog."default",
+    t1q_all text COLLATE pg_catalog."default",
+	T2_CKT text COLLATE pg_catalog."default",
+	T2_ENG text COLLATE pg_catalog."default",
+	T2_GA text COLLATE pg_catalog."default",
+	T2_MATH text COLLATE pg_catalog."default",
+	T2_GI text COLLATE pg_catalog."default",
+	T2P2 text COLLATE pg_catalog."default",
+	T2P3 text COLLATE pg_catalog."default",
+	DEST_MIST text COLLATE pg_catalog."default",
+    CONSTRAINT edp_marks_pk PRIMARY KEY (regid)
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy edp_marks from 'C:\Users\Public\edp_marks.csv' csv header;
+
+----------------------------candidates table-------------------------------------------------------------------------------------------
+
+create table candidates as
+(
+	select
+    ear_person_regno as regno,
+    rollno,
+    ear_name as name,
+    ear_changedname as changed_name,
+    ear_father_name as cand_father_name,
+    ear_mother_name as cand_mother_name,
+    ear_dob as dob,
+    ear_candiateage_ason_date as age,
+    ear_gender as gender,
+    ear_categoryid as cat1,
+    ear_is_ex_serviceman as is_ex_serviceman,
+	null as cat2,
+    ear_service_period as service_period,
+    ear_joining_date_for_armedforces as ear_joining_date_for_armedforces,
+    ear_joining_date_for_civilpost as joining_date_for_civilpost,
+    ear_discharged_date as discharged_date,
+    ear_isexs_benefit_availed_for_civilpost as isexs_benefit_availed_for_civilpost,
+    ear_is_physically_handicaped as is_physically_handicaped,
+    ear_ph_code::character varying as cat3,
+    ear_is_pwbd_blindness as is_pwbd_blindness,
+    ear_is_age_relaxation as is_age_relaxation,
+    ear_age_relaxation_code as age_relaxation_code_original,
+    ear_edqualification as edqualification,
+    ear_education_details as education_details,
+    ear_passed_qual_exam as passed_qual_exam,
+    ear_state_for_university as state_for_university,
+    ear_eduqual_university_board as eduqual_university_board,
+    ear_eduqual_rollno as eduqual_rollno,
+    ear_eduqual_passingyear as eduqual_passingyear,
+    ear_eduqual_percentage as eduqual_percentage,
+    ear_eduqual_cgpa as eduqual_cgpa,
+    ear_present_address as present_address,
+    ear_present_districtid as present_districtid,
+	present_district,
+    ear_present_stateid as present_stateid,
+	present_state,
+    ear_present_pincode as present_pincode,
+    ear_permanent_address as permanent_address,
+    ear_permanent_stateid as permanent_stateid,
+	permanent_state,
+    ear_permanent_districtid as permanent_districtid,
+	permanent_district,
+    ear_permanent_pincode as permanent_pincode,
+    ear_email_id as email_id,
+    ear_mobile_number as mobile_number,
+    center1 ,
+    center2 ,
+    center3 ,
+    region ,
+    post_preference_original from application_data
+)
+
+alter table candidates add constraint pk_rollno primary key(rollno);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+update candidates
+set cat2='3' where is_ex_serviceman='true'; ----1988
+
+
+select * from candidates where cat2='3' limit 100;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column exsm_length text COLLATE pg_catalog."default";
+alter table candidates add column exs_reservation text COLLATE pg_catalog."default";
+alter table candidates add column agerelax_code character varying(5);
+
+----------------------------------------ESM Reservation ----------------------------------------------------------------------------------------------------------------
+
+UPDATE candidates
+SET exsm_length = LEFT(service_period, 2)
+where cat2='3'; --1988
+
+update candidates
+set exs_reservation ='Yes'
+where cat2 ='3'; ---1947
+
+update candidates
+set exs_reservation ='No'
+where cat2 ='3' and isexs_benefit_availed_for_civilpost ='true'; ---41
+
+-----------------------------------AGE RELAXATION -------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set agerelax_code =age_relaxation_code_original;
+
+
+roll
+"2201310760"
+"2201310757"
+
+update candidates set agerelax_code = '06' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2='3'
+and age>='27'); ----5
+
+update candidates set agerelax_code = '03' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat1 in ('0','9')
+and age>='27'); ----5
+
+update candidates set agerelax_code ='03' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat3 in ('4','5','7','8')
+and age>='27' and cat1 in('9','0')); ---109
+
+update candidates set agerelax_code ='04' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat3 in ('4','5','7','8')
+and age>='27' and cat1 in('6')); ---68
+
+update candidates set agerelax_code ='05' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat3 in ('4','5','7','8')
+and age>='27' and cat1 in('1','2'); ---24
+
+update candidates set agerelax_code ='01' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat3 is null
+and age>='27' and cat1 in('1','2')); ---949
+
+update candidates set agerelax_code ='02' where rollno in 
+(select rollno
+from candidates where 
+is_age_relaxation <>'true' and cat2 is null and cat3 is null
+and age>='27' and cat1 in('6')); ---697
+
+
+select agerelax_code,count(*) from candidates group by agerelax_code;
+
+"4"		313
+"12"	8
+		46382
+"10"	571
+"06"	5
+"13"	1
+"03"	109
+"01"	949
+"5"		58
+"04"	68
+"02"	697
+"6"		1939
+"3"		590
+"11"	65
+"2"		5564
+"05"	24
+"1"		6475
+
+-----------------------------------Graduation checking for ESM ---------------------------------------------------------------------------------------
+
+select rollno,service_period,education_details from candidates where cat2='3';
+select distinct education_details from candidates where cat2='3';
+"Deemed Graduation"
+"Equivalent to Graduation"
+"Graduation"
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+
+Alter table candidates add column tier1 numeric;
+Alter table candidates add column t1q_aao text COLLATE pg_catalog."default";
+Alter table candidates add column t1q_jso text COLLATE pg_catalog."default";
+Alter table candidates add column t1q_si text COLLATE pg_catalog."default";
+Alter table candidates add column t1q_all text COLLATE pg_catalog."default";
+Alter table candidates add column t2_math numeric;
+Alter table candidates add column t2_gi numeric;
+Alter table candidates add column t2p1s1 numeric;
+Alter table candidates add column t2_eng numeric;
+Alter table candidates add column t2_ga numeric;
+Alter table candidates add column t2p1s2 numeric;
+Alter table candidates add column t2p1s1s2 numeric;
+Alter table candidates add column t2p2 numeric;
+Alter table candidates add column t2p3 numeric;
+Alter table candidates add column dest_mistakes numeric;
+Alter table candidates add column ckt_marks numeric;
+
+end
+$$
+-------------------------------------marks update in candidates----------------------------------------------------------------------------------------------
+
+update candidates a
+set
+a.tier1= b.tier1 ::numeric,
+a.t1q_aao= b.t1q_aao,
+a.t1q_jso= b.t1q_jso,
+a.t1q_si= b.t1q_si,
+a.t1q_all= b.t1q_all,
+a.t2_math= b.t2_math ::numeric,
+a.t2_gi= b.t2_gi ::numeric,
+a.t2_eng= b.t2_eng ::numeric,
+a.t2_ga= b.t2_ga::numeric,
+a.t2p2= b.t2p2::numeric,
+a.t2p3= b.t2p3::numeric,
+a.dest_mistakes= b.dest_mist ::numeric,
+a.ckt_marks= b.t2_ckt::numeric
+
+from edp_marks b where a.rollno =b.roll; ---63818
+
+update candidates
+set t2p1s1 = t2_math+t2_gi;
+
+update candidates
+set t2p1s2 = t2_eng+t2_ga;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+alter table candidates add column dest_exempted text;
+alter table candidates add column rejection_provision character varying;
+alter table candidates add column remarks text;
+alter table candidates add column dob_flag_18_27 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column dob_flag_20_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column dob_flag_18_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column dob_flag_18_32 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column dob_flag_it_18_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column catsel_dob_18_27 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column catsel_dob_20_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column catsel_dob_18_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column catsel_dob_18_32 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column catsel_dob_it_18_30 character varying(10) COLLATE pg_catalog."default";
+alter table candidates add column debarred character varying;
+alter table candidates add column merit_all integer;
+alter table candidates add column merit_r integer;
+alter table candidates add column merit_f integer;
+end
+$$
+
+----------------------------------------dob_flag_18_27-------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_dob_flag('CGL',4); ---2 min
+
+select distinct dob_flag_18_27,count(*) from candidates group by dob_flag_18_27;
+"01"	6003
+"02"	4444
+"03"	619
+"04"	334
+"05"	76
+"06"	1940
+"10"	570
+"11"	65
+"12"	8
+"13"	1
+"9"	    42302
+"99"	7456
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99'; ----7456
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 ='3'; ----10 ESM 
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 is null and cat3 in ('4','5','7','8'); ---82
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 is null and cat3 in ('4','5','7','8') and agerelax_code ='3';---29
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 is null and cat3 is null and cat1 in('1','2'); ---732 sc/st
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 is null and cat3 is null and cat1 in('6'); ---1296 obc
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat2 is null and cat3 is null and cat1 in('9','0'); ---5336 UR/EWS
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat1 not in ('9','0');----2089
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat1 not in ('9','0') and is_age_relaxation ='false'; ---13
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99' and cat1 not in ('9','0') and is_age_relaxation ='true';---2076
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where 
+agerelax_code in ('10','11','12','13');---645
+
+select rollno,gender,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_27 
+from candidates where 
+agerelax_code in ('12','13');---09 female
+
+-------------------------------------------------dob_flag_20_30----------------------------------------------------------------------------------------------------------
+select * from sp_get_dob_flag('CGL',5);
+ 
+select distinct dob_flag_20_30,count(*) from candidates group by dob_flag_20_30;
+
+"01"	2225
+"02"	1376
+"03"	309
+"04"	185
+"05"	34
+"06"	1935
+"9"	    56931
+"99"	342
+"U"	    481
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='U'; ---481
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99'; ----342
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat2 ='3'; ----11 ESM 
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat2 is null and cat3 in ('4','5','7','8'); ---12
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat2 is null and cat3 is null and cat1 in('1','2'); ---32 sc/st
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat2 is null and cat3 is null and cat1 in('6'); ---43 obc
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat2 is null and cat3 is null and cat1 in('9','0'); ---244 UR/EWS
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat1 not in ('9','0');----92
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='false'; ---0
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_20_30 
+from candidates where dob_flag_20_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='true';---92
+
+-------------------------------------------------dob_flag_18_30----------------------------------------------------------------------------------------------------------
+select * from sp_get_dob_flag('CGL',6); 
+
+select distinct dob_flag_18_30,count(*) from candidates group by dob_flag_18_30;
+
+"01"	2225
+"02"	1376
+"03"	309
+"04"	185
+"05"	34
+"06"	1935
+"9"	    57412
+"99"	342
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99'; ----342
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat2 ='3'; ----11 ESM 
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat2 is null and cat3 in ('4','5','7','8'); ---12
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('1','2'); ---32 sc/st
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('6'); ---43 obc
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('9','0'); ---244 UR/EWS
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat1 not in ('9','0');----92
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='false'; ---0
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_30 
+from candidates where dob_flag_18_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='true';---92
+
+-------------------------------------------------dob_flag_18_32----------------------------------------------------------------------------------------------------------
+select * from sp_get_dob_flag('CGL',7); 
+
+select distinct dob_flag_18_32,count(*) from candidates group by dob_flag_18_32;
+
+"01"	799
+"02"	305
+"03"	172
+"04"	114
+"05"	16
+"06"	1934
+"9"	    60398
+"99"	80
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99'; ----342
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat2 ='3'; ----3 ESM 
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat2 is null and cat3 in ('4','5','7','8'); ---1
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat2 is null and cat3 is null and cat1 in('1','2'); ---6 sc/st
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat2 is null and cat3 is null and cat1 in('6'); ---7 obc
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat2 is null and cat3 is null and cat1 in('9','0'); ---63 UR/EWS
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat1 not in ('9','0');----14
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat1 not in ('9','0') and is_age_relaxation ='false'; ---0
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_18_32 
+from candidates where dob_flag_18_32 ='99' and cat1 not in ('9','0') and is_age_relaxation ='true';---14
+-------------------------------------------------dob_flag_it_18_30----------------------------------------------------------------------------------------------------------
+select * from sp_get_dob_flag('CGL',8); 
+
+select distinct dob_flag_it_18_30,count(*) from candidates group by dob_flag_it_18_30;
+
+"01"	2180
+"02"	1301
+"03"	309
+"04"	185
+"05"	34
+"06"	1935
+"10"	261
+"11"	62
+"12"	6
+"13"	1
+"9"	    57412
+"99"	132
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99'; ----132
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat2 ='3'; ----8 ESM 
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat2 is null and cat3 in ('4','5','7','8'); ---10
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('1','2'); ---14 sc/st
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('6'); ---20 obc
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat2 is null and cat3 is null and cat1 in('9','0'); ---80 UR/EWS
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat1 not in ('9','0');----50
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='false'; ---0
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where dob_flag_it_18_30 ='99' and cat1 not in ('9','0') and is_age_relaxation ='true';---50
+
+select rollno,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30
+from candidates where 
+agerelax_code in ('10','11','12','13');--- 645 
+
+select rollno,gender,cat1,cat2,exsm_length,service_period,cat3,dob,age,is_age_relaxation,age_relaxation_code_original,agerelax_code,dob_flag_it_18_30 
+from candidates where 
+agerelax_code in ('12','13');---09 female
+
+-------------------------------------catsel_dob_18_27----------------------------------------------------------------------------------------------------------------
+select * from sp_get_catseldob_flag('CGL',9);
+
+select distinct catsel_dob_18_27,count(*) from candidates group by catsel_dob_18_27;
+	7456
+"1"	4332
+"2"	1672
+"3"	1940
+"4"	8
+"5"	4
+"6"	4444
+"7"	7
+"8"	3
+"9"	43952
+
+select rollno,gender,dob,cat1,cat2,cat3,dob_flag_18_27,catsel_dob_18_27
+from candidates where catsel_dob_18_27=''; ---7456 all dob_flag='99'
+
+select rollno,gender,dob,cat1,cat2,cat3,dob_flag_18_27,catsel_dob_18_27
+from candidates where catsel_dob_18_27='' and dob_flag_18_27<>'99' ;---0
+
+select rollno,gender,dob,cat1,cat2,cat3,dob_flag_18_27,catsel_dob_18_27
+from candidates where catsel_dob_18_27='1' and dob_flag_18_27<>'99' ;--4332
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='1'  group by dob_flag_18_27;
+"01"	4331
+"13"	1
+
+select rollno,gender,dob,cat1,cat2,cat3,dob_flag_18_27,catsel_dob_18_27
+from candidates where catsel_dob_18_27='2' and dob_flag_18_27<>'99' ;--1672
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='2'  group by dob_flag_18_27;
+"01"	1672
+
+select rollno,gender,dob,cat1,cat2,cat3,dob_flag_18_27,catsel_dob_18_27
+from candidates where catsel_dob_18_27='3' and dob_flag_18_27<>'99' ;--1940
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='3'  group by dob_flag_18_27;
+"06"	1940
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='4'  group by dob_flag_18_27;
+"04"	5
+"05"	3
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='5'  group by dob_flag_18_27;
+"04"	4
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='6'  group by dob_flag_18_27;
+"02"	4444
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='7'  group by dob_flag_18_27;
+"04"	5
+"05"	2
+
+select distinct dob_flag_18_27,count(*) from candidates where catsel_dob_18_27='8'  group by dob_flag_18_27;
+"04"	2
+"05"	1
+
+-------------------------------------catsel_dob_20_30----------------------------------------------------------------------------------------------------------------
+select * from sp_get_catseldob_flag('CGL',10);
+
+-------------------------------------catsel_dob_18_30----------------------------------------------------------------------------------------------------------------
+select * from sp_get_catseldob_flag('CGL',11);
+
+-------------------------------------catsel_dob_18_32----------------------------------------------------------------------------------------------------------------
+select * from sp_get_catseldob_flag('CGL',12);
+
+-------------------------------------catsel_dob_it_18_30----------------------------------------------------------------------------------------------------------------
+select * from sp_get_catseldob_flag('CGL',13);
+
+---------------------------Debarred update--------------------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set debarred ='Yes',
+remarks= 'Debarred',
+rejection_provision ='R'
+ where rollno in ('2201083705','4205001534');
+ 
+------------------------------------merit--------------------------------------------------------------------------------------------------------------
+
+ select * from sp_get_merit('CGL',1);
+ select * from sp_get_merit('CGL',2);
+ select * from sp_get_merit('CGL',3);
+ 
+select rollno from candidates where t1q_all='Y' ;---63612
+select rollno from candidates where t1q_all is null ;---206
+select rollno from candidates where t1q_jso='Y' ;---2866
+select rollno from candidates where t1q_jso is null ;---60952
+select rollno from candidates where t1q_si='Y' ;---2746
+select rollno from candidates where t1q_si is null ;---61072
+
+---------------------------------------cut_off_table ----------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.cut_off_table
+(
+    serial_id integer NOT NULL,
+    category character varying(1) COLLATE pg_catalog."default",
+    tier1 numeric,
+    tier2 numeric,
+    additional_paper numeric,
+    dest_mistakes numeric,
+    ckt_marks numeric,
+    cut_off_name character varying(50) COLLATE pg_catalog."default",
+    remarks text COLLATE pg_catalog."default",
+    CONSTRAINT cut_off_table_pkey PRIMARY KEY (serial_id)
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cgle2023_allocation_final
+
+\copy cut_off_table from 'C:\Users\Public\CUT_OFF_TABLE.csv' csv header;
+
+----------------------------------dest mistakes not available--------------------------------------------------------------------------------------------------------
+
+select count(*) from candidates where dest_mistakes is null;---646 
+
+4410095175	Diptyajit Mallick	ER ---check and confirm whether exempted or not
+
+update candidates
+set dest_exempted ='Y' where rollno in ('1403012172','1404000755','1403008577','1601000334','3001004378','3001011800','3001023891','3001036418','3003004409','3003025286','3003061880','3003063782','3003065652','3003068011','3005001817','3005004222','3005013573','3005014216','3005019932','3007010072','3008011072','3009019347','3009021423','3009044208','3009048372','3009053195','3009070763','3010024089','3010024308','3010026398','3010028740','3010028806','3010049841','3010052290','3010054382','3010061499','3010080255','3010080281','3010087106','3011004380','3011006354','3011008571','3011020297','3011040089','3013000790','3013043459','3013066882','3205009668','3205018488','3205020901','3205029662','3206001374','3206012929','3206016368','3206036235','3206042594','3206043791','3206045344','3206048452','3206055927','3206064955','3206067466','3206075382','3206077783','3206080221','3206082534','3206082784','3206084920','3206085713','3206093487','3206095162','3206025596','4205026007','4205030115','4206001666','4206018863','4206020824','4410078105','4419005163','4207010335','4207011496','4206011676','4206008276','4419001379','6007001006','6005004951','6005006463','6001005702','6006027674','6014000235','6001005672','6016003427','6001007233','6006004962','2201008996','2201011645','2201075497','2201075555','2201111323','2201111658','2201149803','2201174817','2201174819','2201175061','2201183057','2201183322','2201186289','2201208388','2201208476','2201247632','2201248864','2201240418','2201003609','2201008961','2201009162','2201011598','2201016746','2201020018','2201024959','2201025270','2201042195','2201058719','2201083773','2201086341','2201094830','2201111435','2201116378','2201119762','2201119773','2201150352','2201152683','2201152789','2201174728','2201177554','2201199977','2201234552','2201224652','2201033437','2201008821','2201011447','2201044756','2201210845','2201219022','2201219309','2201242031','2201247423','2201268893','2201270611','2201277399','2201297030','2201297145','2201297201','2201297432','2201297522','2201298642','2201298775','2201304374','2201277306','2201270270','2201275579','2201297361','2003000997','2002003160','2002013959','2006003925','2406017424','2406016986','2406011833','2406006146','2406020246','2404009732','2404008078','2405036227','2405051257','2405079991','2405081485','2405078554','2405019710','2405064411','2405116932','2405121096','2405060497','2405092047','2405089115','2405008642','2405036110','2405000953','8007015535','8201007279','8201003389','8201038694','8204012770','8207001197','8601053566','8601027993','8601017404','8601007319','8601009437','8601015966','8208005467','8206008657','7214001614','7001002824','7204015078','7204007857','7201003858','7007000044','7001000215','7203002735','7208021714'
+);
+
+update candidates
+set dest_mistakes = '0' where dest_exempted ='Y';
+
+update candidates
+set rejection_provision ='R',
+remarks ='Dest mistakes not available but Dest is Mandatory' 
+where dest_mistakes is null; ---445
+
+----------------------------------------------Cut_off_flags---------------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+	alter table candidates add column cutoff_flag_jso character varying(10) COLLATE pg_catalog."default";
+    alter table candidates add column cutoff_flag_f character varying(10) COLLATE pg_catalog."default";
+    alter table candidates add column cutoff_flag_all character varying(10) COLLATE pg_catalog."default";
+    alter table candidates add column cutoff_flag_cpt character varying(10) COLLATE pg_catalog."default";
+    alter table candidates add column cutoff_flag_dest character varying(10) COLLATE pg_catalog."default";
+    
+	end
+$$	
+
+---------------------------------------With Held cases------------------------------------------------------------------------------------------------------------------------
+update candidates
+set remarks ='With Held'
+where rollno in ('1010001300','1202003011','1202004635','1402014722','1402014871','1402014997','1403019541','2002002146','2006003178','2201009656','2201015601','2201021904','2201022140','2201029376','2201047394','2201047650','2201062912','2201082894','2201109422','2201112628','2201114452','2201133984','2201147098','2201151549','2201160885','2201170742','2201177189','2201178048','2201179432','2201180223','2201187426','2201189771','2201191435','2201206761','2201228346','2201239246','2201244874','2201246677','2201253465','2201257241','2201274783','2201274973','2201290171','2201297672','2201299137','2201301657','2201310757','2201310758','2201310759','2201310760','2201310761','2201310762','2201310763','2201310764','2201310766','2201310768','2201310769','2201310770','2201310771','2201310772','2201310773','2201310774','2201310775','2201310776','2201310777','2405062519','2405125351','2409006251','3001031575','3003022398','3003053656','3003056820','3009019403','3009047410','3009061556','3010031507','3010055934','3010057909','3010075971','3011006841','3013070689','3019001128','3205008144','3205032376','3206060744','4410015073','4410055724','4410059544','4410073993','4410074995','4410092097','4419003024','5102001080','5105016146','6001013731','6007018463','6016004407','7012003714','7204000215','7207006329','7208005703','7214002799','8006000947','8006009336','8201014979','8201031185','8202001388','8601019601','8601021992','8601022778','8601027599','9212005457'
+);
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+select * from sp_get_cut_off('CGL',15);
+
+select distinct cutoff_flag_jso from candidates;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat2='3' order by merit_r; ---esm who did not cleared cut OFF
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat3 is null and cat2 is null and cat1 in ('6')
+and tier1 >= '165.86857' and t2p1s1s2 >='97.5'  and t2p2 >'50'order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat3 is null and cat2 is null and cat1 in ('9')
+and tier1 >= '168.53975' and t2p1s1s2 >='117'  and t2p2 >'60'order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat3 is null and cat2 is null and cat1 in ('0')
+and tier1 >= '166.0675' and t2p1s1s2 >='97.5'  and t2p2 >'50'order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat3 is null and cat2 is null and cat1 in ('1')
+and tier1 >= '148.50911' and t2p1s1s2 >='78'  and t2p2 >'40'order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is null or cutoff_flag_jso='') and merit_r is not null 
+and cat3 is null and cat2 is null and cat1 in ('2')
+and tier1 >= '146.65109' and t2p1s1s2 >='78'  and t2p2 >'40' order by merit_r;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p2 as additional_paperckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_jso,merit_r 
+from candidates where (cutoff_flag_jso is not null and cutoff_flag_jso<>'') and merit_r is not null 
+and cat3 in ('4','5','7','8') and cat2 is null 
+and tier1>='146.65109' order by merit_r;
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_cut_off('CGL',15);
+
+select distinct cutoff_flag_f from candidates;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,t2p3,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat2='3' order by merit_f; ---esm who did not cleared cut OFF
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat3 is null and cat2 is null and cat1 in ('6')
+and tier1 >= '152.42184' and t2p1s1s2 >='97.5'  and t2p3 >'50'order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat3 is null and cat2 is null and cat1 in ('9')
+and tier1 >= '172.36025' and t2p1s1s2 >='117'  and t2p3 >'60' order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat3 is null and cat2 is null and cat1 in ('0')
+and tier1 >= '166.0675' and t2p1s1s2 >='97.5'  and t2p3 >'50'order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat3 is null and cat2 is null and cat1 in ('1')
+and tier1 >= '148.50911' and t2p1s1s2 >='78'  and t2p3 >'40'order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is null or cutoff_flag_f='') and merit_f is not null 
+and cat3 is null and cat2 is null and cat1 in ('2')
+and tier1 >= '127.32602' and t2p1s1s2 >='78'  and t2p3 >'40' order by merit_f;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paperckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_f,merit_f 
+from candidates where (cutoff_flag_f is not null and cutoff_flag_f<>'') and merit_f is not null 
+and cat3 in ('4','5','7','8') and cat2 is null 
+and tier1>='146.65109' order by merit_f;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_cut_off('CGL',16);
+
+select distinct cutoff_flag_all from candidates;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat2='3' and dest_mistakes is not null order by merit_all; ---esm who did not cleared cut OFF
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('6')
+and tier1 >= '152.42184' and t2p1s1s2 >='97.5'  and t2p3 >'50'order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('9')
+and tier1 >= '172.36025' and t2p1s1s2 >='117'  and t2p3 >'60' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('0')
+and tier1 >= '166.0675' and t2p1s1s2 >='97.5'  and t2p3 >'50'order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('1')
+and tier1 >= '148.50911' and t2p1s1s2 >='78'  and t2p3 >'40'order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is null or cutoff_flag_all='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('2')
+and tier1 >= '127.32602' and t2p1s1s2 >='78'  and t2p3 >'40' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paperckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_all,merit_all 
+from candidates where (cutoff_flag_all is not null and cutoff_flag_all<>'') and merit_all is not null 
+and cat3 in ('4','5','7','8') and cat2 is null 
+and tier1>='146.65109' order by merit_all;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_cut_off('CGL',16);
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1,t2p1s1s2,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat2='3' and dest_mistakes is not null 
+and ckt_marks >='21'
+and dest_mistakes <='7' order by merit_all
+; ---esm who did not cleared cut OFF
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('6') and dest_mistakes is not null
+and tier1 >= '145.93743' and t2p1s1s2 >='97.5' 
+and ckt_marks>='24'
+and dest_mistakes<='7' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('9')
+and tier1 >= '150.04936' and t2p1s1s2 >='117'  and ckt_marks>='27'
+and dest_mistakes<='7' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('0')
+and tier1 >= '143.44441' and t2p1s1s2 >='97.5'  and ckt_marks>='24'
+and dest_mistakes<='7' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('1')
+and tier1 >= '126.68201' and t2p1s1s2 >='78'  and ckt_marks>='21'
+and dest_mistakes<='7' order by merit_all;
+
+select rollno,cat1,cat2,cat3,tier1 as paper1, t2p1s1s2 as paper2, t2p3 as additional_paper,ckt_marks,dest_mistakes,dest_exempted,remarks,cutoff_flag_cpt,merit_all 
+from candidates where (cutoff_flag_cpt is null or cutoff_flag_cpt='') and merit_all is not null 
+and cat3 is null and cat2 is null and cat1 in ('2')
+and tier1 >= '118.16655' and t2p1s1s2 >='78' and ckt_marks>='21'
+and dest_mistakes<='7' order by merit_all;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+select * from sp_get_cut_off('CGL',16);
+
+---------------------------------------- catsel ---------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+
+Alter table candidates add column catsel_cpt_20_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_cpt_18_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_dest_18_27 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_f_18_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_jso_18_32 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_si_18_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_all_18_27 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_all_20_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_all_18_30 character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel_all_it_18_30 character varying(10) COLLATE pg_catalog."default";
+
+end
+$$
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+select rollno,cat1,cat2,exs_reservation,dob,dob_flag_18_30, catsel_dob_18_30 as catsel_dob,cutoff_flag_cpt as cut_off_flag,catsel_cpt_18_30
+from candidates where merit_all is not null  and (catsel_dob_18_30  is not null and catsel_dob_18_30 <>'') order by merit_all;
+
+select rollno,cat1,cat2,exs_reservation,rejection_provision,dob,dob_flag_18_30, catsel_dob_18_30,cutoff_flag_cpt,catsel_cpt_18_30
+from candidates where merit_all is not null  and (catsel_cpt_18_30 is null or catsel_cpt_18_30='')
+order by merit_all;
+
+--------------------------------------------- Allocation ----------------------------------------------------------------------------------------------------
+
+do
+$$
+BEGIN
+
+Alter table candidates add column post_preference text COLLATE pg_catalog."default";
+Alter table candidates add column allocated_category_r character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_post_r character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_against_ur_r character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_preference_position_r integer;
+Alter table candidates add column allocated_category_f character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_post_f character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_against_ur_f character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_preference_position_f integer;
+Alter table candidates add column allocated_category_all character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_post_all character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_against_ur_all character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_preference_position_all integer;
+Alter table candidates add column alloc_rejection_reason text COLLATE pg_catalog."default";
+Alter table candidates add column allocated_post character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_category character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_position integer;
+Alter table candidates add column allocated_against_ur character varying(5) COLLATE pg_catalog."default";
+alter table candidates add column is_catsel_available boolean;
+
+end
+$$
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+update candidates
+set post_preference = post_preference_original;
+
+---------------------------- vacancy_table -----------------------------------------------------------------------------------------------------------------
+do
+$$
+
+begin
+
+Alter table vacancy_table add column allocated_oh integer;
+Alter table vacancy_table add column allocated_hh integer;
+Alter table vacancy_table add column allocated_vh integer;
+Alter table vacancy_table add column allocated_ph_others integer;
+Alter table vacancy_table add column allocated_esm integer;
+Alter table vacancy_table add column lowest_total numeric;
+Alter table vacancy_table add column lowest_additional_paper numeric;
+Alter table vacancy_table add column lowest_t2p1s1 numeric;
+Alter table vacancy_table add column lowest_dob date;
+Alter table vacancy_table add column max_merit integer;
+
+end
+$$
+
+update vacancy_table
+set allocated_oh ='0',
+allocated_hh ='0',
+allocated_vh ='0',
+allocated_ph_others ='0',
+allocated_esm ='0';
+
+update vacancy_table
+set left_vacancy =current;
+
+update vacancy_table
+set allocated ='0';
+
+select sum(allocated) from vacancy_table;--0
+select sum(initial_vacancy),sum(current) from vacancy_table;---8988,8988
+select sum(initial_vacancy),sum(current) from vacancy_table where category_code in ('1','2','6','0','9');---8415,8415
+select sum(initial_vacancy),sum(current) from vacancy_table where category_code in ('4','5','7','8','3');---573,573
+--------------------------------------- Allocation ---------------------------------------------------------------------------------------------------------------------
+
+update candidates set post_preference=replace(post_preference,'X,','') ;
+update candidates set post_preference=replace(post_preference,',X','');
+update candidates set post_preference=replace(post_preference,'X','');
+
+select post_preference_original,post_preference from candidates where post_preference_original like '%X%';
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 221 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 224 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 8493 candidates
+
+select SUM(initial_vacancy),sum(current) from vacancy_table where post_code in ('A01','A02');---263,263
+select SUM(initial_vacancy),sum(current) from vacancy_table where post_code in ('C34','C35');---232,232
+
+select * from candidates where allocated_post_r is not null;---224
+select * from candidates where allocated_post_f is not null;---221
+select * from candidates where allocated_post_all is not null;---8493
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null
+
+------------------------------------------------back up -------------------------------------------------------------------------------------------------------------------	
+select * into candidates_bkp_29112023_12_30pm from candidates;
+select * into vacancy_table_bkp_29112023_12_30pm from vacancy_table;	
+
+select * from candidates_bkp_29112023_11_30am where allocated_post_r is not null;---224
+select * from candidates_bkp_29112023_11_30am where allocated_post_f is not null;---221
+select * from candidates_bkp_29112023_11_30am where allocated_post_all is not null;---8493
+
+select allocated_post_all,allocated_post_r,allocated_post_f,allocated_post from candidates
+where (allocated_preference_position_all is not null or allocated_preference_position_f is not null or allocated_preference_position_r is not null)
+and allocated_post is not null ;--8698
+
+------------------------------------------------------------------------------------------------------------------------------
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select rollno,post_preference_original,post_preference,allocated_post from candidates where allocated_preference_position_f=1 and allocated_post_f in ('A01','A02');
+select rollno,post_preference_original,post_preference,allocated_post from candidates where allocated_preference_position_r=1 and allocated_post_r in ('C34','C35');
+
+select rollno,post_preference_original,post_preference,allocated_post from candidates where allocated_preference_position_all=1 and allocated_post_all is not null and post_preference_original like '%A02%';
+
+select rollno,post_preference_original,post_preference,allocated_post from candidates where  allocated_category_all is not null and allocated_category_r is not null and allocated_preference_position_r<>1
+     and allocated_preference_position_all<>1 and allocated_preference_position_r>allocated_preference_position_all and post_preference_original like '%C34%';
+
+select rollno,post_preference_original,post_preference,allocated_post from candidates where  allocated_category_all is not null and allocated_category_r is not null and allocated_preference_position_r<>1
+     and allocated_preference_position_all<>1 and allocated_preference_position_r>allocated_preference_position_all and post_preference_original like '%C35%';
+
+select rollno,post_preference_original,post_preference,allocated_post from candidates where allocated_category_all is not null and allocated_category_f is not null and allocated_preference_position_f<>1
+     and allocated_preference_position_all<>1 and allocated_preference_position_f>allocated_preference_position_all  and post_preference_original like '%A01%';
+	 
+select rollno,post_preference_original,post_preference,allocated_post from candidates where allocated_category_all is not null and allocated_category_f is not null and allocated_preference_position_f<>1
+     and allocated_preference_position_all<>1 and allocated_preference_position_f>allocated_preference_position_all  and post_preference_original like '%A02%';
+	 
+select rollno,post_preference_original,post_preference,allocated_post_all,allocated_post from candidates where allocated_category_all is not null and allocated_category_f is not null and allocated_Category_r is null 
+	and allocated_preference_position_f<allocated_preference_position_all and allocated_preference_position_f<>1 and allocated_preference_position_all<>1;
+	 
+	 
+select * from sp_adjust_vacancy('CGL',32);
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--0,8441,8998
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 217 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 201 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7973 candidates
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--8391,8441,8998
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+update candidates
+set post_preference = post_preference_original where rollno ='4207005228';
+
+select * from sp_check_notallocation('CGL',34);
+
+update candidates
+set post_preference = post_preference_original where rollno ='4604001703';
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--0,8433,8988
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 215 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 197 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--0,8430,8988
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 215 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 8493 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_10_30am from candidates;
+select * into vacancy_table_bkp_30112023_10_30am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 215 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select count(allocated_post),count(allocated_post_all),count(allocated_post_r),count(allocated_post_f) from candidates limit 10;
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_11_45am from candidates;
+select * into vacancy_table_bkp_30112023_11_45am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 215 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select count(allocated_post),count(allocated_post_all),count(allocated_post_r),count(allocated_post_f) from candidates limit 10;
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_11_45am from candidates;
+select * into vacancy_table_bkp_30112023_11_45am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+
+
+alter table candidates add column cutoff_flag_si character varying;
+select * from sp_get_cut_off('CGL',35); ---si cut_off_flag
+
+alter table candidates add column catsel_si_18_30_original character varying;
+
+update candidates
+set catsel_si_18_30_original = catsel_si_18_30;
+
+select * from sp_get_catsel('CGL',21);
+
+---------------------------------------------after si cutoff update --------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 263 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 230 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for  candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_11_45am from candidates;
+select * into vacancy_table_bkp_30112023_11_45am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+7208021798,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1203
+2201086367,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1206
+
+
+select * from sp_check_notallocation('CGL',34);
+
+8603001211,Wrong Allocation- keyvalue - 5C35 Last Merit- 1254 candidate merit name - merit_r  candidate merit- 1213
+3209001628,Wrong Allocation- keyvalue - 5C35 Last Merit- 1254 candidate merit name - merit_r  candidate merit- 1223
+6001007243,Wrong Allocation- keyvalue - 5C35 Last Merit- 1254 candidate merit name - merit_r  candidate merit- 1238
+3206040250,Wrong Allocation- keyvalue - 5C35 Last Merit- 1254 candidate merit name - merit_r  candidate merit- 1233
+8601000734,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1246
+8601030155,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1273
+3010002993,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1312
+5111001066,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1350
+5111000560,Wrong Allocation- keyvalue - 7C35 Last Merit- 968 candidate merit name - merit_r  candidate merit- 954
+
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 255 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 201 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for  7975 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_5_45pm from candidates;
+select * into vacancy_table_bkp_30112023_5_45pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+
+1202003969,Wrong Allocation- keyvalue - 1A02 Last Merit- 689 candidate merit name - merit_f candidate merit- 355
+4410040287,Wrong Allocation- keyvalue - 1A02 Last Merit- 689 candidate merit name - merit_f candidate merit- 344
+
+7208021798,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1203
+2201086367,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1206
+
+update candidates
+set post_preference = post_preference_original where rollno rollno in ('1202003969','4410040287');
+
+
+select * from sp_check_notallocation('CGL',34);
+
+8603001211,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1213
+3209001628,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1223
+6001007243,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1238
+3206040250,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1233
+8601000734,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1246
+2405017826,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1261
+4410058367,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1260
+8601030155,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1273
+3010002993,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1312
+5111001066,Wrong Allocation- keyvalue - 8C35 Last Merit- 1364 candidate merit name - merit_r  candidate merit- 1350
+5111000560,Wrong Allocation- keyvalue - 7C35 Last Merit- 968 candidate merit name - merit_r  candidate merit- 954
+7001009790,Wrong Allocation- keyvalue - 5C35 Last Merit- 1286 candidate merit name - merit_r  candidate merit- 1280
+
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+--------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 197 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_5_45pm from candidates;
+select * into vacancy_table_bkp_30112023_5_45pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+3206095843,Wrong Allocation- keyvalue - 1A01 Last Merit- 877 candidate merit name - merit_f candidate merit- 689
+4415016593,Wrong Allocation- keyvalue - 1A01 Last Merit- 877 candidate merit name - merit_f candidate merit- 627
+
+update candidates
+set post_preference = post_preference_original where rollno rollno in ('1202003969','4410040287');
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_5_45pm from candidates;
+select * into vacancy_table_bkp_30112023_5_45pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+----------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7971 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_5_45pm from candidates;
+select * into vacancy_table_bkp_30112023_5_45pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7970 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_11pm from candidates;
+select * into vacancy_table_bkp_30112023_11pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7969 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_11pm from candidates;
+select * into vacancy_table_bkp_30112023_11pm from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select rollno,name,post_preference,allocated_preference_position_r,allocated_preference_position_all from candidates 
+where allocated_category_all is not null and allocated_category_r is not null and allocated_category_f is null 
+and allocated_preference_position_r<allocated_preference_position_all
+and allocated_preference_position_r<>1 and allocated_preference_position_all<>1
+"2002012269" 
+"8601034562"
+"2201290402"
+"2405054217"
+"3001006297"
+set post_preference="'C34','C35'" 
+
+
+select rollno,name,merit_all,merit_f,post_preference,allocated_post_f,allocated_preference_position_f,allocated_preference_position_all from 
+candidates where allocated_category_all is not null and allocated_category_f is not null and allocated_Category_r is null 
+and allocated_preference_position_f<allocated_preference_position_all and allocated_preference_position_f<>1 and allocated_preference_position_all<>1
+
+update candidates set post_preference=allocated_post_f  
+where allocated_category_all is not null and allocated_category_f is not null and allocated_Category_r is null 
+and allocated_preference_position_f<allocated_preference_position_all and allocated_preference_position_f<>1 and allocated_preference_position_all<>1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7969 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_5am from candidates;
+select * into vacancy_table_bkp_30112023_5am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select rollno,name,merit_all,merit_f,post_preference,allocated_post_f,allocated_preference_position_f,allocated_preference_position_all from 
+candidates where allocated_category_all is not null and allocated_category_f is not null and allocated_Category_r is null 
+and allocated_preference_position_f<allocated_preference_position_all and allocated_preference_position_f<>1 and allocated_preference_position_all<>1
+
+update candidates set post_preference=allocated_post_f  
+where allocated_category_all is not null and allocated_category_f is not null and allocated_Category_r is null 
+and allocated_preference_position_f<allocated_preference_position_all and allocated_preference_position_f<>1 and allocated_preference_position_all<>1
+ 
+select * from sp_adjust_vacancy('CGL',32);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7968 candidates
+
+select * from sp_copy_post_preference();
+
+select * into candidates_bkp_30112023_7am from candidates;
+select * into vacancy_table_bkp_30112023_7am from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select rollno,name,merit_r,merit_f,allocated_post_r,allocated_post_f,post_preference,allocated_preference_position_r,allocated_preference_position_f,allocated_preference_position_all from candidates where allocated_category_all is null and
+allocated_category_r is not null and allocated_category_f is not null
+and allocated_preference_position_r<>1 and allocated_preference_position_f<>1 and
+allocated_preference_position_r>allocated_preference_position_f
+
+"6006022897" ---A01,A02 set
+
+select * from sp_adjust_vacancy('CGL',32);
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_f('CGL',29); ---allocation_f updated for 253 candidates
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7968 candidates
+
+select count(allocated_post),count(allocated_post_all),count(allocated_post_r),count(allocated_post_f) from candidates limit 10;---8414,7968,194,253
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;--8988,8417,8415,2
+
+
+-----------------------------------------------reprocessed with modified vacancy---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+update vacancy_table
+set initial_vacancy ='0' where post_code in ('A01','A02','D38','D39');
+
+
+update vacancy_table
+set allocated_oh ='0',
+allocated_hh ='0',
+allocated_vh ='0',
+allocated_ph_others ='0',
+allocated_esm ='0',
+allocated ='0',
+left_vacancy =initial_vacancy,
+current = initial_vacancy;
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---8380	8380	0	8380
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table where category_code in ('1','2','6','0','9');---7859	7859	0	7859
+
+
+update candidates
+set post_preference = post_preference_original ;
+
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+	
+select count(*)	 from candidates where allocated_post is not null;
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 230 candidates
+
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 8148 candidates	
+
+select * into candidates_reshared from candidates;
+select * into vacancy_table_reshared from vacancy_table;
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+
+select rollno,name,post_preference,allocated_post_r,allocated_preference_position_r,allocated_post_all,allocated_preference_position_all from candidates 
+where allocated_category_all is not null and allocated_category_r is not null and allocated_category_f is null 
+and allocated_preference_position_r<allocated_preference_position_all
+and allocated_preference_position_r<>1 and allocated_preference_position_all<>1
+
+
+update candidates set post_preference= allocated_post_r
+where allocated_category_all is not null and allocated_category_r is not null and allocated_category_f is null 
+and allocated_preference_position_r<allocated_preference_position_all
+and allocated_preference_position_r<>1 and allocated_preference_position_all<>1
+
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--8378,8380,8380
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+-----------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 200 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7669 candidates	
+
+select * into candidates_reprocessed_2 from candidates;
+select * into vacancy_table_reprocessed_2 from vacancy_table;
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7869	7871	8380
+
+select count(*) from candidates where allocated_post is not null;---7857
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+----------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 197 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7666 candidates	
+
+select * into candidates_reprocessed_3 from candidates;
+select * into vacancy_table_reprocessed_3 from vacancy_table;
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7863	7865	8380
+
+select count(*) from candidates where allocated_post is not null;---7860
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+-----------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7677 candidates	
+
+select * into candidates_reprocessed_4 from candidates;
+select * into vacancy_table_reprocessed_4 from vacancy_table;
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+post_preference set to original for 3003075161;
+2201290402---- removed pref after c34 as r<all
+
+select * from function_pref_check_and_update();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7860	7862	8380
+select count(*) from candidates where allocated_post is not null;---7859
+
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+
+UPDATE public.candidates set 
+	allocated_category_r=null, allocated_post_r=null, allocated_against_ur_r=null, allocated_preference_position_r=null,
+	allocated_category_f=null, allocated_post_f=null, allocated_against_ur_f=null, allocated_preference_position_f=null,
+	allocated_category_all=null, allocated_post_all=null, allocated_against_ur_all=null, allocated_preference_position_all=null,
+	allocated_post=null, allocated_category=null, allocated_position=null, allocated_against_ur=null;
+
+------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7666 candidates	
+
+select * from sp_copy_post_preference();
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+
+select * from function_pref_check_and_update();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7860 7862 8380
+
+select count(*) from candidates where allocated_post is not null;---7859
+
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+
+	
+-------------------------------------------------------------------------------------------------------------------------------
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7665 candidates	
+	
+select * into candidates_reprocessed_6 from candidates;
+select * into vacancy_table_reprocessed_6 from vacancy_table;
+
+select * from sp_copy_post_preference();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7859 7861 8380
+
+select count(*) from candidates where allocated_post is not null;---7859
+
+select * from sp_check_allocation('CGL',33);
+
+select * from sp_check_notallocation('CGL',34);
+	
+select * from sp_adjust_vacancy('CGL',32);
+
+select * from vacancy_table order by post_code,category_code;
+----------------------------------------------------------------------------------------------------------------------------	
+
+select * from sp_get_allocation_r('CGL',30); ---allocation_r updated for 194 candidates
+select * from sp_get_allocation_all('CGL',31);----allocated_all updated successfully for 7665 candidates	
+	
+select * from sp_copy_post_preference();
+
+select sum(allocated),sum(current),sum(initial_vacancy) from vacancy_table;--7859 7861 8380
+
+select count(*) from candidates where allocated_post is not null;---7859
+
+select * from sp_check_allocation('CGL',33);
+
+-----------------------------t2p2s1s2 Verification -----------------------------------------------------------------------------------
+---ESM
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and cat2='3'and cat3 is null and allocated_category ='3'
+order by t2p1s1s2; ----255.00
+
+--OH
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and cat2 is null and cat3='4' and allocated_category ='4'
+order by t2p1s1s2; ---271
+
+--HH
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and cat3='5' and allocated_category ='5'
+order by t2p1s1s2; ----153
+
+--VH
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and cat3='7' and allocated_category ='7'
+order by t2p1s1s2;
+
+---PWD-OTHERS
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and cat3='8' and allocated_category ='8'
+order by t2p1s1s2;
+
+---SC
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and allocated_category ='1'
+order by t2p1s1s2;
+
+---ST
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and allocated_category ='2'
+order by t2p1s1s2;
+
+---OBC
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and allocated_category ='6'
+order by t2p1s1s2;
+
+--EWS
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and allocated_category ='0'
+order by t2p1s1s2;
+
+---UR
+
+select rollno,cat1,cat2,cat3,t2p1s1s2,remarks,merit_r,merit_all,allocated_post,allocated_category 
+from candidates where allocated_post is not null
+and allocated_category ='9'
+order by t2p1s1s2;

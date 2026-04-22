@@ -1,0 +1,540 @@
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_steno2022_allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final -t arc_table C:\Users\Public\arc_table.dump
+
+
+alter table arc_table add constraint pk_serial primary key (serial_no);
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final
+\copy cut_off_table from 'C:\Users\SalauddinKhan\Desktop\cut_off_table.csv' csv header;	
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_steno2022_allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final -t master_table C:\Users\Public\master_table.dump
+
+alter table master_table add constraint pk_sl primary key (serial);
+
+create table edp_marks
+(
+	regid character varying,
+	rollno character varying,
+	name character varying,
+	father_name character varying,
+	mother_name character varying,
+	dob date,
+	gender integer,
+	cat1 integer,
+	cat2 integer,
+	cat3 integer,
+	skill_medium character varying,
+	post_apply character varying,
+	eng numeric,
+	ga numeric,
+	gi numeric,
+	score numeric,
+	normalized_score numeric,
+	cbe_marks numeric,
+	agerelaxcode character varying,
+	EQ character varying,
+	withheld character varying
+	)
+	
+alter table edp_marks add constraint pk_regid primary key (regid);	
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final	
+\copy edp_marks from 'C:\Users\SalauddinKhan\Desktop\Steno23Tier1Marks.csv' csv header;	
+
+create table candidates as 
+(select a.*,b.regid as regno,b.rollno,b.skill_medium,b.post_apply,b.eng,b.ga ,b.gi ,b.score ,b.normalized_score,b.cbe_marks,b.agerelaxcode,b.EQ,b.withheld
+ from 
+t_steno2023exam_applicant_reg_pu a,
+ edp_marks b
+ where a.ear_person_regno = b.regid ::bigint
+)
+
+alter table candidates add constraint pk_rollno primary key (rollno);	
+
+select * from candidates where eng is null;--0
+select * from candidates where ga is null;--0
+select * from candidates where gi is null;--0
+select * from candidates where score is null;--0
+select * from candidates where normalized_score is null;---0
+select * from candidates where cbe_marks is null;---0
+
+
+update candidates
+set ear_age_relaxation_code =replace(ear_age_relaxation_code,'.0','');
+
+
+alter table candidates add column cat1 character varying;
+alter table candidates add column cat2 character varying;
+alter table candidates add column serviceperiod character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+alter table candidates add column cat3 character varying;
+
+update candidates set cat1=ear_categoryid;---18601
+
+select distinct ear_is_ex_serviceman,count(*) from candidates group by ear_is_ex_serviceman;
+false	18381
+true	220
+
+update candidates set cat2='3' where ear_is_ex_serviceman='true'; --220
+
+update candidates set serviceperiod=ear_service_period where cat2='3' ;--220
+
+update candidates set cat3=ear_ph_code;--18601
+
+select distinct ear_isexs_benefit_availed_for_civilpost,count(*) from candidates where cat2='3' group by ear_isexs_benefit_availed_for_civilpost;
+false	173
+		47
+		
+update candidates set exs_reservation='Yes' where cat2='3';	--220	
+
+update candidates
+set exsm_length= substring(serviceperiod,1,2)
+where cat2='3';
+
+select distinct ear_education_details from candidates;
+
+"Equivalent to 12th Standard"
+"12th Standard"
+"Deemed Graduation"
+
+
+select * from candidates where rollno in ('1203001278', '2201056952', '2201056953','2201056954', '2201056955', '2201056956', '2201056957');---withheld
+
+select rollno,ear_candiateage_ason_date,ear_dob,ear_gender,cat1,cat2,cat3,ear_age_relaxation_code,agerelaxcode 
+from candidates
+where ear_candiateage_ason_date>'27';---3273 records
+
+
+select distinct ear_post_applying_for,post_apply from candidates group by ear_post_applying_for,post_apply;
+1	"GRADE C"
+1	"GRADE D" ----ROLLNO 3009010032
+2	"GRADE D"
+3	"BOTH (GRADE C AND GRADE D)"
+
+
+select distinct ear_skill_medium,skill_medium from candidates group by ear_skill_medium,skill_medium;
+
+1	"ENGLISH"
+1	"HINDI" ---- rollno 3003007767
+2	"ENGLISH"--- rollno 3001010175
+2	"HINDI"
+
+select * from candidates where ear_skill_medium='1' and skill_medium='HINDI';---3003007767
+select * from candidates where ear_skill_medium='2' and skill_medium='ENGLISH';---3001010175
+
+
+do
+$$
+begin
+
+update candidates
+set ear_present_districtid =replace(ear_present_districtid,'.0','');
+
+update candidates
+set ear_present_stateid =replace(ear_present_stateid,'.0','');
+
+update candidates
+set ear_present_pincode =replace(ear_present_pincode,'.0','');
+
+update candidates
+set ear_permanent_districtid =replace(ear_permanent_districtid,'.0','');
+
+update candidates
+set ear_permanent_stateid =replace(ear_permanent_stateid,'.0','');
+
+update candidates
+set ear_permanent_pincode =replace(ear_permanent_pincode,'.0','');
+
+end
+$$
+
+
+alter table candidates add column permanent_district character varying;
+alter table candidates add column permanent_state character varying;
+alter table candidates add column present_district character varying;
+alter table candidates add column present_state character varying;
+
+
+
+do
+$$
+begin
+
+update candidates a
+set a.present_state = b.st_state_name
+from m_states_gis b
+where a.ear_present_stateid::integer =b.st_stateid;
+
+update candidates a
+set a.permanent_state = b.st_state_name
+from m_states_gis b
+where a.ear_permanent_stateid::integer =b.st_stateid;
+
+update candidates a
+set a.present_district = b.ds_dist_name
+from m_districts_gis b
+where a.ear_present_districtid::integer =b.ds_distid;
+
+update candidates a
+set a.permanent_district = b.ds_dist_name
+from m_districts_gis b
+where a.ear_permanent_districtid::integer =b.ds_distid;
+
+end
+$$
+
+
+pg_dump -U postgres -h localhost -p 5432 -t vacancy_table -F c -f C:\Users\Public\vacancy_table.dump postgres
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final -t vacancy_table C:\Users\Public\vacancy_table.dump
+
+
+alter table vacancy_table add column current integer;
+alter table vacancy_table add column allocated integer;
+alter table vacancy_table add column left_vacancy integer;
+alter table vacancy_table add column min_marks numeric;
+alter table vacancy_table add column min_marks_part1_gi numeric;
+alter table vacancy_table add column min_marks_part2_ga numeric;
+alter table vacancy_table add column min_marks_cand_dob date;
+
+
+update vacancy_table set current =initial;
+
+alter table candidates add column agerelax_code character varying;
+
+update candidates set agerelax_code=ear_age_relaxation_code where ear_age_relaxation_code is not null;--3630
+
+select rollno,ear_person_regno,cat1,cat2,cat3,ear_dob,ear_gender from candidates where agerelax_code='10';---190 all OBC/EWS/UR
+select rollno,ear_person_regno,cat1,cat2,cat3,ear_dob,ear_gender from candidates where agerelax_code='11';---46 all SC/ST
+select rollno,ear_person_regno,cat1,cat2,cat3,ear_dob,ear_gender from candidates where agerelax_code='12';---4 female UR/OBC/EWS
+select rollno,ear_person_regno,cat1,cat2,cat3,ear_dob,ear_gender from candidates where agerelax_code='13';---2 female S/ST
+
+
+
+do
+$$
+begin
+
+alter table candidates add column merit integer;
+alter table candidates add column dob_flag_c character varying;
+alter table candidates add column dob_flag_d character varying;
+alter table candidates add column catsel_dob_c character varying;
+alter table candidates add column catsel_dob_d character varying;
+alter table candidates add column cut_off_c character varying;
+alter table candidates add column cut_off_d character varying;
+alter table candidates add column catsel_c character varying;
+alter table candidates add column catsel_d character varying;
+
+end
+$$
+
+alter table candidates add column remarks character varying;
+
+---age >=27 but relaxation not taken
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates where ear_candiateage_ason_date>='27' and agerelax_code is null;--193
+
+--SC/ST PWD
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is not null and cat1 in ('1','2');---0
+
+--OBC PWD
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is not null and cat1 in ('6');---0
+
+--EWS/UR PWD
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is not null and cat1 in ('9','0');---1
+
+update candidates
+set agerelax_code ='03',
+remarks='Age relaxation given'
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is not null and cat1 in ('9','0');
+
+--ESM
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2='3'
+and cat3 is null;---0
+
+--SC/ST 
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is null and cat1 in ('1','2');---8
+
+update candidates
+set agerelax_code ='01',
+remarks='Age relaxation given'
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is null and cat1 in ('1','2');
+
+--OBC
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is null and cat1 in ('6');--6
+
+update candidates
+set agerelax_code ='02',
+remarks='Age relaxation given'
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is null and cat1 in ('6');
+
+---UR/EWS (Not given relaxation)
+select rollno,ear_dob as dob1,ear_candiateage_ason_date,cat1,cat2,cat3,ear_gender,agerelax_code,exsm_length,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d 
+from candidates 
+where ear_candiateage_ason_date>='27' and agerelax_code is null and cat2 is null
+and cat3 is null and cat1 in ('9','0');---178 
+
+select * from sp_get_dob_flag('STENO2023',2);
+select * from sp_get_dob_flag('STENO2023',3);
+
+select distinct dob_flag_c,count(*) from candidates group by dob_flag_c;
+"01"	372
+"02"	44
+"03"	63
+"04"	48
+"05"	32
+"06"	218
+"9"		17685
+"99"	139
+
+select rollno,ear_dob,ear_gender,cat1,cat2,exsm_length,cat3,agerelax_code,dob_flag_c
+from candidates where dob_flag_c='99'; ---139 candidates taken 10,11,12 ARC
+
+
+select distinct dob_flag_d,count(*) from candidates group by dob_flag_d;
+"01"	1413
+"02"	882
+"03"	116
+"04"	117
+"05"	54
+"06"	218
+"10"	187
+"11"	45
+"12"	4
+"13"	2
+"9"		15328
+"99"	235
+
+
+select rollno,ear_dob,ear_candiateage_ason_date,ear_gender,cat1,cat2,exsm_length,cat3,agerelax_code,dob_flag_c,dob_flag_d
+from candidates where dob_flag_d='99' and cat1 not in('9','0');---56 candidates arc taken but still overaged
+
+
+select * from sp_get_catseldob_flag('STENO2023',4);
+select * from sp_get_catseldob_flag('STENO2023',5);
+
+select distinct catsel_dob_c,count(*) from candidates group by catsel_dob_c;
+	139
+"1"	272
+"2"	100
+"3"	218
+"4"	1
+"6"	44
+"7"	1
+"9"	17826
+
+select distinct catsel_dob_d,count(*) from candidates group by catsel_dob_d;
+
+	235
+"1"	988
+"2"	426
+"3"	218
+"4"	6
+"6"	882
+"7"	5
+"9"	15841
+
+select rollno,ear_dob,ear_candiateage_ason_date,ear_gender,cat1,cat2,exsm_length,cat3,agerelax_code,dob_flag_c,catsel_dob_c,dob_flag_d,catsel_dob_d
+from candidates where dob_flag_d in ('10','11','12','13') order by dob_flag_d;
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_165.csv' csv header;---1
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_166.csv' csv header;---633
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_167.csv' csv header;---1948
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_170.csv' csv header;---2276
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_171.csv' csv header;---1080
+\copy (select * from t_post_pref_steno2023_ssc) to 'C:\Users\Public\t_post_pref_steno23_172.csv' csv header;---2764
+
+
+total post_pref filled =8702
+
+
+CREATE TABLE IF NOT EXISTS public.t_post_pref_steno2023_ssc
+(
+    tp_id integer NOT NULL ,
+    tp_regno bigint NOT NULL,
+    tp_cand_name text COLLATE pg_catalog."default",
+    tp_name_in_application text COLLATE pg_catalog."default",
+    tp_changedname_in_application text COLLATE pg_catalog."default",
+    tp_cand_father_name text COLLATE pg_catalog."default",
+    tp_cand_mother_name text COLLATE pg_catalog."default",
+    tp_cand_rollno text COLLATE pg_catalog."default" NOT NULL,
+    tp_dob date NOT NULL,
+    tp_candidate_age real NOT NULL,
+    tp_gender integer NOT NULL,
+    tp_cat1 integer,
+    tp_is_ex_serviceman boolean NOT NULL,
+    tp_cat2 integer,
+    tp_is_physically_handicaped boolean NOT NULL,
+    tp_cat3 integer,
+    tp_is_age_relaxation boolean NOT NULL,
+    tp_age_relaxation_code integer,
+    tp_joining_date_for_armedforces date,
+    tp_discharged_date date,
+    tp_service_period text COLLATE pg_catalog."default",
+    tp_isexs_benefit_availed_for_civilpost boolean,
+    tp_joining_date_for_civilpost date,
+    tp_post_applied integer NOT NULL,
+    tp_stenography_knowledge boolean NOT NULL,
+    tp_stenography_medium integer NOT NULL,
+    tp_post_pref text COLLATE pg_catalog."default" NOT NULL,
+    tp_share_info_accrossportal boolean NOT NULL,
+    tp_present_address text COLLATE pg_catalog."default",
+    tp_present_districtid integer,
+    tp_present_districtname text COLLATE pg_catalog."default",
+    tp_present_stateid integer,
+    tp_present_statename text COLLATE pg_catalog."default",
+    tp_present_pincode integer,
+    tp_permanent_address text COLLATE pg_catalog."default",
+    tp_permanent_stateid integer,
+    tp_permanent_statename text COLLATE pg_catalog."default",
+    tp_permanent_districtid integer,
+    tp_permanent_districtname text COLLATE pg_catalog."default",
+    tp_permanent_pincode integer,
+    tp_email_id text COLLATE pg_catalog."default" NOT NULL,
+    tp_mobile_number text COLLATE pg_catalog."default" NOT NULL,
+    tp_other_national_address text COLLATE pg_catalog."default",
+    tp_isactive boolean DEFAULT true,
+    tp_ip_address text COLLATE pg_catalog."default",
+    tp_createdbyid integer,
+    tp_createdbyrid integer,
+    tp_updbyid integer,
+    tp_upddtm timestamp without time zone,
+    tp_createddtm timestamp without time zone DEFAULT now(),
+    tp_notificationid integer,
+    tp_examid integer,
+    tp_exam_year integer,
+    tp_qrcode_path text COLLATE pg_catalog."default",
+    tp_remarks text COLLATE pg_catalog."default"
+	)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_steno2023_allocation_final	
+	
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_165.csv' csv header;--1
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_166.csv' csv header;--633
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_167.csv' csv header;--1948
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_170.csv' csv header;--2276
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_171.csv' csv header;---1080
+\copy t_post_pref_steno2023_ssc from 'C:\Users\Public\t_post_pref_steno23_172.csv' csv header;--2764
+		
+alter table candidates add column post_preference text;
+
+update candidates a
+set a.post_preference = b.tp_post_pref
+from t_post_pref_steno2023_ssc b where 
+a.ear_person_regno =b.tp_regno;---8702 updates
+
+
+select * from sp_get_merit('STENO2023',1);
+
+Select merit,rollno,total,part1_gi,part2_ga,ear_dob,ear_name from candidates where merit is not null order by merit;		
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
+select rollno,ear_skill_medium,skill_medium,ear_post_applying_for,post_apply,post_preference_original,post_preference,remarks from candidates
+where merit is not null
+and ear_post_applying_for ='1' and post_preference like '%D%';--14 records
+
+select rollno,ear_skill_medium,skill_medium,ear_post_applying_for,post_apply,post_preference_original,post_preference,remarks from candidates
+where merit is not null
+and ear_post_applying_for ='2' and post_preference like '%C%';--22 records
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+alter table candidates add column mistake_d double precision;
+alter table candidates add column mistake_c double precision;
+alter table candidates add column medium_d character varying;
+alter table candidates add column medium_c character varying;
+
+
+create table skilltest_marks
+( rollno character varying,
+ per_of_error numeric,
+ medium character varying,
+ asr_stenograde character varying
+
+)
+
+select asr_stenograde,count(*) from skilltest_marks group by asr_stenograde ;
+"Grade-D"	9947
+"Grade-C"	1901
+
+
+update candidates a
+set a.mistake_d = b.per_of_error,
+a.medium_d =b.medium
+from skilltest_marks b
+where a.rollno=b.rollno and
+b.asr_stenograde ='Grade-D';---9946,---1203001278 wrong rollno
+
+update candidates a
+set a.mistake_c = b.per_of_error,
+a.medium_c =b.medium
+from skilltest_marks b
+where a.rollno=b.rollno and
+b.asr_stenograde ='Grade-C';--1901
+
+
+select * from edp_marks where rollno='1203001278' limit 10;
+
+select rollno from candidates where merit is not null and (mistake_d is null and mistake_c is null);--11
+
+'3011004391','2201002515','6205003605','2201021112','8601000645','2201023891','3001000761','7208000080','2201019223','2201038165','2201006894'
+
+select * from sp_get_cut_off('STENO2023',6);
+
+select * from sp_get_cut_off('STENO2023',7);
+
+select * from sp_get_catsel('STENO2023',8);
+
+select * from sp_get_catsel('STENO2023',9);
+
+
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_medium character varying;
+alter table candidates add column allocated_against_ur character varying;
+
+alter table vacancy_table add constraint pk_vacancy primary key (post_code,post_name,category_code)
+
+update candidates
+set allocated_category=null,
+allocated_post=null,
+allocated_medium=null,
+allocated_against_ur=null
+where merit is not null
+and allocated_post is not null;
+
+
+select sum(initial),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;1384	1384	1274	110---r1
+
+select sum(initial),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;1384	1333		---after adjust1
+
+
+select * from t_steno2023exam_applicant_reg_pu  where ear_person_regno ='40005248064' limit 10;
+
+select count(*) from candidates where allocated_post is not null;--1223

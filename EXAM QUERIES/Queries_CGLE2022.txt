@@ -1,0 +1,50 @@
+select *from candidates where service_period is not null order by regno;
+select regno,dob,age,service_period,substring(service_period,1,2),exsm_length from candidates where service_period is not null order by regno;
+--copy candidates from 'C:\Users\Public\CGLE2022\pref_form_final.csv'csv header;
+--update candidates set age = cast(extract(year from age(CAST('01-01-2022' as DATE), CAST(dob as DATE)))||'.'||extract(month from age(CAST('01-01-2022' as DATE), CAST(dob as DATE)))as real);
+--update candidates set exsm_length = substring(service_period,1,2) where service_period is not null;
+select regno,dob,age(CAST('01-01-2022' as DATE), CAST(dob as DATE)),cast(extract(year from age(CAST('01-01-2022' as DATE), CAST(dob as DATE)))||'.'||extract(month from age(CAST('01-01-2022' as DATE), CAST(dob as DATE)))as real) as age1 from candidates order by regno;
+
+
+update candidates
+set
+  	--  t1_eng =b.t1_eng :: numeric
+     t1_ga =b.t1_ga :: numeric,
+     t1_gi =b.t1_gi :: numeric,
+      t1_qa =b.t1_qa :: numeric,
+      t1_score =b.t1_score :: numeric,
+      t1_normal=b.t1_normal :: numeric,
+	  
+      tier1 =b.tier1 :: numeric,
+      t1q_aao =b.t1q_aao ,
+      t1q_jso =b.t1q_jso  ,
+      t1q_all =b.t1q_all  ,
+      t2_math =b.t2_math :: numeric,
+      t2_gi=b.t2_gi :: numeric,
+      t2p1s1scor=b.t2p1s1scor :: numeric,
+      t2p1s1norm=b.t2p1s1norm :: numeric,
+	  
+      t2p1s1=b.t2p1s1 :: numeric,
+      t2_eng =b.t2_eng :: numeric,
+      t2_ga=b.t2_ga :: numeric,
+      t2p1s2scor=b.t2p1s2scor :: numeric,
+      t2p1s2norm =b.t2p1s2norm :: numeric,
+      t2p1s2 =b.t2p1s2 :: numeric,
+      t2p1s1s2=b.t2p1s1s2 :: numeric,
+      t2p2 = nullif(b.t2p2, '') :: numeric,
+      t2p3 =nullif(b.t2p3,'') :: numeric,
+      dest_mistakes =nullif(b.dest_mist,'') :: numeric,
+     ckt_marks =b.ckt_marks :: numeric,
+      dest_exempted =b.exempted  
+from edp_marks b where candidates.rollno =b.roll;
+
+
+update candidates
+set remarks = '"Absent in DEST, DEST is mandatory, hence excluded from process"',
+rejection_provision = 'R'
+where regno in ('10000004116', '10000340598', '10000389456', '10000512706', '10000644818', '10000930585', '10000996709', '10001119912', '10001340937', '10001379060', '10001817508', '10002113788', '10003210256', '10005222037', '10006117840', '20000074107', '20000082915', '20000212032', '20000397464', '20000618187', '20000704637', '20000711910', '20000725331', '20000778775', '20000794782', '20000891610', '20000892397', '20000910094', '20000937374', '20000982564', '20001007575', '20001197833', '20001753991', '20002240077', '20002275569', '20002282868', '20003021484', '20003734153', '20004660993', '30000067824', '30000106312', '30000199546', '30000225058', '30000459181', '30000626085', '30000641224', '30000789977', '30000838951', '30000904053', '30001058862', '30001072390', '30001261638', '30002162252', '30002349350', '30002675466', '30004322552', '30004407353', '30004418689', '30004983298', '30005396368', '30005418331', '40000658848', '40000793919', '40000915765', '40000965526', '40001031790', '40001436673', '40001479551', '40001615497', '40001866438', '40002257845', '40002270099', '40002713407', '40003092310', '40004338142', '40004392163', '40004710632', '50000367085', '50000379905', '50000506326', '50000692022', '50000858919', '50002372963', '50002437147', '50002526057', '50002889212', '50003021703', '50005756574', '72000464527', '72000706009', '72000747175', '72000761216', '72000817836', '72000961180', '72001840824', '72001907645', '73000860614', '73001697662', '74000880924', '74000904096', '75000346269', '81000053276', '81000328570', '82000021969', '82000108884', '82000129282', '82000209931', '83000012042', '83000165625', '83000192531', '83000232188', '84000049210', '85000308966', '91000011907', '91000015508', '91000057572', '91000118671', '91000202441', '91000334514', '92000007322', '92000015372', '92000022873', '92000067317', '92000071877', '92000074880', '92000098390', '92000177654', '92000194680', '92000274598', '92000297242', '92000351515', '92000423599', '92000503565', '92000533825', '92000600977', '92000608848', '93000002989', '93000050595', '93000056794', '93000115966', '93000118987', '93000148995', '93000181879', '93000218572', '93000291417', '93000336881', '93000348869', '93000415487', '93000460567', '93000475928', '93000483939', '93000627844', '93000692138', '94000038630', '94000115177', '94000138499', '94000340123', '94000365061', '94000492264', '95000386764');
+
+update candidates
+set rejection_provision = 'C'
+where
+rejection_provision is null;

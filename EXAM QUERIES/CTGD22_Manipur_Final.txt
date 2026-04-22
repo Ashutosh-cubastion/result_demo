@@ -1,0 +1,608 @@
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_constablegd22_petpst where pt_dateofappear ::character varying like '2023-11%' order by pt_dateofappear) to 'C:\Users\Public\manipur_pet_pst.csv' csv header;
+
+
+CREATE TABLE IF NOT EXISTS public.t_constablegd22_petpst_manipur
+(
+    pt_roll_no bigint NOT NULL,
+    pt_name text COLLATE pg_catalog."default",
+    pt_fname text COLLATE pg_catalog."default",
+    pt_mname text COLLATE pg_catalog."default",
+    pt_tenthroll text COLLATE pg_catalog."default",
+    pt_board integer,
+    pt_boardname text COLLATE pg_catalog."default",
+    pt_tenthyear integer,
+    pt_category integer,
+    pt_categoryname text COLLATE pg_catalog."default",
+    pt_gender integer,
+    pt_gendername text COLLATE pg_catalog."default",
+    pt_dob date,
+    pt_ismigrated boolean,
+    pt_isseekingreservation boolean,
+    pt_migratedstate integer,
+    pt_migratedstatename text COLLATE pg_catalog."default",
+    pt_migrateddistrict integer,
+    pt_migrateddistrictname text COLLATE pg_catalog."default",
+    pt_originstate integer,
+    pt_originstatename text COLLATE pg_catalog."default",
+    pt_origindistrict integer,
+    pt_origindistrictname text COLLATE pg_catalog."default",
+    pt_stateconsider integer,
+    pt_stateconsidername text COLLATE pg_catalog."default",
+    pt_districtconsider integer,
+    pt_districtconsidername text COLLATE pg_catalog."default",
+    pt_createdbyid integer,
+    pt_isactive boolean,
+    pt_createdatetime timestamp without time zone DEFAULT now(),
+    pt_ipaddress text COLLATE pg_catalog."default",
+    pt_updatedbyid integer,
+    pt_updateddtm timestamp without time zone,
+    pt_pet_satatus text COLLATE pg_catalog."default",
+    pt_pst_status boolean,
+    pt_seek_height_relax boolean,
+    pt_heightbar boolean,
+    pt_height_measure double precision,
+    pt_heightbar_pst boolean,
+    pt_is_chest_relaxation_availed boolean,
+    pt_chestbar_pst boolean,
+    pt_weight_measure double precision,
+    pt_is_qualified_kms5_min24 text COLLATE pg_catalog."default",
+    pt_is_qualified_km16_min630 text COLLATE pg_catalog."default",
+    pt_is_qualified_km16_min830 text COLLATE pg_catalog."default",
+    pt_is_qualified_m800_min4 text COLLATE pg_catalog."default",
+    pt_description text COLLATE pg_catalog."default",
+    pt_attendance text COLLATE pg_catalog."default",
+    chestexp double precision,
+    chestnotexp double precision,
+    pt_centrename text COLLATE pg_catalog."default",
+    pt_centrecode text COLLATE pg_catalog."default",
+    pt_dateofappear timestamp without time zone,
+    pt_heightrelaxcode text COLLATE pg_catalog."default",
+    pt_finalstatus text COLLATE pg_catalog."default",
+    pt_naxal_district boolean,
+    pt_border_district boolean,
+    pt_chestrelax_code text COLLATE pg_catalog."default",
+    pt_biometricstatus boolean,
+    pt_biometricphoto text COLLATE pg_catalog."default",
+    pt_isexservicemen boolean NOT NULL,
+    pt_heightstatusfinal boolean,
+    pt_is_selected_revised_result character varying(1) COLLATE pg_catalog."default",
+    pt_result_status boolean,
+    med_centercode text COLLATE pg_catalog."default",
+    med_centername text COLLATE pg_catalog."default",
+    med_date_of_appear date,
+    regno text COLLATE pg_catalog."default",
+    pt_actualdate timestamp without time zone,
+    CONSTRAINT primary_kep_petpst_gd22_manipur PRIMARY KEY (pt_roll_no)
+	)
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final
+	
+\copy t_constablegd22_petpst_manipur from 'C:\Users\Public\manipur_pet_pst.csv' csv header;
+
+select distinct pt_finalstatus,count(*) from t_constablegd22_petpst_manipur group by pt_finalstatus
+
+"Not Qualified"	1333
+"Qualified"	367
+"Rejected"	1
+
+---from tier1 result
+
+CREATE TABLE IF NOT EXISTS public.candidates
+(
+    regid bigint NOT NULL,
+    rollno bigint NOT NULL,
+    cand_name text COLLATE pg_catalog."default",
+    cand_fname text COLLATE pg_catalog."default",
+    cand_mname text COLLATE pg_catalog."default",
+    category_raw integer NOT NULL,
+    category integer,
+    gender integer NOT NULL,
+    dob date NOT NULL,
+    isncc_certificate text COLLATE pg_catalog."default",
+    typeofncc_certificate text COLLATE pg_catalog."default",
+    is_ex_serviceman text COLLATE pg_catalog."default",
+    ex_service_period_ymd text COLLATE pg_catalog."default",
+    ex_service_period text COLLATE pg_catalog."default",
+    joining_date_for_armedforces date,
+    joining_date_for_civilpost date,
+    ex_discharged_date date,
+    isexs_benefit_availed_for_civilpost boolean,
+    ex_isexs_eligibility text COLLATE pg_catalog."default",
+    applied_date date,
+    is_age_relaxation boolean,
+    age_relaxation_code_raw text COLLATE pg_catalog."default",
+    age_relaxation_code text COLLATE pg_catalog."default",
+    post_preference text COLLATE pg_catalog."default",
+    domicile_stateid integer,
+    domicile_districtid integer,
+    ismigrated boolean,
+    isreservation_availed_candidate boolean,
+    origin_stateid integer,
+    origin_districtid integer,
+    isnaxal_district_application boolean,
+    isborder_district_application boolean,
+    stateconsider integer,
+    districtconsider integer,
+    statename_considered text COLLATE pg_catalog."default",
+    districtname_considered text COLLATE pg_catalog."default",
+    naxal_district character varying(5) COLLATE pg_catalog."default",
+    border_district character varying(5) COLLATE pg_catalog."default",
+    general_intelligence numeric,
+    general_awareness numeric,
+    elementry_mathematics numeric,
+    english numeric,
+    hindi numeric,
+    score numeric,
+    normalised_score numeric,
+    ncc_marks numeric,
+    total_marks numeric,
+    remarks text COLLATE pg_catalog."default",
+    rejection_provision character varying(5) COLLATE pg_catalog."default",
+    merit integer,
+    dob_flag character varying(10) COLLATE pg_catalog."default",
+    catsel_dob character varying(10) COLLATE pg_catalog."default",
+    cut_off character varying(10) COLLATE pg_catalog."default",
+    catsel character varying(10) COLLATE pg_catalog."default",
+    debarred text COLLATE pg_catalog."default",
+    allocated_category character varying(5) COLLATE pg_catalog."default",
+    allocated_post character varying(5) COLLATE pg_catalog."default",
+    allocated_state character varying(20) COLLATE pg_catalog."default",
+    allocated_area character varying(10) COLLATE pg_catalog."default",
+    allocated_against_ur character varying(5) COLLATE pg_catalog."default",
+    allocated_state_in_notice character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT candidates_pk PRIMARY KEY (rollno)
+)	
+
+create table candidates_manipur AS
+(select a.*,b.*
+from candidates a,
+t_constablegd22_petpst_manipur b
+where a.rollno=b.pt_roll_no);
+
+
+'5501000428','5501000539','5501001280','5501001413','5501001700','5501001951','5501002431','5501002701','5501003571','5501003933','5501004074','5501004261','5501004378','5501005598','5501006019','5501006081','5501006091','5501006228','5501006238','5501006292','5501006306','5501006327','5501006388','5501006443','5501006456','5501006475','5501006550','5501006678','5501006784','5501006833','5501006900','5501007081','5501007175','5501007253','5501007298','5501007306','5501007333','5501007338','5501007370','5501007385','5501007398','5501007491','5501007511','5501007550','5501007611','5501007630','5501007639','5501007677','5501007737','5501007746','5501007859','5501007910','5501007913','5501008019','5501008023','5501008132','5501008178','5501008201','5501008242','5501008284','5501008294','5501008305','5501008308','5501008320','5501008325','5501008334','5501008382','5501008385','5501008440','5501008557','5501008604','5501008639','5501008642','5501008668','5501008689','5501008691','5502000057','5502000080','5502000082','5502000085','5502000108','5502000116','5502000142','5502000157','5502000159','5502000167','5502000243','5502000276','5502000291','5502000293','5502000295','5502000331','5502000334','5502000335','5502000365','5502000371','5502000393','5502000418','5502000421','5502000438','5502000439','5502000465','5502000468','5502000477','5502000480','5502000506','5502000517','5502000539','5502000566','5502000577','5502000583','5502000589','5502000596','5502000646','5502000667','5502000670','5502000694','5502000711','5502000747','5502000757','5502000759','5502000763','5502000799','5502000800','5502000811','5502000824','5502000827','5502000871','5502000873','5502000879','5502000886','5502000892','5502000893','5502000898','5502000904','5502000927','5502000958','5502000968','5502000994','5502001000','5502001008','5502001014','5502001031','5502001082','5502001102','5502001103','5502001119','5502001123','5502001184','5502001188','5502001197','5502001213','5502001229','5502001237','5502001273','5502001278','5502001360','5502001432','5502001436','5502001445','5502001446','5502001449','5502001467','5502001494','5502001517','5502001537','5502001538','5502001540','5502001566','5502001620','5502001625','5502001639','5502001642','5502001647','5502001654','5502001679','5502001683','5502001704','5502001714','5502001724','5502001742','5502001749','5502001772','5502001785','5502001838','5502001859','5502001863','5502001871','5502001872','5502001905','5502001911','5502001956','5502002036','5502002074','5502002106','5502002128','5502002141','5502002144','5502002165','5502002169','5502002187','5502002207','5502002221','5502002252','5502002287','5502002294','5502002295','5502002309','5502002316','5502002349','5502002350','5502002368','5502002374','5502002377','5502002383','5502002394','5502002430','5502002459','5502002476','5502002477','5502002480','5502002513','5502002519','5502002527','5502002530','5502002533','5502002542','5502002547','5502002551','5502002581','5502002587','5502002597','5502002613','5502002634','5502002647','5502002652','5502002674','5502002686','5502002688','5502002708','5502002718','5502002719','5502002745','5502002753','5502002803','5502002817','5502002827','5502002829','5502002837','5502002846','5502002875','5502002912','5502002921','5502002923','5502002999','5502003012','5502003050','5502003064','5502003089','5502003095','5502003107','5502003112','5502003124','5502003140','5502003141','5502003145','5502003177','5502003197','5502003207','5502003208','5502003249','5502003255','5502003259','5502003275','5502003312','5502003346','5502003369','5502003405','5502003410','5502003421','5502003474','5502003510','5502003536','5502003547','5502003558','5502003570','5502003572','5502003588','5502003603','5502003607','5502003625','5502003627','5502003643','5502003645','5502003653','5502003655','5502003658','5502003660','5502003689','5502003693','5502003733','5502003816','5502003830','5502003835','5502003842','5502003845','5502003867','5502003876','5502003882','5502003935','5502003944','5502003948','5502003955','5502003969','5502003984','5502003985','5502003992','5502004007','5502004012','5502004016','5502004019','5502004021','5502004030','5502004035','5502004037','5502004044','5502004045','5502004070','5502004074','5502004087','5502004089','5502004097','5502004100','5503000003','5503000004','5503000012','5503000018','5503000027','5503000038','5503000047','5503000050','5503000057','5503000073','5503000082','5503000099','5503000114','5503000117','5503000122','5503000130','5503000147','5503000172','5503000174','5503000178','5503000201','5503000203','5503000235','5503000238','5503000243','5503000269','5503000278','5503000290','5503000299','5503000304','5503000319','5503000326','5503000327','5503000332'
+
+
+CREATE TABLE IF NOT EXISTS public.t_gd22exam_medical
+(
+    med_roll_no bigint NOT NULL,
+    med_name text COLLATE pg_catalog."default" NOT NULL,
+    med_fname text COLLATE pg_catalog."default" NOT NULL,
+    med_mname text COLLATE pg_catalog."default" NOT NULL,
+    med_ismigrated boolean NOT NULL,
+    med_isseekingreservation boolean,
+    med_migratedstate integer,
+    med_migrateddistrict integer,
+    med_originstate integer,
+    med_origindistrict integer,
+    med_stateconsider integer,
+    med_districtconsider integer,
+    med_createdbyid integer,
+    med_isactive boolean NOT NULL DEFAULT true,
+    med_createdatetime timestamp without time zone DEFAULT now(),
+    med_ipaddress text COLLATE pg_catalog."default",
+    med_updatedbyid integer,
+    med_updateddtm timestamp without time zone,
+    med_dateofappear timestamp without time zone,
+    med_naxal_district boolean,
+    med_border_district boolean,
+    med_domicile boolean,
+    med_merti boolean,
+    med_naxal boolean,
+    med_border boolean,
+    med_domicile_district boolean,
+    med_dme_status text COLLATE pg_catalog."default",
+    med_dme_unfitreason text COLLATE pg_catalog."default",
+    med_rme_applied boolean,
+    med_rme_appeal_approved boolean,
+    med_rme_attendance boolean,
+    med_biometric_status_rme boolean,
+    med_biometric_photo_rme text COLLATE pg_catalog."default",
+    med_rme_biometric_description text COLLATE pg_catalog."default",
+    med_rme_finalstatus boolean,
+    med_dme_rme_finalstatus text COLLATE pg_catalog."default",
+    med_rme_final_description text COLLATE pg_catalog."default",
+    med_rme_date_of_appear timestamp without time zone,
+    med_rme_centercode text COLLATE pg_catalog."default",
+    med_rme_centername text COLLATE pg_catalog."default",
+    med_dme_unfitreason_remarks text COLLATE pg_catalog."default",
+    med_rmeipaddress text COLLATE pg_catalog."default",
+    med_rmeupdatedbyid integer,
+    med_rmeupdateddtm timestamp without time zone
+)
+
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_gd22exam_medical) to 'C:\Users\Public\t_gd22exam_medical.csv' csv header;
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final
+\copy t_gd22exam_medical from 'C:\Users\Public\t_gd22exam_medical.csv' csv header;
+
+CREATE TABLE IF NOT EXISTS public.t_appl_dv_ctgd2022candidatedetails_ssc_manipur
+(
+    advc_id integer NOT NULL ,
+    advc_name text COLLATE pg_catalog."default",
+    advc_father_name text COLLATE pg_catalog."default",
+    advc_mother_name text COLLATE pg_catalog."default",
+    advc_candidatenameremarks text COLLATE pg_catalog."default",
+    advc_fathernameremarks text COLLATE pg_catalog."default",
+    advc_mothernameremarks text COLLATE pg_catalog."default",
+    advc_genderid integer,
+    advc_categoryid integer,
+    advc_reason_for_catchange text COLLATE pg_catalog."default",
+    advc_isex_serviceman boolean,
+    advc_serviceperiod text COLLATE pg_catalog."default",
+    advc_discharged_date date,
+    advc_isph boolean,
+    advc_examregion_code text COLLATE pg_catalog."default",
+    advc_minority_community boolean,
+    advc_dvactualdate date,
+    advc_createdbyid integer,
+    advc_createdbyrid integer,
+    advc_updbyid integer,
+    advc_upddtm timestamp without time zone,
+    advc_createddtm timestamp without time zone DEFAULT now(),
+    advc_isactive boolean DEFAULT true,
+    advc_orderby integer,
+    advc_ipaddress text COLLATE pg_catalog."default",
+    advc_arccode text COLLATE pg_catalog."default",
+    advc_capturedimgurl text COLLATE pg_catalog."default",
+    advc_phcode integer,
+    advc_rejectionprovision text COLLATE pg_catalog."default",
+    advc_rejectionreason text COLLATE pg_catalog."default",
+    advc_remarks text COLLATE pg_catalog."default",
+    advc_rollno text COLLATE pg_catalog."default",
+    advc_notificationid integer,
+    advc_examid integer,
+    advc_posteligiblefor text COLLATE pg_catalog."default",
+    advc_posteligiblefor_dept_code text COLLATE pg_catalog."default",
+    advc_postpreference_dv_option text COLLATE pg_catalog."default",
+    advc_examyear integer,
+    advc_isdvcomplete boolean,
+    advc_regno bigint,
+    advc_dob date,
+    advc_schedule_date date,
+    advc_capturedsignurl text COLLATE pg_catalog."default",
+    advc_minority_name text COLLATE pg_catalog."default",
+    advc_subcat_of_phtype integer,
+    advc_is_eligible_exsvc_reservation boolean,
+    advc_exsvc_joining_date date,
+    advc_post_not_eligiblefor text COLLATE pg_catalog."default",
+    advc_age text COLLATE pg_catalog."default",
+    advc_tenth_rollno text COLLATE pg_catalog."default",
+    advc_groupcategory text COLLATE pg_catalog."default",
+    advc_multipledisability text COLLATE pg_catalog."default",
+    advc_post_qualified_for text COLLATE pg_catalog."default",
+    advc_driving_licence_formotorcycle boolean,
+    advc_driving_licence_date_formotorcycle date,
+    advc_driving_licence_forcar boolean,
+    advc_driving_licence_date_forcar date,
+    advc_pet_pst_date date,
+    advc_isdept_candidate boolean,
+    advc_isdept_certificate boolean,
+    advc_iswards_of_delhipolice boolean,
+    advc_issportsperson_of_distinction boolean,
+    advc_typeof_sportdistinction text COLLATE pg_catalog."default",
+    advc_isncc_certificate boolean,
+    advc_typeof_ncccertificate text COLLATE pg_catalog."default",
+    advc_exs_govtjob boolean,
+    advc_exs_govtjob_join_date date,
+    advc_exam_applied_date date NOT NULL,
+    advc_exs_govtjob_undertaking boolean,
+    advc_isexs_specialquota boolean,
+    advc_specialforcensg_proof boolean,
+    advc_commandoqi_proof boolean,
+    advc_commando_navyair_proof boolean,
+    advc_email_id text COLLATE pg_catalog."default",
+    advc_share_persinfo boolean,
+    advc_permanentaddress text COLLATE pg_catalog."default",
+    advc_permanentstateid integer,
+    advc_permanentdistid integer,
+    advc_permanentpincode text COLLATE pg_catalog."default",
+    advc_persentaddress text COLLATE pg_catalog."default",
+    advc_persentstateid integer,
+    advc_persentdistid integer,
+    advc_persentpincode text COLLATE pg_catalog."default",
+    advc_attendance text COLLATE pg_catalog."default",
+    advc_photostatus text COLLATE pg_catalog."default",
+    advc_reasonforchangesport text COLLATE pg_catalog."default",
+    advc_reasonfordepartmentalchange text COLLATE pg_catalog."default",
+    advc_isvalidannexureixandx boolean,
+    advc_isvalidannexurexiii boolean,
+    advc_isvalidannexurexii boolean,
+    advc_actualgender text COLLATE pg_catalog."default",
+    advc_ltistatus boolean,
+    advc_petpststatus text COLLATE pg_catalog."default"
+	)
+
+
+copy (select * from t_appl_dv_ctgd2022candidatedetails_ssc where advc_rollno in ('5501000428','5501000539','5501001280','5501001413','5501001700','5501001951','5501002431','5501002701','5501003571','5501003933','5501004074','5501004261','5501004378','5501005598','5501006019','5501006081','5501006091','5501006228','5501006238','5501006292','5501006306','5501006327','5501006388','5501006443','5501006456','5501006475','5501006550','5501006678','5501006784','5501006833','5501006900','5501007081','5501007175','5501007253','5501007298','5501007306','5501007333','5501007338','5501007370','5501007385','5501007398','5501007491','5501007511','5501007550','5501007611','5501007630','5501007639','5501007677','5501007737','5501007746','5501007859','5501007910','5501007913','5501008019','5501008023','5501008132','5501008178','5501008201','5501008242','5501008284','5501008294','5501008305','5501008308','5501008320','5501008325','5501008334','5501008382','5501008385','5501008440','5501008557','5501008604','5501008639','5501008642','5501008668','5501008689','5501008691','5502000057','5502000080','5502000082','5502000085','5502000108','5502000116','5502000142','5502000157','5502000159','5502000167','5502000243','5502000276','5502000291','5502000293','5502000295','5502000331','5502000334','5502000335','5502000365','5502000371','5502000393','5502000418','5502000421','5502000438','5502000439','5502000465','5502000468','5502000477','5502000480','5502000506','5502000517','5502000539','5502000566','5502000577','5502000583','5502000589','5502000596','5502000646','5502000667','5502000670','5502000694','5502000711','5502000747','5502000757','5502000759','5502000763','5502000799','5502000800','5502000811','5502000824','5502000827','5502000871','5502000873','5502000879','5502000886','5502000892','5502000893','5502000898','5502000904','5502000927','5502000958','5502000968','5502000994','5502001000','5502001008','5502001014','5502001031','5502001082','5502001102','5502001103','5502001119','5502001123','5502001184','5502001188','5502001197','5502001213','5502001229','5502001237','5502001273','5502001278','5502001360','5502001432','5502001436','5502001445','5502001446','5502001449','5502001467','5502001494','5502001517','5502001537','5502001538','5502001540','5502001566','5502001620','5502001625','5502001639','5502001642','5502001647','5502001654','5502001679','5502001683','5502001704','5502001714','5502001724','5502001742','5502001749','5502001772','5502001785','5502001838','5502001859','5502001863','5502001871','5502001872','5502001905','5502001911','5502001956','5502002036','5502002074','5502002106','5502002128','5502002141','5502002144','5502002165','5502002169','5502002187','5502002207','5502002221','5502002252','5502002287','5502002294','5502002295','5502002309','5502002316','5502002349','5502002350','5502002368','5502002374','5502002377','5502002383','5502002394','5502002430','5502002459','5502002476','5502002477','5502002480','5502002513','5502002519','5502002527','5502002530','5502002533','5502002542','5502002547','5502002551','5502002581','5502002587','5502002597','5502002613','5502002634','5502002647','5502002652','5502002674','5502002686','5502002688','5502002708','5502002718','5502002719','5502002745','5502002753','5502002803','5502002817','5502002827','5502002829','5502002837','5502002846','5502002875','5502002912','5502002921','5502002923','5502002999','5502003012','5502003050','5502003064','5502003089','5502003095','5502003107','5502003112','5502003124','5502003140','5502003141','5502003145','5502003177','5502003197','5502003207','5502003208','5502003249','5502003255','5502003259','5502003275','5502003312','5502003346','5502003369','5502003405','5502003410','5502003421','5502003474','5502003510','5502003536','5502003547','5502003558','5502003570','5502003572','5502003588','5502003603','5502003607','5502003625','5502003627','5502003643','5502003645','5502003653','5502003655','5502003658','5502003660','5502003689','5502003693','5502003733','5502003816','5502003830','5502003835','5502003842','5502003845','5502003867','5502003876','5502003882','5502003935','5502003944','5502003948','5502003955','5502003969','5502003984','5502003985','5502003992','5502004007','5502004012','5502004016','5502004019','5502004021','5502004030','5502004035','5502004037','5502004044','5502004045','5502004070','5502004074','5502004087','5502004089','5502004097','5502004100','5503000003','5503000004','5503000012','5503000018','5503000027','5503000038','5503000047','5503000050','5503000057','5503000073','5503000082','5503000099','5503000114','5503000117','5503000122','5503000130','5503000147','5503000172','5503000174','5503000178','5503000201','5503000203','5503000235','5503000238','5503000243','5503000269','5503000278','5503000290','5503000299','5503000304','5503000319','5503000326','5503000327','5503000332')order by advc_rollno) to 'C:\Users\Public\t_appl_dv_ctgd2022candidatedetails_ssc_manipur.csv' csv header;
+
+create table candidates_manipur_dv
+as
+(select a.*,b.* from 
+candidates_manipur a left join
+t_appl_dv_ctgd2022candidatedetails_ssc_manipur b
+on a.rollno=b.advc_rollno::bigint);
+
+
+create table vacancy_table as (select * from vacancy_table_without_manipur where 1=0)
+
+UPDATE vacancy_table
+set initial =vacancies,
+current=vacancies;
+
+create table pet_dme_manipur
+as
+(
+with cte as
+(
+	select * from t_appl_dv_ctgd2022candidatedetails_ssc where advc_rollno in ('5501000428','5501000539','5501001280','5501001413','5501001700','5501001951','5501002431','5501002701','5501003571','5501003933','5501004074','5501004261','5501004378','5501005598','5501006019','5501006081','5501006091','5501006228','5501006238','5501006292','5501006306','5501006327','5501006388','5501006443','5501006456','5501006475','5501006550','5501006678','5501006784','5501006833','5501006900','5501007081','5501007175','5501007253','5501007298','5501007306','5501007333','5501007338','5501007370','5501007385','5501007398','5501007491','5501007511','5501007550','5501007611','5501007630','5501007639','5501007677','5501007737','5501007746','5501007859','5501007910','5501007913','5501008019','5501008023','5501008132','5501008178','5501008201','5501008242','5501008284','5501008294','5501008305','5501008308','5501008320','5501008325','5501008334','5501008382','5501008385','5501008440','5501008557','5501008604','5501008639','5501008642','5501008668','5501008689','5501008691','5502000057','5502000080','5502000082','5502000085','5502000108','5502000116','5502000142','5502000157','5502000159','5502000167','5502000243','5502000276','5502000291','5502000293','5502000295','5502000331','5502000334','5502000335','5502000365','5502000371','5502000393','5502000418','5502000421','5502000438','5502000439','5502000465','5502000468','5502000477','5502000480','5502000506','5502000517','5502000539','5502000566','5502000577','5502000583','5502000589','5502000596','5502000646','5502000667','5502000670','5502000694','5502000711','5502000747','5502000757','5502000759','5502000763','5502000799','5502000800','5502000811','5502000824','5502000827','5502000871','5502000873','5502000879','5502000886','5502000892','5502000893','5502000898','5502000904','5502000927','5502000958','5502000968','5502000994','5502001000','5502001008','5502001014','5502001031','5502001082','5502001102','5502001103','5502001119','5502001123','5502001184','5502001188','5502001197','5502001213','5502001229','5502001237','5502001273','5502001278','5502001360','5502001432','5502001436','5502001445','5502001446','5502001449','5502001467','5502001494','5502001517','5502001537','5502001538','5502001540','5502001566','5502001620','5502001625','5502001639','5502001642','5502001647','5502001654','5502001679','5502001683','5502001704','5502001714','5502001724','5502001742','5502001749','5502001772','5502001785','5502001838','5502001859','5502001863','5502001871','5502001872','5502001905','5502001911','5502001956','5502002036','5502002074','5502002106','5502002128','5502002141','5502002144','5502002165','5502002169','5502002187','5502002207','5502002221','5502002252','5502002287','5502002294','5502002295','5502002309','5502002316','5502002349','5502002350','5502002368','5502002374','5502002377','5502002383','5502002394','5502002430','5502002459','5502002476','5502002477','5502002480','5502002513','5502002519','5502002527','5502002530','5502002533','5502002542','5502002547','5502002551','5502002581','5502002587','5502002597','5502002613','5502002634','5502002647','5502002652','5502002674','5502002686','5502002688','5502002708','5502002718','5502002719','5502002745','5502002753','5502002803','5502002817','5502002827','5502002829','5502002837','5502002846','5502002875','5502002912','5502002921','5502002923','5502002999','5502003012','5502003050','5502003064','5502003089','5502003095','5502003107','5502003112','5502003124','5502003140','5502003141','5502003145','5502003177','5502003197','5502003207','5502003208','5502003249','5502003255','5502003259','5502003275','5502003312','5502003346','5502003369','5502003405','5502003410','5502003421','5502003474','5502003510','5502003536','5502003547','5502003558','5502003570','5502003572','5502003588','5502003603','5502003607','5502003625','5502003627','5502003643','5502003645','5502003653','5502003655','5502003658','5502003660','5502003689','5502003693','5502003733','5502003816','5502003830','5502003835','5502003842','5502003845','5502003867','5502003876','5502003882','5502003935','5502003944','5502003948','5502003955','5502003969','5502003984','5502003985','5502003992','5502004007','5502004012','5502004016','5502004019','5502004021','5502004030','5502004035','5502004037','5502004044','5502004045','5502004070','5502004074','5502004087','5502004089','5502004097','5502004100','5503000003','5503000004','5503000012','5503000018','5503000027','5503000038','5503000047','5503000050','5503000057','5503000073','5503000082','5503000099','5503000114','5503000117','5503000122','5503000130','5503000147','5503000172','5503000174','5503000178','5503000201','5503000203','5503000235','5503000238','5503000243','5503000269','5503000278','5503000290','5503000299','5503000304','5503000319','5503000326','5503000327','5503000332')
+)
+select cte.*,b.*
+from 
+cte,
+t_gd22exam_medical b
+where cte.advc_rollno::bigint= b.med_roll_no
+	)
+	
+pg_dump -U postgres -h 10.246.126.165 -p 5432 -t pet_dme_manipur -F c -f C:\Users\Public\pet_dme_manipur.dump ssc2
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final -t pet_dme_manipur C:\Users\Public\pet_dme_manipur.dump
+	
+ALTER TABLE candidates_manipur_dv add column med_roll_no bigint;
+ALTER TABLE candidates_manipur_dv add column med_dme_status text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_dme_unfitreason text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_applied boolean;
+ALTER TABLE candidates_manipur_dv add column med_rme_appeal_approved boolean;
+ALTER TABLE candidates_manipur_dv add column med_rme_attendance boolean;
+ALTER TABLE candidates_manipur_dv add column med_biometric_status_rme boolean;
+ALTER TABLE candidates_manipur_dv add column med_biometric_photo_rme text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_biometric_description text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_finalstatus boolean;
+ALTER TABLE candidates_manipur_dv add column med_dme_rme_finalstatus text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_final_description text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_date_of_appear timestamp without time zone;
+ALTER TABLE candidates_manipur_dv add column med_rme_centercode text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_rme_centername text COLLATE pg_catalog."default";
+ALTER TABLE candidates_manipur_dv add column med_dme_unfitreason_remarks text COLLATE pg_catalog."default";	
+
+
+update candidates_manipur_dv a
+set
+a.med_roll_no =b.med_roll_no,
+a.med_dme_status =b.med_dme_status,
+a.med_dme_unfitreason =b.med_dme_unfitreason,
+a.med_rme_applied =b.med_rme_applied,
+a.med_rme_appeal_approved =b.med_rme_appeal_approved,
+a.med_rme_attendance =b.med_rme_attendance,
+a.med_biometric_status_rme =b.med_biometric_status_rme,
+a.med_biometric_photo_rme =b.med_biometric_photo_rme,
+a.med_rme_biometric_description= b.med_rme_biometric_description,
+a.med_rme_finalstatus =b.med_rme_finalstatus,
+a.med_dme_rme_finalstatus =b.med_dme_rme_finalstatus,
+a.med_rme_final_description =b.med_rme_final_description,
+a.med_rme_date_of_appear =b.med_rme_date_of_appear,
+a.med_rme_centercode =b.med_rme_centercode,
+a.med_rme_centername =b.med_rme_centername,
+a.med_dme_unfitreason_remarks=b.med_dme_unfitreason_remarks
+from 
+pet_dme_manipur b 
+where a.advc_rollno::bigint=b.med_roll_no;
+
+
+update candidates
+set merit=null,
+rejection_provision=null,
+allocated_category=null,
+allocated_post=null,
+allocated_state=null,
+allocated_area=null,
+allocated_against_ur=null,
+allocated_state_in_notice=null;
+
+update candidates
+set 
+rejection_provision= 'W'
+where med_dme_rme_finalstatus in ('W');
+
+update candidates
+set 
+rejection_provision= 'C'
+where med_dme_rme_finalstatus in ('C');
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_debbaredcandidates_ssc -F c -f C:\Users\Public\debarred.dump alloc_jht2023allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final -t m_debbaredcandidates_ssc C:\Users\Public\debarred.dump
+	
+select a.regid,a.rollno,a.advc_name,a.advc_father_name,a.advc_mother_name,a.advc_dob,a.advc_genderid,a.advc_categoryid,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc b where 
+--b.dc_debarred_upto >'2023-08-01' and
+
+--replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)||UPPER(a.advc_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+ 
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_mother_name)),' ','') and a.advc_dob = b.dc_dob_name;
+ 
+replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)),' ','') and a.advc_dob = b.dc_dob_name;
+
+
+select * from candidates where merit is not null and pt_heightrelaxcode='6' and gender='2' and pt_height_measure<'162.5'
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'height relaxation availed'
+where merit is not null and pt_heightrelaxcode='6' and gender='2' and pt_height_measure<'162.5';---87 updates
+
+select * from candidates where merit is not null and pt_heightrelaxcode='6' and gender='1' and pt_height_measure<'152.5';
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'height relaxation availed'
+where merit is not null and pt_heightrelaxcode='6' and gender='1' and pt_height_measure<'152.5';--7 updates
+
+select * from candidates where merit is not null and pt_heightrelaxcode='6' and gender='2' and chestnotexp<'77' and remarks is null;
+
+update candidates
+set catsel=replace (catsel,'9',''),
+remarks = 'chest relaxation availed'
+where merit is not null and pt_heightrelaxcode='6' and gender='2' and chestnotexp<'77' and remarks is null;
+
+select * from candidates where merit is not null and pt_heightrelaxcode='6' and gender='2' and chestexp<'82' and remarks is null;
+
+
+
+alter table candidates add column cat2 character varying;
+alter table candidates add column post_preference_original character varying;
+
+update candidates
+set post_preference_original=post_preference;
+
+update candidates
+set post_preference=replace(post_preference,'G,','');
+
+update candidates
+set post_preference=replace(post_preference,',G','');
+
+update candidates
+set post_preference=replace(post_preference,'H,','');
+
+update candidates
+set post_preference=replace(post_preference,',H','');
+
+
+update vacancy_table
+set 
+allocated=null,
+left_vacancy=null,
+min_marks=null,
+min_marks_parta=null,
+min_marks_partb=null,
+min_marks_cand_dob=null
+
+select sum(initial),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---658,658,418,240
+select sum(initial),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table where category_code<>'3';---597,597,418,179
+
+
+select distinct advc_categoryid,COUNT(*) from candidates where med_dme_rme_finalstatus in ('Q','W') group by advc_categoryid;---1
+select * from candidates where advc_categoryid='0';---candidate allocated in UR
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='6'and gender='1' ;---8,3,5
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='6'and gender='2' ;---92,34,58
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='0'and gender='1' ;---8,0,8
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='0'and gender='2' ;---79,0,79
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='1'and gender='1' ;---1,0,1
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='1'and gender='2' ;---17,6,11
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='2'and gender='1' ;---9,9,0
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='2'and gender='2' ;---158,158,0
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='9'and gender='1' ;---16,15,1
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table where category_code='9'and gender='2' ;---209,193,16
+
+category	count	category	count
+EWS			1			ST		10
+SC			14			OBC		3
+ST			130			UR		2
+OBC			29		
+UR			19		
+
+
+'5501001413','5501007511','5501000539','5502001620','5501008642','5501008382','5501007298','5501008668','5502000893','5501007630','5502000583','5501008639','5502000480','5501007910','5501007913','5502000646','5502001119','5501006900','5501006456','5501008320','5501007859','5501008385','5502000799','5502002165','5502000276','5502002718','5502004035','5501007385','5502000824','5502000694','5502001123','5503000238','5502002803','5502000108','5502000085','5502003733','5502001538','5502002036','5502003050','5502000365','5502002846','5502003658','5502002753','5502003474','5502002513','5502002144','5502001273','5502000898','5501007306','5502001446','5502002377','5503000038','5503000174','5502003259','5502001008','5501007370','5502001197','5502003249','5502004037','5502001679','5501008308','5502002827','5502003410','5502003984','5502002187','5502003603','5501007338','5502001724','5502001467','5502002519','5501006475'
+
+rollno 		merit
+5501007511	248 UR ----> last female allocated in UR is of merit 198
+5502000583	359 ST
+5501008639	375 ST
+5502000365	645 ST
+5502003050	644 ST
+5501008668	289 ST
+5502000893	313 ST
+5502000646	419 ST
+5501007859	520 ST
+5502000799	622 ST
+5502004035	626 ST
+5502000694	629 ST
+5502000085	637 ST
+5502001273	653 ST
+5502000898	654 ST
+5501007306	655 ST
+5502001008	664 ST
+5502003249	667 ST
+5502002827	672 ST
+5502003603	676 ST
+5502002519	681 ST
+5502000480	376 ST
+5501008320	482 ST
+5501000539	249 ST
+5501008642	261 ST
+5501007298	286 ST
+5501007630	339 ST
+5501007910	377 ST
+5502001119	426 ST
+5501006900	447 ST
+5501006456	471 ST
+5501008385	525 ST
+5502000276	624 ST
+5502002718	625 ST
+5501007385	627 ST
+5502000824	628 ST
+5502000108	636 ST
+5502001538	639 ST
+5503000038	660 ST
+5502003658	647 ST
+5502002846	646 ST
+5502002036	642 ST
+5502002753	648 ST
+5502003474	649 ST
+5502002513	650 ST
+5502002377	658 ST
+5501007370	665 ST
+5502001197	666 ST
+5502001679	669 ST
+5502003984	674 ST
+5502002187	675 ST
+5501007338	677 ST
+5502001467	680 ST
+5501006475	682 ST
+5501001413	207 ST
+5502001620	260 ST
+5501008382	282 ST
+5501007913	412 ST
+5502002165	623 ST
+5502001123	630 ST
+5503000238	631 ST
+5502002803	635 ST
+5502003733	638 ST
+5502002144	651 ST
+5502001446	657 ST
+5503000174	661 ST
+5502003259	662 ST
+5502004037	668 ST
+5501008308	670 ST
+5502003410	673 ST
+5502001724	679 ST
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='6'and gender='1' ;---8,3,5
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='6'and gender='2' ;---92,0,92
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='0'and gender='1' ;---8,0,8
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='0'and gender='2' ;---79,0,79
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='1'and gender='1' ;---1,0,1
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='1'and gender='2' ;---17,0,17
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='2'and gender='1' ;---9,9,0
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='2'and gender='2' ;---158,141,17
+
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='9'and gender='1' ;---16,15,1
+select sum(initial),sum(allocated),sum(left_vacancy) from vacancy_table_manipur_1701 where category_code='9'and gender='2' ;---209,92,117
+
+category	count	category	count
+ST			91	        ST		10
+OBC			1	        OBC		3
+		                UR		2
+		                

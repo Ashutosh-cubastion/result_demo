@@ -1,0 +1,383 @@
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t cut_off_table -F c -f C:\Users\Public\cutoff_table.dump alloc_mts2022_t1_allocation
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t1_allocation -t cut_off_table C:\Users\Public\cutoff_table.dump
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t1_allocation
+
+----------------------------------------------------------------------------------------------------------------------------------
+create table candidates as(select
+ ear_person_regno as regno,
+	 ear_rollno as rollno,
+  ear_name as name,
+ ear_changedname as changedname,
+  ear_father_name as father_name,
+  ear_mother_name as mother_name,
+  ear_dob as dob,
+ ear_candiateage_ason_date as candidateage_ason_date ,
+ ear_gender as gender,
+  ear_categoryid as cat1,
+  ear_tenth_roll_no as tenth_roll_no,
+ ear_regionid as regionid,
+ ear_is_ex_serviceman as is_ex_serviceman,
+	  null as cat2,
+ ear_service_period as service_period,
+  ear_joining_date_for_armedforces as joining_date_for_armedforces,
+  ear_joining_date_for_civilpost as joining_date_for_civilpost,
+  ear_discharged_date as discharged_date,
+  ear_isexs_benefit_availed_for_civilpost as isexs_benefit_availed_for_civilpost,
+  ear_is_physically_handicaped as is_physically_handicaped,
+ ear_ph_code as cat3 ,
+  ear_state_ut_pref as state_ut_pref,
+ ear_is_age_relaxation as is_age_relaxation,
+  ear_age_relaxation_code as age_relaxation_code,
+ ear_notificationid as notificationid,
+ ear_present_address as present_address,
+  ear_present_districtid as present_districtid,
+  ear_present_stateid as present_stateid,
+  ear_present_pincode as present_pincode,
+ ear_permanent_address as permanent_address,
+  ear_permanent_stateid as permanent_stateid,
+  ear_permanent_districtid as permanent_districtid,
+  ear_permanent_pincode as permanent_pincode,
+  ear_email_id as email_id,
+ear_mobile_number as mobile_number from t_mtsexam2023_applicant_reg_pu );
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates
+alter column cat2 type integer using cat2::integer;
+
+alter table candidates
+alter column cat3 type integer using cat3::integer;
+--------------------------------------------------------------------------------------------------------------------------------------
+update candidates
+set cat2='0';
+
+update candidates 
+set cat2='3' where is_ex_serviceman='true';----8682
+
+alter table candidates add column exsm_length character varying;
+
+update candidates
+set exsm_length= substring(service_period,1,3) where cat2='3';----8682
+
+alter table candidates add column exs_reservation character varying;
+
+update candidates
+set exs_reservation = 'Yes'
+where cat2='3';---8683
+
+update candidates
+set exs_reservation = 'No'
+where isexs_benefit_availed_for_civilpost='true' 
+and cat2='3';---19
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_mts2022_t1_allocation
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t1_allocation -t arc_table C:\Users\Public\arc_table.dump 
+
+--------------------------------------------------------------------------------------------------------------------------------------
+alter table candidates add column agerelax_code character varying;
+
+update candidates
+set agerelax_code =age_relaxation_code_app;
+
+update candidates
+set agerelax_code='06' where cat2='3' and (age_relaxation_code_app is null );----96 esm relaxation given
+
+select rollno,regno,gender,cat1,cat2,exsm_length,cat3,is_age_relaxation,age_relaxation_code_app,agerelax_code 
+from candidates where cat2 ='0' and cat3 in ('4','5','7','8')and cat1 in ('9','0') and (age_relaxation_code_app is null );
+
+update candidates
+set agerelax_code ='03'  where cat2='0' and cat3 in ('4','5','7','8')and cat1 in ('9','0') and (age_relaxation_code_app is null);---5761
+
+select rollno,regno,gender,cat1,cat2,exsm_length,cat3,is_age_relaxation,age_relaxation_code_app,agerelax_code 
+from candidates where cat2 ='0' and cat3 in ('4','5','7','8')and cat1 in ('6') and (age_relaxation_code_app is null );
+
+update candidates
+set agerelax_code ='04'  where cat2='0' and cat3 in ('4','5','7','8')and cat1 in ('6') and (age_relaxation_code_app is null);---8849
+
+select rollno,regno,gender,cat1,cat2,exsm_length,cat3,is_age_relaxation,age_relaxation_code_app,agerelax_code 
+from candidates where cat2 ='0' and cat3 in ('4','5','7','8')and cat1 in ('1','2') and (age_relaxation_code_app is null );
+
+update candidates
+set agerelax_code ='05'  where cat2='0' and cat3 in ('4','5','7','8')and cat1 in ('1','2') and (age_relaxation_code_app is null);---3937
+
+select rollno,regno,gender,cat1,cat2,exsm_length,cat3,is_age_relaxation,age_relaxation_code_app,agerelax_code 
+from candidates where cat2 ='0' and cat3 is null and cat1 in ('1','2') and (age_relaxation_code_app is null );
+
+update candidates
+set agerelax_code ='01'  where cat2='0' and cat3 is null and cat1 in ('1','2') and (age_relaxation_code_app is null);---654864
+
+select rollno,regno,gender,cat1,cat2,exsm_length,cat3,is_age_relaxation,age_relaxation_code_app,agerelax_code 
+from candidates where cat2 ='0' and cat3 is null and cat1 in ('6') and (age_relaxation_code_app is null );
+
+update candidates
+set agerelax_code ='02'  where cat2='0' and cat3 is null and cat1 in ('6') and (age_relaxation_code_app is null);------843121
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+do
+$$
+BEGIN
+
+alter table candidates add column dob_flag_18_25 character varying;
+alter table candidates add column dob_flag_18_27 character varying;
+alter table candidates add column catsel_dob_18_25 character varying;
+alter table candidates add column catsel_dob_18_27 character varying;
+
+end
+$$
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+dob_flag_18_27
+
+"01"	148519 
+"02"	79674
+"03"	3603
+"04"	5888
+"05"	3550
+"06"	8491
+"08"	1
+"09"	1
+"10"	2163
+"11"	1118
+"12"	1138
+"13"	420
+"9"		2351562
+"99"	2039
+
+select regno,gender,cat1,cat2,cat3,service_period,dob,is_age_relaxation,age_relaxation_code_app,agerelax_code,dob_flag_18_27
+from candidates where dob_flag_18_27 ='99';
+
+Verification:
+
+select regno,gender,cat1,cat2,cat3,service_period,dob,is_age_relaxation,age_relaxation_code_app,agerelax_code,dob_flag_18_27 
+from candidates where dob_flag_18_27 ='99'and cat2='3'; ----esm candidates where month and days of exp. used
+
+select regno,gender,cat1,cat2,cat3,service_period,dob,is_age_relaxation,age_relaxation_code_app,agerelax_code,dob_flag_18_25 
+from candidates where dob_flag_18_25 ='99'and cat2='3' and agerelax_code ='6';
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+create table reg_roll_map
+(
+	REGID character varying,
+	ROLL character varying,
+	NAME character varying,
+	TCS_V_CODE character varying,
+	EXAM_DATE date,
+	EXAM_SHIFT character varying,
+	PWD_STATUS character varying,
+	PWD_TYPE character varying,
+	SCRIBE character varying,
+	OWN_SCRIBE character varying,
+	REMARKS character varying,
+	constraint pk_reg_roll_map primary key (regid)
+)
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set rollno = b.roll
+from reg_roll_map b where candidates.regno = b.regid::bigint;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+select count(*) from candidates ;-----2608167
+
+select count(*) from candidates where rollno is null;----60765
+
+select count(*) from candidates where rollno is not null;---2547402
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE m_debbaredcandidates_ssc
+(
+    dc_id integer,  
+    dc_isactive boolean,
+    dc_rollno text ,
+    dc_name text  ,
+    dc_father_name text  ,
+    dc_mother_name text ,
+    dc_dob_name date ,
+    dc_gender integer ,
+    dc_category text ,
+    dc_name_year_exam text  ,
+    dc_debarreddate date ,
+    dc_debarred_upto date ,
+    dc_dc_debbared_reason text  ,
+    debarredyear integer ,
+    region_code integer 
+)
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_mts2023_t1_allocation
+
+\copy m_debbaredcandidates_ssc from 'C:\Users\Public\debarred.csv' csv header; -----2589
+
+select a.regno,a.debarred_flag,a.rollno,a.name,a.father_name,a.mother_name,a.dob,a.gender,a.cat1,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc b where 
+b.dc_debarred_upto >'2023-01-01' and
+replace ((UPPER(a.name)||UPPER(a.father_name)||UPPER(a.mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.mother_name)),' ','') and a.dob = b.dc_dob_name;
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.father_name)),' ','') and a.dob = b.dc_dob_name;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+update vacancy_table
+set initial_vacancy = orignal_vacancy * 10;
+
+update vacancy_table
+set current =initial_vacancy ;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+alter table candidates add column debarred_flag character varying;
+
+update candidates
+set debarred_flag ='Yes' where rollno in (
+'1004006872','1403003962','1403012635','1404003565','2002007997','2201001181','2201001454','2201035595','2201049215','2201052389','2201053048','2201063401','2201064450','2201070878','2201073050','2201091974','2201104772','2201108124','2201112555','2201136342','2201140294','2201157980','2201173532','2201184984','2201197029','2201205079','2201215731','2404002893','2405018125','2405031601','2405045983','2405064447','2405064698','2405075156','2405083193','2405096125','2405107074','2405109234','2405115136','2405121595','2405121681','2405133262','2406000819','2406003867','2409000199','2409002304','2409003060','2409004471','3001047590','3003045785','3003049617','3007023773','3009011878','3009066918','3010022625','3010063740','3010074703','3013001613','3013003776','3013008597','3013010403','3013030476','3013040989','3013057809','3013058452','3013075942','3013076609','3013081680','3013082778','3013097248','3019000825','3019000853','3019009297','3019009422','3019011686','3201008429','3202001851','3202003714','3202005406','3203005694','3203008033','3203017245','3205004549','3205005227','3206000532','3206022893','3206023241','3206036610','3206045453','3206068246','3206070556','3206080567','3206081137','3206097901','3206104606','3206117930','3206126232','3206128907','3206139359','3206142551','3206146293','3206148017','3206149700','3206151108','3206153273','3206155287','3206162977','3207001203','3207004455','3207005242','3207005529','3209004630','3209009620','3209018985','4204002321','4204003399','4204004420','4205043089','4206001386','4207010071','4207012921','4417001933','6001015572'
+);
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.marks_edp
+(
+    participantid character varying COLLATE pg_catalog."default" NOT NULL,
+    name character varying COLLATE pg_catalog."default",
+	participantType character varying,
+	TestCenter character varying,
+    numericalandmathematicalability double precision,
+    reasoningabilityandproblemsolving double precision,
+	session1_raw_score double precision
+	session1_normalized_score double precision,
+    generalawareness double precision,
+    englishlanguageandcomprehension double precision,
+    session2_raw_score double precision,
+	session2_normalized_score double precision,
+	score double precision,
+    normalized_score double precision,
+    
+    CONSTRAINT pk PRIMARY KEY (participantid)
+)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+alter table candidates add column part1_nm double precision;
+alter table candidates add column part2_reasoning double precision;
+alter table candidates add column part3_ga double precision;
+alter table candidates add column part4_eng double precision;
+alter table candidates add column score double precision;
+alter table candidates add column total_normalized double precision;
+alter table candidates add column session1_raw double precision;
+alter table candidates add column session2_raw double precision;
+alter table candidates add column session1 double precision;
+alter table candidates add column session2 double precision;
+alter table candidates add column merit integer;
+alter table candidates add column cutoff_flag character varying ;
+alter table candidates add column catsel_18_25 character varying;
+alter table candidates add column catsel_18_27 character varying;
+end
+$$
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+update candidates set
+part1_nm = b.NumericalandMathematicalAbility,
+part2_reasoning =b.ReasoningAbilityandProblemSolving,
+part3_ga =b.GeneralAwareness,
+part4_eng=b.EnglishLanguageandComprehension,
+session1_raw=b.session1_raw_score,
+session2_raw=b.session2_raw_score,
+session1= b.session1_Normalized_Score,
+session2= b.session2_Normalized_Score,
+score_raw =b.score,
+total_normalized= b.normalized_score
+from marks_edp b where candidates.rollno = b.participantid;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates alter column cat1 type character varying;
+alter table candidates alter column cat2 type character varying;
+alter table candidates alter column cat3 type character varying;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+select * from sp_get_merit('MTS2023T1',1);
+
+select * from sp_get_cutoff('MTS2023T1',2);
+
+select * from sp_get_catsel('MTS2023T1',5);
+
+select * from sp_get_catsel('MTS2023T1',8);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select merit,name,cat1,cat2,cat3,session1,session2 from candidates where cutoff_flag='' and session1>='24'and session2>='30' and cat1 in ('1','2');
+select merit,name,cat1,cat2,cat3,session1,session2 from candidates where cutoff_flag='' and session1>='24'and session2>='30' and cat3 in ('4','5','7','8');
+select merit,name,cat1,cat2,cat3,session1,session2 from candidates where cutoff_flag='' and session1>='30'and session2>='37.5' and cat1 in ('6');
+select merit,name,cat1,cat2,cat3,session1,session2 from candidates where cutoff_flag='' and session1>='24'and session2>='30' and cat2='3';
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+select distinct cutoff_flag,count(*) from candidates group by cutoff_flag;
+blank---	470905
+
+select distinct catsel_18_27,count(*) from candidates group by catsel_18_27;
+blank----	471311
+
+select distinct catsel_18_25,count(*) from candidates group by catsel_18_25;
+blank---	510215
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Debarred candidates rollno:
+'1004006872','1403003962','1403012635','1404003565','2002007997','2201001181','2201001454','2201035595','2201049215','2201052389','2201053048','2201063401','2201064450','2201070878','2201073050','2201091974','2201104772','2201108124','2201112555','2201136342','2201140294','2201157980','2201173532','2201184984','2201197029','2201205079','2201215731','2404002893','2405018125','2405031601','2405045983','2405064447','2405064698','2405075156','2405083193','2405096125','2405107074','2405109234','2405115136','2405121595','2405121681','2405133262','2406000819','2406003867','2409000199','2409002304','2409003060','2409004471','3001047590','3003045785','3003049617','3007023773','3009011878','3009066918','3010022625','3010063740','3010074703','3013001613','3013003776','3013008597','3013010403','3013030476','3013040989','3013057809','3013058452','3013075942','3013076609','3013081680','3013082778','3013097248','3019000825','3019000853','3019009297','3019009422','3019011686','3201008429','3202001851','3202003714','3202005406','3203005694','3203008033','3203017245','3205004549','3205005227','3206000532','3206022893','3206023241','3206036610','3206045453','3206068246','3206070556','3206080567','3206081137','3206097901','3206104606','3206117930','3206126232','3206128907','3206139359','3206142551','3206146293','3206148017','3206149700','3206151108','3206153273','3206155287','3206162977','3207001203','3207004455','3207005242','3207005529','3209004630','3209009620','3209018985','4204002321','4204003399','4204004420','4205043089','4206001386','4207010071','4207012921','4417001933','6001015572'
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+do
+$$
+begin
+ALTER TABLE CANDIDATES ADD COLUMN allocated_category character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN allocated_state character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN age_limit character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN allocated_against_ur character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN post_name character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN post_code character varying COLLATE pg_catalog."default";
+ALTER TABLE CANDIDATES ADD COLUMN state_name character varying COLLATE pg_catalog."default";
+
+end
+$$
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+update candidates set post_name=vacancy_table.post_name,
+post_code=vacancy_table.post_code,
+state_name=vacancy_table.state_name
+from vacancy_table where candidates.allocated_state=vacancy_table.state_code and vacancy_table.post_code<>'MTS' and 
+candidates.allocated_state is not null;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set merit = null where debarred_flag is not null;
+
+update candidates
+set allocated_category=null,
+allocated_state=null,
+age_limit=null,
+allocated_against_ur =null,
+post_name=null,
+post_code=null,
+state_name=null where allocated_state is not null;
+
+update vacancy_table
+set allocated =null,
+left_vacancy =null;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------

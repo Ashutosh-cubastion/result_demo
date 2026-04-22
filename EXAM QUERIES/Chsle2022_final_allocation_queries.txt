@@ -1,0 +1,835 @@
+-- Table: public.t_post_preference_chsle2022_ssc
+
+-- DROP TABLE IF EXISTS public.t_post_preference_chsle2022_ssc;
+
+CREATE TABLE IF NOT EXISTS public.t_post_preference_chsle2022_ssc
+(
+    tp_id integer NOT NULL ,
+    tp_regno bigint NOT NULL,
+    tp_cand_name text COLLATE pg_catalog."default",
+    tp_cand_father_name text COLLATE pg_catalog."default",
+    tp_cand_mother_name text COLLATE pg_catalog."default",
+    tp_cand_rollno text COLLATE pg_catalog."default",
+    tp_dob date NOT NULL,
+    tp_gender integer NOT NULL,
+    tp_cat1 integer,
+    tp_is_ex_serviceman boolean NOT NULL,
+    tp_cat2 integer,
+    tp_is_physically_handicaped boolean NOT NULL,
+    tp_cat3 integer,
+    tp_is_age_relaxation boolean NOT NULL,
+    tp_age_relaxation_code integer,
+    tp_joining_date_for_armedforces date,
+    tp_discharged_date date,
+    tp_service_period text COLLATE pg_catalog."default",
+    tp_isexs_benefit_availed_for_civilpost boolean,
+    tp_joining_date_for_civilpost date,
+    tp_post_pref text COLLATE pg_catalog."default" NOT NULL,
+    tp_isactive boolean DEFAULT true,
+    tp_ip_address text COLLATE pg_catalog."default",
+    tp_createdbyid integer,
+    tp_createdbyrid integer,
+    tp_updbyid integer,
+    tp_upddtm timestamp without time zone,
+    tp_createddtm timestamp without time zone DEFAULT now(),
+    tp_notificationid integer,
+    tp_examid integer,
+    tp_exam_year integer,
+    tp_qrcode_path text COLLATE pg_catalog."default",
+    tp_remarks text COLLATE pg_catalog."default",
+    CONSTRAINT t_post_preference_chsle2022_ssc_pkey PRIMARY KEY (tp_id)
+    
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.t_post_preference_chsle2022_ssc
+    OWNER to postgres;
+
+----------------------------------------------------------------------------------------
+
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc165.csv' csv header;
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc166.csv' csv header;
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc167.csv' csv header;
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc170.csv' csv header;
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc171.csv' csv header;
+\copy t_post_preference_chsle2022_ssc to 'C:\Users\Public\t_post_pref_chsle2022_ssc172.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2022allocation_final
+
+\copy t_post_preference_chsle2022_ssc from 'C:\Users\Public\t_post_pref_chsle2022_ssc165.csv' csv header;
+\copy t_post_preference_chsle2022_ssc from 'C:\Users\Public\t_post_pref_chsle2022_ssc166.csv' csv header;
+\copy t_post_preference_chsle2022_ssc from 'C:\Users\Public\t_post_pref_chsle2022_ssc167.csv' csv header;
+\copy t_post_preference_chsle2022_ssc from 'C:\Users\Public\t_post_pref_chsle2022_ssc170.csv' csv header;
+\copy t_post_preference_chsle2022_ssc from 'C:\Users\Public\t_post_pref_chsle2022_ssc171.csv' csv header
+
+-------------------------------------------------------------------------------------------------------
+
+select t_chsl2022exam_applicant_reg_pu.*
+from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc
+on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno
+and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1';
+
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc165.csv' csv header;
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc166.csv' csv header;
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc167.csv' csv header;
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc170.csv' csv header;
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc171.csv' csv header;
+\copy (select t_chsl2022exam_applicant_reg_pu.* from t_chsl2022exam_applicant_reg_pu inner join t_post_preference_chsle2022_ssc on t_chsl2022exam_applicant_reg_pu.ear_person_regno = t_post_preference_chsle2022_ssc.tp_regno and t_chsl2022exam_applicant_reg_pu.ear_isactive = 'true' and t_chsl2022exam_applicant_reg_pu.ear_application_status='1') to 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc172.csv' csv header;
+
+
+
+-- Table: public.t_chsl2022exam_applicant_reg_pu
+
+-- DROP TABLE IF EXISTS public.t_chsl2022exam_applicant_reg_pu;
+
+CREATE TABLE IF NOT EXISTS public.t_chsl2022exam_applicant_reg_pu
+(
+    ear_appl_regid bigint NOT NULL ,
+    ear_person_regno bigint NOT NULL,
+    ear_personid integer NOT NULL,
+    ear_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_changedname text COLLATE pg_catalog."default",
+    ear_father_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_mother_name text COLLATE pg_catalog."default" NOT NULL,
+    ear_dob date NOT NULL,
+    ear_candiateage_ason_date real NOT NULL,
+    ear_gender integer NOT NULL,
+    ear_categoryid integer,
+    ear_nationality integer NOT NULL,
+    ear_identification_mark text COLLATE pg_catalog."default" NOT NULL,
+    ear_tenth_education_board integer NOT NULL,
+    ear_tenth_roll_no text COLLATE pg_catalog."default" NOT NULL,
+    ear_tenth_yearofpassing integer NOT NULL,
+    ear_photo_img_url text COLLATE pg_catalog."default" NOT NULL,
+    ear_sign_img_url text COLLATE pg_catalog."default" NOT NULL,
+    ear_centerid1 integer NOT NULL,
+    ear_centerid2 integer NOT NULL,
+    ear_centerid3 integer NOT NULL,
+    ear_regionid integer NOT NULL,
+    ear_is_ex_serviceman boolean NOT NULL,
+    ear_service_period text COLLATE pg_catalog."default",
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_is_cerebral_palsy boolean,
+    ear_is_physical_limitation boolean,
+    ear_is_scribe_required boolean,
+    ear_scribe_medium integer,
+    ear_own_scribe boolean,
+    ear_typetest_medium integer NOT NULL,
+    ear_science_withmaths boolean NOT NULL,
+    ear_is_age_relaxation boolean NOT NULL,
+    ear_age_relaxation_code integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text COLLATE pg_catalog."default",
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone DEFAULT now(),
+    ear_notificationid integer NOT NULL,
+    ear_application_status integer,
+    ear_is_ews_candidate boolean,
+    ear_share_persinfo_accrossportal boolean NOT NULL,
+    ear_languagepreference integer,
+    ear_edqualification integer NOT NULL,
+    ear_education_details text COLLATE pg_catalog."default" NOT NULL,
+    ear_passed_qual_exam text COLLATE pg_catalog."default",
+    ear_state_for_university integer,
+    ear_eduqual_university_board integer,
+    ear_eduqual_rollno text COLLATE pg_catalog."default",
+    ear_eduqual_passingyear integer,
+    ear_eduqual_percentage text COLLATE pg_catalog."default",
+    ear_eduqual_cgpa text COLLATE pg_catalog."default",
+    ear_present_address text COLLATE pg_catalog."default",
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text COLLATE pg_catalog."default",
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text COLLATE pg_catalog."default" NOT NULL,
+    ear_mobile_number text COLLATE pg_catalog."default" NOT NULL,
+    ear_other_national_address text COLLATE pg_catalog."default",
+    ear_photo_date text COLLATE pg_catalog."default",
+    ear_isdate_clear_on_photo boolean NOT NULL,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text COLLATE pg_catalog."default",
+    applicationfee character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    ear_rollno text COLLATE pg_catalog."default",
+    ear_qrcode_path text COLLATE pg_catalog."default",
+    ear_add_source character(1) COLLATE pg_catalog."default",
+    ear_upd_source character(1) COLLATE pg_catalog."default",
+    ear_noofattempt integer,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean
+    
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.t_chsl2022exam_applicant_reg_pu
+    OWNER to postgres;
+
+GRANT SELECT ON TABLE public.t_chsl2022exam_applicant_reg_pu TO PUBLIC;
+
+GRANT ALL ON TABLE public.t_chsl2022exam_applicant_reg_pu TO postgres;
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2022allocation_final
+
+
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc165.csv' csv header;
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc166.csv' csv header;
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc167.csv' csv header;
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc170.csv' csv header;
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc171.csv' csv header;
+\copy t_chsl2022exam_applicant_reg_pu from 'C:\Users\Public\t_chsl2022exam_applicant_reg_pu_ssc172.csv' csv header;
+
+-----------------------------------------------------------------------------------------------------------
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_chsl2021allocation_final
+
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2022allocation_final -t arc_table C:\Users\Public\arc_table.dump
+
+
+-------------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2022allocation_final
+
+\copy districts_master from 'C:\Users\Public\m_district_gis.csv' csv header;
+
+CREATE TABLE IF NOT EXISTS public.districts_master
+(
+    distid integer NOT NULL,
+    dist_name text COLLATE pg_catalog."default" NOT NULL,
+    stateid integer,
+    ds_isactive boolean,
+    statename character varying COLLATE pg_catalog."default",
+    is_border boolean,
+    is_naxal boolean
+   
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.districts_master
+    OWNER to postgres;
+
+GRANT SELECT ON TABLE public.districts_master TO PUBLIC;
+
+GRANT ALL ON TABLE public.districts_master TO postgres;
+
+---------------------------------------------------------------------------------------------------------------------
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2022allocation_final
+
+\copy states_master from 'C:\Users\Public\m_states_gis.csv' csv header;
+
+
+CREATE TABLE IF NOT EXISTS public.states_master
+(
+    stateid integer NOT NULL ,
+    state_name text COLLATE pg_catalog."default" NOT NULL,
+    st_isactive boolean 
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.states_master
+    OWNER to postgres;
+
+GRANT SELECT ON TABLE public.states_master TO PUBLIC;
+
+GRANT ALL ON TABLE public.states_master TO postgres;
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.vacancy_table
+(
+    post text COLLATE pg_catalog."default",
+    department_name text COLLATE pg_catalog."default",
+    department_code character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    category character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    category_code character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    initial_vacancy integer,
+    CONSTRAINT vacancy_table_chsl2022_prog_pk PRIMARY KEY (department_code, category_code)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.vacancy_table
+    OWNER to postgres;
+	
+
+\copy vacancy_table from 'C:\Users\Admin\Downloads\Vacancy Format.csv' csv header;
+
+----------------------------------------------------------------------------------------------------------------	
+CREATE TABLE IF NOT EXISTS public.edp_marks
+(
+    
+    rollno character varying(10) COLLATE pg_catalog."default" NOT NULL,
+	regid character varying(11) COLLATE pg_catalog."default",
+    cand_name text COLLATE pg_catalog."default",
+    computer_knowledge_module numeric,
+    english_language_and_comprehension numeric,
+	general_awareness numeric,
+	mathematical_abilities numeric,
+	reasoning _and_general_intelligence numeric,
+	score numeric,
+	total numeric,
+	ldc_marks double precision,
+	ldc_medium text,
+	dest_mistake double precision,
+	dest_medium text,
+    withheld character varying(5) COLLATE pg_catalog."default",
+    remaks text COLLATE pg_catalog."default",
+    CONSTRAINT edp_marks_chsl2022_pk PRIMARY KEY (rollno)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.edp_marks
+    OWNER to postgres;
+	
+\copy edp_marks from 'C:\Users\Public\CHSLE2022_TIER2_MARKS_FINAL_try2.csv' csv header;
+
+update edp_marks
+set remaks ='Post_preference not filled'
+where regid is null;
+
+-----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.candidates
+(
+    regno bigint NOT NULL,
+    name text COLLATE pg_catalog."default",
+	changed_name text COLLATE pg_catalog."default",
+    father_name text COLLATE pg_catalog."default",
+    mother_name text COLLATE pg_catalog."default",
+    rollno text COLLATE pg_catalog."default",
+    dob date NOT NULL,
+    gender integer NOT NULL,
+    cat1 integer,
+    is_ex_serviceman boolean NOT NULL,
+    cat2 integer,
+    is_physically_handicaped boolean NOT NULL,
+    cat3 integer,
+    is_age_relaxation boolean NOT NULL,
+    age_relaxation_code_raw integer,
+	age_relaxation_code integer,
+    joining_date_for_armedforces date,
+    discharged_date date,
+    service_period text COLLATE pg_catalog."default",
+    isexs_benefit_availed_for_civilpost boolean,
+    joining_date_for_civilpost date,
+    post_pref_original text COLLATE pg_catalog."default" NOT NULL,
+	post_pref text COLLATE pg_catalog."default" NOT NULL,
+    notificationid integer,
+    examid integer,
+    exam_year integer
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.candidates
+    OWNER to postgres;
+-----------------------------------------------------------------------------------------------------------
+
+ALTER table candidates add column is_ews_candidate boolean;
+ALTER table candidates add column share_persinfo_accrossportal boolean NOT NULL;
+ALTER table candidates add column edqualification integer NOT NULL;
+ALTER table candidates add column education_details text COLLATE pg_catalog."default" NOT NULL;
+ALTER table candidates add column passed_qual_exam text COLLATE pg_catalog."default";
+ALTER table candidates add column state_for_university integer;
+ALTER table candidates add column eduqual_university_board integer;
+ALTER table candidates add column eduqual_rollno text COLLATE pg_catalog."default";
+ALTER table candidates add column eduqual_passingyear integer;
+ALTER table candidates add column eduqual_percentage text COLLATE pg_catalog."default";
+ALTER table candidates add column eduqual_cgpa text COLLATE pg_catalog."default";
+ALTER table candidates add column present_address text COLLATE pg_catalog."default";
+ALTER table candidates add column present_districtid integer;
+ALTER table candidates add column present_stateid integer;
+ALTER table candidates add column present_pincode integer;
+ALTER table candidates add column permanent_address text COLLATE pg_catalog."default";
+ALTER table candidates add column permanent_stateid integer;
+ALTER table candidates add column permanent_districtid integer;
+ALTER table candidates add column permanent_pincode integer;
+ALTER table candidates add column email_id text COLLATE pg_catalog."default" NOT NULL;
+ALTER table candidates add column mobile_number text COLLATE pg_catalog."default" NOT NULL;
+
+---------------------------------------------------------------------------------------------------------
+
+
+ALTER table candidates add column computer_knowledge_module numeric;
+ALTER table candidates add column english_language_and_comprehension numeric;
+ALTER table candidates add column general_awareness numeric;
+ALTER table candidates add column mathematical_abilities numeric;
+ALTER table candidates add column reasoning_and_general_intelligence numeric;
+ALTER table candidates add column score numeric;
+ALTER table candidates add column total numeric;
+ALTER table candidates add column ldc_marks double precision;
+ALTER table candidates add column ldc_medium text;
+ALTER table candidates add column dest_mistake double precision;
+ALTER table candidates add column dest_medium text;
+
+
+----------------------------------------------------------------------------------------------------------------
+
+insert into candidates (select tp_regno,tp_cand_name,null,tp_cand_father_name,tp_cand_mother_name,tp_cand_rollno,tp_dob,tp_gender,tp_cat1,tp_is_ex_serviceman,tp_cat2,tp_is_physically_handicaped,
+tp_cat3,tp_is_age_relaxation,tp_age_relaxation_code,null,tp_joining_date_for_armedforces,tp_discharged_date,tp_service_period,tp_isexs_benefit_availed_for_civilpost,tp_joining_date_for_civilpost,
+tp_post_pref,null,tp_notificationid,tp_examid,tp_exam_year from t_post_preference_chsle2022_ssc);
+
+-----------------------------------------------------------------------------------------------------------------
+
+update candidates
+set is_ews_candidate = b.ear_is_ews_candidate,
+share_persinfo_accrossportal = b.ear_share_persinfo_accrossportal,
+edqualification = b.ear_edqualification,
+education_details = b.ear_education_details,
+passed_qual_exam = b.ear_passed_qual_exam,
+state_for_university = b.ear_state_for_university,
+eduqual_university_board = b.ear_eduqual_university_board,
+eduqual_rollno = b.ear_eduqual_rollno,
+eduqual_passingyear = b.ear_eduqual_passingyear,
+eduqual_percentage = b.ear_eduqual_percentage,
+eduqual_cgpa = b.ear_eduqual_cgpa,
+present_address = b.ear_present_address,
+present_districtid = b.ear_present_districtid,
+present_stateid = b.ear_present_stateid,
+present_pincode = b.ear_present_pincode,
+permanent_address = b.ear_permanent_address,
+permanent_stateid = b.ear_permanent_stateid,
+permanent_districtid = b.ear_permanent_districtid,
+permanent_pincode = b.ear_permanent_pincode,
+email_id = b.ear_email_id,
+mobile_number = b.ear_mobile_number
+from t_chsl2022exam_applicant_reg_pu b where candidates.regno = b.ear_person_regno;
+
+-------------------------------------------------------------------------------------------------
+
+update candidates
+
+set computer_knowledge_module = b.computer_knowledge_module,
+english_language_and_comprehension = b.english_language_and_comprehension,
+general_awareness = b.general_awareness,
+mathematical_abilities = b.mathematical_abilities,
+reasoning_and_general_intelligence = b.reasoning_and_general_intelligence,
+score = b.score,
+total = b.total,
+ldc_marks = b.ldc_marks,
+ldc_medium = b.ldc_medium,
+dest_mistake = b.dest_mistake,
+dest_medium = b.dest_medium
+ 
+from edp_marks b where candidates.rollno =b.rollno;
+
+--------------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.master_table
+(
+    serial integer NOT NULL,
+    exam_name character varying(15) COLLATE pg_catalog."default",
+    exam_year character varying(4) COLLATE pg_catalog."default",
+    flag_name character varying(30) COLLATE pg_catalog."default",
+    flag_query text COLLATE pg_catalog."default",
+    dob_from_date date,
+    dob_to_date date,
+    esm_agerelax_codes text COLLATE pg_catalog."default",
+    cut_off_clause text COLLATE pg_catalog."default",
+    CONSTRAINT master_table_pk PRIMARY KEY (serial)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.master_table
+    OWNER to postgres;
+	
+-----------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.m_debbaredcandidates_ssc
+(
+    dc_id integer NOT NULL,
+    dc_createdbyid integer,
+    dc_createdbyrid integer,
+    dc_updbyid integer,
+    dc_upddtm timestamp without time zone,
+    dc_createddtm timestamp without time zone DEFAULT now(),
+    dc_isactive boolean DEFAULT true,
+    dc_orderby integer,
+    dc_ipaddress text COLLATE pg_catalog."default",
+    dc_rollno text COLLATE pg_catalog."default",
+    dc_name text COLLATE pg_catalog."default" NOT NULL,
+    dc_father_name text COLLATE pg_catalog."default" NOT NULL,
+    dc_mother_name text COLLATE pg_catalog."default",
+    dc_dob_name date NOT NULL,
+    dc_gender integer NOT NULL,
+    dc_category text COLLATE pg_catalog."default",
+    dc_name_year_exam text COLLATE pg_catalog."default" NOT NULL,
+    dc_debarreddate date NOT NULL,
+    dc_debarred_upto date NOT NULL,
+    dc_dc_debbared_reason text COLLATE pg_catalog."default" NOT NULL,
+    debarredyear integer NOT NULL,
+    region_code integer NOT NULL,
+    dc_regno bigint,
+    dc_isews text COLLATE pg_catalog."default",
+    dc_tenthboard integer,
+    dc_tenthyear text COLLATE pg_catalog."default",
+    dc_tenthroll text COLLATE pg_catalog."default",
+    dc_photo text COLLATE pg_catalog."default",
+    CONSTRAINT m_debbaredcandidates_ssc_pkey PRIMARY KEY (dc_id)
+   
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.m_debbaredcandidates_ssc
+    OWNER to postgres;
+
+--------------------------------------------------------------------------------------------------------	
+
+\copy m_debbaredcandidates_ssc from 'C:\Users\Public\debbared.csv' csv header;
+
+------------------------------------------------------------------------------------------------------
+
+update candidates set rejection_provision ='C';
+-----------------------------------------------------------------------------------------------------
+
+alter table candidates add column exsm_length character varying;
+
+update candidates
+set exsm_length = substring(service_period,1,3) ;
+
+----------------------------------------------------------------------------------------------------------
+update candidates set age_relaxation_code =age_relaxation_code_raw;
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code from candidates; 
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where is_age_relaxation ='false'; -----15868
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where is_age_relaxation ='false' and cat2 ='3'; ----11
+
+update candidates
+set age_relaxation_code ='06' where is_age_relaxation ='false' and cat2 ='3';----11 ESM age_relaxCode candidates updated
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null;----893 
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null and cat2 is null;---886
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null and cat2 is null and is_age_relaxation ='false';----583
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('9','0');----263
+
+update candidates
+set age_relaxation_code ='03' where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('9','0');---263 UR/EWS pwd candidates given relax_code '03'
+
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('6');---264
+
+update candidates
+set age_relaxation_code ='04' where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('6');----264 obc pwd candidates given relaxation '04'
+
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('1','2');----56
+
+update candidates
+set age_relaxation_code ='05' where cat3 is not null and cat2 is null and is_age_relaxation ='false' and cat1 in('1','2');----56 sc/st pwd candidates given relaxation '05'
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is null and cat2 is null and is_age_relaxation ='false' ;-----15274 non ESM non Pwbd candidates
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is null and cat2 is null and is_age_relaxation ='false' and cat1 in('6');----5573
+
+update candidates
+set age_relaxation_code ='02'  where cat3 is null and cat2 is null and is_age_relaxation ='false' and cat1 in('6');---5573 obc candidates given relaxation code '02'
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,service_period,isexs_benefit_availed_for_civilpost,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code
+from candidates where cat3 is null and cat2 is null and is_age_relaxation ='false' and cat1 in('1','2');----3668
+
+
+update candidates
+set age_relaxation_code ='01'  where cat3 is null and cat2 is null and is_age_relaxation ='false' and cat1 in('1','2');---3668 sc/st candidates given relaxation code '01'
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+age_relaxation_code_raw
+11	9
+10	60
+	15868
+1	1183
+5	41
+4	136
+2	994
+6	896
+12	1
+3	120
+
+age_relaxation_code
+11	9
+10	60
+	6033
+1	4851
+5	97
+2	6567
+4	400
+6	907
+12	1
+3	383
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+alter table candidate_bkp_02082023 alter column age_relaxation_code_raw TYPE character varying;
+
+dob_flag
+"01"	810
+"02"	665
+"03"	92
+"04"	108
+"05"	34
+"06"	896
+"10"	58
+"11"	8
+"12"	1
+"9"	16636
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+\copy cut_off_table from 'C:\Users\Public\cut_off_table_chsle2022.csv' csv header;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column tt_exempted character varying;
+
+alter table candidates add column ckt_qly character varying;
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+update candidates 
+set tt_exempted ='Y' where rollno in ('1601002293','1601004095','1601004808','1601006071','1601007474','2405107406','2405075008','2405075030','2405091101','2405074089','2405107419','2404010058','2404011221','2405143780','2405138683','2405130510','2405095259','2405030692','2405022347','2405033601','2405087167','2405054997','2405006326','2405094289','2405142863','2411002902','2411015353','2406003382','2405009175','2405025315','2405042500','2405058787','2201169119','2201169156','2201234257','2201234383','2201234624','2201299653','2201299683','2201299877','2201299883','2201005434','2201005472','2201005598','2201016305','2201016489','2201016641','2201016736','2201016768','2201038191','2201038233','2201048963','2201049073','2201049322','2201049536','2201059747','2201060345','2201080935','2201234353','2201267038','2201267394','2201027854','2201070674','2201105226','2201105355','2201105369','2201108870','2201137033','2201137109','2201097609','2201113199','2201113454','2201144940','2201144956','2201146884','2201147252','2201152961','2201160828','2201185087','2201193588','2201193662','2201210069','2201210360','2201242529','2201242765','2201275149','2201275281','2201283718','2201283778','2201307738','2201307791','2201307851','2201307916','2201308187','2006015073','2006018489','2003004480','3206196207','3011011325','3206096816','3206019059','3001000340','3009066654','3010080880','3010005412','3206046890','3011038189','3009039876','3009090164','3009042840','3008016528','3003025614','3206041415','3009016384','3009042922','3011009112','3011006879','3013122516','3205042003','3009060672','3009054727','3003029045','3009010401','3209012176','3003005674','3206024660','3010101115','3010118016','3205036109','3205033104','3007010199','3009090137','3009039888','3009090298','3008014867','3001040585','3206019119','3205006457','3206013719','3206013752','3206008327','3206063691','3206047035','3206129629','3206058126','3206135488','3003029131','3005014887','3007025215','3010033570','3010037495','3206168167','3013034007','3013055236','3013065840','3013108232','4410038665','4604015273','4206003794','4205002966','4205050372','4415010713','4417009075','4205012922','4605000916','6001024945','6006019067','6005005600','6006010326','6006004561','6007001184','6001006593','7201000291','7204006466','7204003257','7214001751','7002005647','7007001672','7208017288','7205012384','8001005423','8007014151','8007026543','8008001648','8012005202','8012009533','8201027362','8201003719','8204013926','8204004368','8208008152','8208006599','8601037492','8601020041','8601043270','8601004500','8601048988','8604001305');
+-----167 records updated
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+update candidates set mistakes_ldc ='0' where tt_exempted ='Y';
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2='3' and computer_knowledge_module>='9'; ---899
+
+update candidates set ckt_qly ='Y' where cat2='3' and computer_knowledge_module>='9'; 
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 in ('4','5','7','8') and computer_knowledge_module>='9'; ----834
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 in ('4','5','7','8') and computer_knowledge_module>='9';
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('1','2') and computer_knowledge_module>='9';----4789
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('1','2') and computer_knowledge_module>='9';
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('6','0') and computer_knowledge_module>='11.25'; ----9781
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('6','0') and computer_knowledge_module>='11.25';
+
+select regno,name,rollno,dob,gender,cat1,is_ex_serviceman,cat2,is_physically_handicaped,cat3,is_age_relaxation,age_relaxation_code_raw,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('9') and computer_knowledge_module>='13.5'; ----2587
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('9') and computer_knowledge_module>='13.5';
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column debarred character varying(5);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+update cut_off_table
+set paper2 ='108' where category in ('9');
+
+update cut_off_table
+set paper2 ='72' where category in ('1','2','3','4','5','7','8');
+
+update cut_off_table
+set paper2 ='90' where category in ('6','0');
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+alter table candidates add column cutoff_flag_deo character varying(10);
+alter table candidates add column cutoff_flag_ldc character varying(10);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+alter table candidates add column exs_reservation character varying;
+
+update candidates
+set exs_reservation ='No',
+remarks = 'esm reservation already availed'
+where cat2 ='3' and isexs_benefit_availed_for_civilpost ='true'; ---1
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+alter table candidates add column catsel_ldc character varying;
+alter table candidates add column catsel_deo character varying;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+alter table candidates add column allocated_category character varying(5);
+alter table candidates add column allocated_dept character varying(5);
+alter table candidates add column allocated_against_ur character varying(5);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+update vacancy_table set current=initial_vacancy;
+--------------------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set candidates.paper1 = b.normalized,
+candidates.tt_qly= b.tt_qly,
+candidates.dest_qly =b.dest_qly
+ from edp_marks_03082023 b where candidates.regno = b.regid ::bigint ;
+ -----------------------------------------------------------------------------------------------------------------------------------
+ 
+ update candidates
+set cutoff_flag_ldc =null,
+cutoff_flag_deo =null,
+catsel_ldc =null,
+catsel_deo =null;
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+update candidates
+set allocated_category =null,
+allocated_dept =null,
+allocated_against_ur =null
+
+----------------------------------------------------------------------------------------------------------------------------
+update vacancy_table
+set allocated =null,
+left_vacancy =null;
+
+---------------------------------------------------------------------------------------------------------------------------
+
+select count(*) from candidates where allocated_category is not null;
+select * from vacancy_table order by department_code;
+
+------------------------------------------------------------------------------------------------------------------------------
+ total 3242 candidates allocated 
+ 258 vacancy record count
+ total vacancy -3658 (initial)
+ total vacancy -3254 (current)
+ allocated -3242
+ left-12
+ 
+-------------------------------------------------------------------------------------------------------------------------------- 
+
+alter table candidates add column mistakes_ldc_bkp numeric;
+alter table candidates add column mistakes_deo_bkp numeric;
+alter table candidates add column ldc_medium_bkp numeric;
+alter table candidates add column dest_medium_bkp numeric;
+
+do
+$$
+begin
+alter table candidates alter column ldc_medium_bkp TYPE text;
+alter table candidates alter column dest_medium_bkp TYPE text;
+
+end
+$$
+
+update candidates
+set mistakes_ldc_bkp=mistakes_ldc,
+mistakes_deo_bkp =mistakes_deo,
+ldc_medium_bkp=ldc_medium,
+dest_medium_bkp=dest_medium;
+
+update candidates
+set mistakes_ldc =null,
+mistakes_deo =null,
+ldc_medium=null,
+dest_medium=null;
+
+update candidates
+set mistakes_deo = b.asr_per_of_error,
+dest_medium = b.asr_remarks
+from typing_test_marks b where candidates.rollno = b.asr_rollno and b.asr_batch_no ='BATCH1_DEO'; -----190
+
+update candidates
+set mistakes_ldc = b.asr_per_of_error,
+ldc_medium = b.asr_remarks
+from typing_test_marks b where candidates.rollno = b.asr_rollno and b.asr_batch_no <>'BATCH1_DEO';---19022
+
+update candidates
+set mistakes_ldc = mistakes_ldc_bkp,
+ldc_medium = ldc_medium_bkp
+where ldc_medium_bkp= 'TT-HINDI'; ---71
+
+update candidates
+set cutoff_flag_ldc =null,
+cutoff_flag_deo =null,
+catsel_ldc =null,
+catsel_deo =null,
+allocated_category =null,
+allocated_dept =null,
+allocated_against_ur =null;
+
+rollno 8008001648,3013122516 ---tt_exempted but given tt
+
+'1601002293','1601004095','1601004808','1601006071','1601007474','2405107406','2405075008','2405075030','2405091101','2405074089','2405107419','2404010058','2404011221','2405143780','2405138683','2405130510','2405095259','2405030692','2405022347','2405033601','2405087167','2405054997','2405006326','2405094289','2405142863','2411002902','2411015353','2406003382','2405009175','2405025315','2405042500','2405058787','2201169119','2201169156','2201234257','2201234383','2201234624','2201299653','2201299683','2201299877','2201299883','2201005434','2201005472','2201005598','2201016305','2201016489','2201016641','2201016736','2201016768','2201038191','2201038233','2201048963','2201049073','2201049322','2201049536','2201059747','2201060345','2201080935','2201234353','2201267038','2201267394','2201027854','2201070674','2201105226','2201105355','2201105369','2201108870','2201137033','2201137109','2201097609','2201113199','2201113454','2201144940','2201144956','2201146884','2201147252','2201152961','2201160828','2201185087','2201193588','2201193662','2201210069','2201210360','2201242529','2201242765','2201275149','2201275281','2201283718','2201283778','2201307738','2201307791','2201307851','2201307916','2201308187','2006015073','2006018489','2003004480','3206196207','3011011325','3206096816','3206019059','3001000340','3009066654','3010080880','3010005412','3206046890','3011038189','3009039876','3009090164','3009042840','3008016528','3003025614','3206041415','3009016384','3009042922','3011009112','3011006879','3013122516','3205042003','3009060672','3009054727','3003029045','3009010401','3209012176','3003005674','3206024660','3010101115','3010118016','3205036109','3205033104','3007010199','3009090137','3009039888','3009090298','3008014867','3001040585','3206019119','3205006457','3206013719','3206013752','3206008327','3206063691','3206047035','3206129629','3206058126','3206135488','3003029131','3005014887','3007025215','3010033570','3010037495','3206168167','3013034007','3013055236','3013065840','3013108232','4410038665','4604015273','4206003794','4205002966','4205050372','4415010713','4417009075','4205012922','4605000916','6001024945','6006019067','6005005600','6006010326','6006004561','6007001184','6001006593','7201000291','7204006466','7204003257','7214001751','7002005647','7007001672','7208017288','7205012384','8001005423','8007014151','8007026543','8008001648','8012005202','8012009533','8201027362','8201003719','8204013926','8204004368','8208008152','8208006599','8601037492','8601020041','8601043270','8601004500','8601048988','8604001305'
+
+update vacancy_table
+set allocated =null,
+left_vacancy=null,
+min_marks=null,
+min_paper1 =null,
+min_marks_cand_dob =null;
+
+select * from vacancy_table where initial_vacancy =current order by department_code,category_code;
+
+
+alter table candidates ass column cutoff_flag_ldc CHARACTER VARYING(10);
+alter table candidates ass column cutoff_flag_ldc CHARACTER VARYING(10);
+
+update candidates set cutoff_flag_ldc_bkp=cutoff_flag_ldc,
+cutoff_flag_deo_bkp=cutoff_flag_deo;
+
+update candidates
+set cutoff_flag_ldc=null,
+cutoff_flag_deo=null;
+
+update candidates
+set
+catsel_ldc =null,
+catsel_deo =null,
+allocated_category =null,
+allocated_dept =null,
+allocated_against_ur =null;
+
+update vacancy_table
+set current =initial_vacancy,
+allocated =null,
+left_vacancy=null,
+min_marks=null,
+min_paper1 =null,
+min_marks_cand_dob =null;
+
+select * from vacancy_table;

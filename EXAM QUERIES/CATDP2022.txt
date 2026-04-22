@@ -1,0 +1,160 @@
+
+
+do
+$$
+begin
+
+alter table candidates add column cat1 integer;
+alter table candidates add column cat2 integer;
+alter table candidates add column service_period character varying;
+alter table candidates add column age_relaxation_code character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+
+end
+$$
+
+
+update candidates 
+set cat1 =advc_categoryid::integer;
+
+alter table candidates add column rollno  character varying;
+
+update candidates set rollno =advc_rollno;
+
+alter table candidates add constraint pk_1 primary key (rollno);
+
+update candidates 
+set cat2 = '3' where advc_isex_serviceman ='TRUE';---335
+
+update candidates 
+set exsm_length = substring(advc_serviceperiod,1,2) where advc_isex_serviceman ='TRUE';
+
+update candidates
+set exs_reservation ='Yes' where cat2='3' and advc_is_eligible_exsvc_reservation='true' ;---335
+
+update candidates 
+set age_relaxation_code = substring(advc_arccode,1,2) ;
+
+
+update candidates set age_relaxation_code=replace(age_relaxation_code,',','');
+
+
+do
+$$
+begin
+
+Alter table candidates add column merit integer;
+Alter table candidates add column dob_flag character varying COLLATE pg_catalog."default";
+Alter table candidates add column catsel_dob character varying COLLATE pg_catalog."default";
+Alter table candidates add column cutoff_flag character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel character varying COLLATE pg_catalog."default";
+Alter table candidates add column allocated_category character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_dept character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_sub_category character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_against_ur character varying(5) COLLATE pg_catalog."default";
+
+end
+$$
+
+select * from sp_get_dob_flag('CATDP22',2);
+
+select distinct dob_flag,count(*) from candidates where ckt_finalstatus ='Q' group by dob_flag;
+"01"	91
+"02"	107
+"06"	136
+"10"	21
+"11"	12
+"12"	2
+"13"	3
+"9"	    2696
+"99"	3
+
+
+select * from sp_get_catseldob_flag('CATDP22',3);
+
+select distinct catsel_dob,count(*) from candidates where ckt_finalstatus ='Q' group by catsel_dob;
+
+	3
+"1"	61
+"2"	30
+"3"	136
+"6"	107
+"9"	2734
+
+
+alter table candidates add column catsel_original character varying;
+
+update candidates
+set catsel_original =catsel;
+
+update candidates set catsel= '',
+remarks ='Double relaxation not allowed' 
+where advc_rollno in ('2201019114','2202006655');
+
+update candidates set catsel=replace(catsel,'9',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---139
+
+update candidates set catsel=replace(catsel,'1',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---139
+
+update candidates set catsel=replace(catsel,'2',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---139
+
+update candidates set catsel=replace(catsel,'6',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';--139
+
+update candidates set catsel=replace(catsel,'0',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---139
+
+
+update candidates
+set allocated_category=null,
+allocated_dept =null,
+allocated_sub_category =null,
+allocated_against_ur =null;
+
+update vacancy_table
+set allocated=null,
+left_vacancy=null,
+current= initial_vacancy;
+
+
+
+select sum(initial_vacancy),sum(current),sum(allocated)from vacancy_table where gender='2';---573,573,550
+select sum(initial_vacancy),sum(current),sum(allocated)from vacancy_table where gender='1';---284,284,282
+
+
+select rollno,cat1,merit,catsel,is_dept,allocated_dept,allocated_sub_category,allocated_category from candidates where
+catsel='3' and merit is not null and allocated_dept is not null and gender='1' order by merit ;
+
+select rollno,cat1,merit,catsel,is_dept,allocated_dept,allocated_sub_category,allocated_category from candidates where
+merit is not null and allocated_dept is not null and is_dept ='Yes' and gender='1' order by merit ;
+
+
+update candidates
+set key =allocated_category||allocated_dept||allocated_sub_category||gender
+where allocated_category is not null;
+
+
+update vacancy_table
+set lowest_marks = min(final_score)
+from candidates a
+where key =b.key 
+and a.allocated_category is not null;
+
+
+with cte as
+(select key,min(final_score) as mn_mrk from candidates where allocated_category is not null group by key
+)
+update vacancy_table
+set vacancy_table.lowest_marks = cte.mn_mrk
+from cte where cte.key =vacancy_table.key;
+
+
+select sum(initial_vacancy),sum(allocated),sum(left_vacancy) from vacancy_table;---857,832,25

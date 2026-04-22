@@ -1,0 +1,153 @@
+
+do
+$$
+begin
+
+Alter table candidates add column service_period character varying;
+Alter table candidates add column exsm_length character varying;
+Alter table candidates add column exs_reservation character varying;
+Alter table candidates add column ncc_marks numeric;
+Alter table candidates add column rru_marks numeric;
+Alter table candidates add column final_score numeric;
+
+end
+$$
+
+update candidates
+set agerelax_code =replace(agerelax_code,'.0','') where agerelax_code is not null;
+
+update candidates
+set service_period= substring(ear_service_period,1,2)
+where cat2='3';---14657
+
+update candidates
+set exsm_length= substring(ear_service_period,1,2)
+where cat2='3';---14657
+
+update candidates
+set exs_reservation= 'No'
+where cat2='3' and ear_isexs_benefit_availed_for_civilpost='true';---49
+
+
+select distinct agerelax_Code,count(*) from candidates group by agerelax_Code;
+
+"1"		353348
+"2"		243808
+"20"	753
+"21"	239
+"22"	212
+"23"	218
+"24"	406
+"25"	2280
+"26"	8102
+"27"	5294
+"28"	1137
+"29"	3265
+	2624021
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cedp2023_t1_allocation
+\copy vacancy_table from 'C:\Users\SalauddinKhan\Desktop\vacancy_CEDP2023.csv' csv header;	
+
+select * from vacancy_table order by category_code,sub_category_code,gender;
+
+Alter table vacancy_table add column lowest_parta_marks double precision;
+Alter table vacancy_table add column lowest_partb_marks double precision;
+Alter table vacancy_table add column lowest_marks_dob date;
+
+do
+$$
+begin
+ 
+Alter table candidates add column merit_male integer;
+Alter table candidates add column merit_female integer;
+Alter table candidates add column dob_flag character varying COLLATE pg_catalog."default";
+Alter table candidates add column catsel_dob character varying COLLATE pg_catalog."default";
+Alter table candidates add column cutoff_flag character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel character varying COLLATE pg_catalog."default";
+
+end
+$$
+
+alter table candidates add column gender character varying;
+
+update candidates
+set dob_flag ='26' where ear_person_regno in 
+('10001840724','20004928647','30001487482','10001037113','10000541174','10003576634','10002993699','10000798602','30000743208','30007090524','40000338446','40006845008','40006783086','40006832656','40001997688','50004541504','75001417192','91000111069','91000147410','95000274521')
+
+
+update candidates
+set dob_flag ='28' where ear_person_regno in ('40006921209');
+
+
+\copy unvd_data_all from 'C:\Users\SalauddinKhan\Desktop\reg_roll_mapped.csv' csv header;	
+
+
+select count(*) from unvd_data_all limit 10;---3183582
+
+update candidates 
+set rollno= b.roll
+from unvd_data_all b where candidates.ear_person_regno =b.regid::bigint;
+
+
+Alter table candidates add column parta_gkca numeric;
+Alter table candidates add column partb_reas numeric;
+Alter table candidates add column partc_numa numeric;
+Alter table candidates add column partd_comp numeric;
+Alter table candidates add column score numeric;
+Alter table candidates add column normalized_marks numeric;
+
+\copy marks_edp from 'C:\Users\SalauddinKhan\Desktop\Normalized_Score_Part_2.csv' csv header;	
+\copy marks_edp from 'C:\Users\SalauddinKhan\Desktop\Normalized_Score_Part_3.csv' csv header;	
+
+
+update marks_edp 
+set regid= b.regid
+from unvd_data_all b where marks_edp.participantid =b.roll;
+
+
+update candidates a
+set 
+a.rollno = b.participantid,
+a.parta_gkca = b.general_knowledge,
+a.partb_reas = b.reasoning,
+a.partc_numa = b.numerical_ability,
+a.partd_comp = b.computer_proficiency,
+a.score = b.score,
+a.normalized_marks = b.normalized_score
+from marks_edp b where 
+a.ear_person_regno = b.regid::bigint;
+
+
+update candidates
+set final_score =normalized_marks
+where rollno is not null;
+
+
+select * from sp_get_merit('CEDP23',1);
+
+
+CREATE INDEX IF NOT EXISTS allocated_index
+    ON public.candidates USING btree
+    (allocated_category COLLATE pg_catalog."default" ASC NULLS LAST, allocated_sub_category COLLATE pg_catalog."default" ASC NULLS LAST, allocated_gender COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+	
+select merit,rollno,ear_dob,gender,cat1,cat2,special_esm,catsel_dob,catsel,allocated_category,allocated_sub_category,allocated_gender from candidates_bkp where gender='2' and merit is not null order by merit;	
+
+select rollno,merit,gender,allocated_category,allocated_sub_category,allocated_gender from candidates where allocated_category is not null order by merit;
+
+create table temp_allocated
+(
+	rollno character varying,
+	allocated_category character varying,
+	allocated_sub_category character varying,
+	allocated_gender character varying
+)
+
+alter table temp_allocated add constraint pk_3 primary key (rollno);
+
+update candidates a
+set a.allocated_category =b.allocated_category,
+a.allocated_sub_category = b.allocated_sub_category,
+a.allocated_gender = b.allocated_gender
+
+from temp_allocated b where a.rollno=b.rollno;---29892 updates

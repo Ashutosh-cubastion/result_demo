@@ -1,0 +1,412 @@
+create table candidates_pet_pst_1 as (select * from candidates_pet_pst where allocated_post is not null);
+
+create table t_ctgd2022_dme_rme_data
+(
+roll_number character varying,
+registration_number character varying,
+candidate_name character varying,
+father_name character varying,
+mother_name character varying,
+category integer,
+reason_for_category_change character varying,
+gender character varying(1),
+date_of_birth date,
+is_migrated boolean,
+isseekingreservation character varying,
+migrated_state_name character varying,
+migrated_district_name character varying,
+original_state_name character varying,
+original_district_name character varying,
+state_consider_name character varying,
+district_considered_name character varying,
+naxal_district character varying,
+border_district character varying,
+isex_serviceman character varying,
+isncc_certificate character varying,
+type_of_ncccertificate character varying,
+domicile character varying,
+domicile_distict character varying,
+metriculation character varying,
+matriculation_roll_no character varying,
+attendance character varying,
+biometric_status character varying,
+photo_match_status character varying,
+dme_status character varying,
+dme_unfit_reason character varying,
+med_dme_status character varying,
+rme_attendance character varying,
+rme_final_status character varying,
+rme_biometric_status character varying,
+rme_biometric_photo character varying,
+rme_biometric_description character varying,
+dme_rme_final_status character varying,
+rme_final_description character varying,
+rme_applied character varying,
+rme_centre_code character varying,
+rme_centre_name character varying,
+dme_center_code character varying,
+dme_center_name character varying,
+dme_schedule_date date,
+dme_date_of_appear date,
+rme_date_of_appear date,
+rme_appeal_approved character varying,
+dv_candidate_status character varying,
+dv_notqualified_reason character varying,
+dv_remarks character varying	
+)
+
+ psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_ctgd2022_allocation_final
+ \copy t_ctgd2022_dme_rme_data from 'C:\Users\Public\dme_rme_ctgd22_data.csv' csv header;
+
+create table candidates as (select * from candidates_pet_pst);
+
+alter table candidates add constraint candidates_pk primary key (rollno);
+
+ 
+ALTER table candidates add column regno character varying ;
+ALTER table candidates add column rollno character varying ;
+ALTER table candidates add column cand_name character varying ;
+ALTER table candidates add column father_name character varying ;
+ALTER table candidates add column mother_name character varying ;
+ALTER table candidates add column candidate_name_remarks text ;
+ALTER table candidates add column candidate_father_name_remarks text ;
+ALTER table candidates add column candidate_mother_name_remarks text ;
+ALTER table candidates add column gender integer;
+ALTER table candidates add column cat1 integer;
+ALTER table candidates add column change_cat1_reason character varying ;
+ALTER table candidates add column dob date;
+ALTER table candidates add column cat2 character varying(10) ;
+ALTER table candidates add column exsm_length_ymd text ;
+ALTER table candidates add column exsm_length character varying(10) ;
+ALTER table candidates add column discharged_date date;
+ALTER table candidates add column exs_govtjob text ;
+ALTER table candidates add column exs_govtjob_join_date date;
+ALTER table candidates add column exs_govtjob_undertaking text ;
+ALTER table candidates add column exs_reservation text ;
+ALTER table candidates add column exsvc_joining_date date;
+ALTER table candidates add column is_ph boolean;
+ALTER table candidates add column cat3 character varying(5) ;
+ALTER table candidates add column arccode_with_year text ;
+ALTER table candidates add column agerelax_code character varying(10) ;
+ALTER table candidates add column dv_rejection_provision character varying(10) ;
+ALTER table candidates add column dv_rejection_reason integer;
+ALTER table candidates add column dv_remarks text ;
+ALTER table candidates add column isncc_certificate text ;
+ALTER table candidates add column typeofncc_certificate text ;
+ALTER table candidates add column dme_attendance text ;
+ALTER table candidates add column dme_photostatus text ;
+ALTER table candidates add column dme_ltistatus character varying(10) ;
+ALTER table candidates add column is_migrated boolean;
+ALTER table candidates add column isseeking_reservation boolean;
+ALTER table candidates add column domicile_stateid integer;
+ALTER table candidates add column domicile_state text ;
+ALTER table candidates add column domicile_districtid integer;
+ALTER table candidates add column domicile_district text ;
+ALTER table candidates add column origin_stateid integer;
+ALTER table candidates add column origin_state text ;
+ALTER table candidates add column origin_districtid integer;
+ALTER table candidates add column origin_district text ;
+ALTER table candidates add column stateconsider integer;
+ALTER table candidates add column statename_considered text ;
+ALTER table candidates add column districtconsider integer;
+ALTER table candidates add column districtname_considered text ;
+ALTER table candidates add column naxal_district character varying(5) ;
+ALTER table candidates add column border_district character varying(5) ;
+ALTER table candidates add column dme_status character varying(10) ;
+ALTER table candidates add column rme_applied character varying(10) ;
+ALTER table candidates add column rme_attendance character varying(10) ;
+ALTER table candidates add column rme_biometric_status character varying(10) ;
+ALTER table candidates add column rme_photo_status character varying(20) ;
+ALTER table candidates add column rme_final_status character varying(10) ;
+ALTER table candidates add column final_status character varying(10) ;
+ALTER table candidates add column final_status_description text ;
+ALTER table candidates add column remarks text ;
+ALTER table candidates add column general_intelligence numeric;
+ALTER table candidates add column general_awareness numeric;
+ALTER table candidates add column elementry_mathematics numeric;
+ALTER table candidates add column english numeric;
+ALTER table candidates add column hindi numeric;
+ALTER table candidates add column score numeric;
+ALTER table candidates add column normalised_score numeric;
+ALTER table candidates add column ncc_marks numeric;
+ALTER table candidates add column total_marks numeric;
+ALTER table candidates add column height_chest_rlx_pet_pst_final text ;
+ALTER table candidates add column rejection_provision character varying(5) ;
+ALTER table candidates add column merit_male integer;
+ALTER table candidates add column merit_female integer;
+
+
+ update candidates
+ 
+ set regno = b.advc_regno ::character varying,
+ rollno = b.advc_rollno,
+ cand_name = b.advc_name,
+ father_name = b.advc_father_name,
+ mother_name = b.advc_mother_name,
+ candidate_name_remarks = b.advc_candidatenameremarks, 
+ candidate_father_name_remarks = b.advc_fathernameremarks, 
+ candidate_mother_name_remarks = b.advc_mothernameremarks, 
+ gender = b.advc_genderid ,
+ cat1 = b.advc_categoryid,
+ change_cat1_reason = b.advc_reason_for_catchange,
+ dob =b.advc_dob,
+ --cat2  ,
+ exsm_length_ymd = b.advc_serviceperiod ,
+ --exsm_length ,
+ discharged_date =b.advc_discharged_date,
+ exs_govtjob = b.advc_exs_govtjob, 
+ exs_govtjob_join_date =b.advc_exs_govtjob_join_date,
+ exs_govtjob_undertaking = b.advc_exs_govtjob_undertaking ,
+ exs_reservation = b.advc_is_eligible_exsvc_reservation ,
+ exsvc_joining_date =b.advc_exsvc_joining_date ,
+ is_ph =b.advc_isph,
+ cat3 =b.advc_phcode,
+ arccode_with_year = b.advc_arccode, 
+ --agerelax_code  ,
+ dv_rejection_provision =advc_rejectionprovision,
+ dv_rejection_reason = b.advc_rejectionreason,
+ dv_remarks = b.advc_remarks, 
+ isncc_certificate = b.advc_isncc_certificate ,
+ typeofncc_certificate = b.advc_typeof_ncccertificate, 
+ dme_attendance = b.advc_attendance,
+ dme_photostatus = b.advc_photostatus,
+ dme_ltistatus=b.advc_ltistatus  ,
+ is_migrated =b.med_ismigrated,
+ isseeking_reservation =b.med_isseekingreservation,
+ domicile_stateid = b.med_migratedstate,
+ domicile_state = b.med_migratedstatename, 
+ domicile_districtid = b.med_migrateddistrict,
+ domicile_district = b.med_migrateddistrictname,
+ origin_stateid = b.med_originstate,
+ origin_state = b.med_originstatename ,
+ origin_districtid = b.med_origindistrict,
+ origin_district = b.med_origindistrictname ,
+ stateconsider = b.med_stateconsider,
+ statename_considered = b.med_stateconsidername,
+ districtconsider = b.med_districtconsider,
+ districtname_considered = b.med_districtconsidername, 
+ naxal_district =b.med_naxal_district,
+ border_district = b.med_border_district,
+ dme_status = b.med_dme_status ,
+ rme_applied =b.med_rme_applied,
+ rme_attendance =b.med_rme_attendance ,
+ rme_biometric_status =b.med_biometric_status_rme ,
+ rme_photo_status =b.med_biometric_photo_rme ,
+ rme_final_status =b.med_rme_finalstatus ,
+ final_status =b.med_dme_rme_finalstatus ,
+ final_status_description = b.med_rme_final_description,
+ remarks = b.med_dme_unfitreason_remarks 
+ from t_ctgd2022_dme_rme_data b where candidates.pet_regid = b.advc_regno;
+ 
+ 
+ alter table candidates add column is_ex_serviceman text;
+ 
+ update candidates
+set is_ex_serviceman =advc_isex_serviceman
+from t_ctgd2022_dme_rme_data b where candidates.pet_regid = b.advc_regno;
+
+update candidates
+	set general_intelligence =pet_general_intelligence,
+    general_awareness =pet_general_awareness,
+    elementry_mathematics =pet_elementry_mathematics,
+    english =pet_english,
+    hindi =pet_hindi,
+    score= pet_score,
+    normalised_score =pet_normalised_score;
+
+update candidates set ncc_marks ='0';---93328,93230
+update candidates set ncc_marks ='3.2' where typeofncc_certificate='1';--1940,1940	
+update candidates set ncc_marks ='4.8' where typeofncc_certificate='2';--2436,2437
+update candidates set ncc_marks ='8' where typeofncc_certificate='3';--4211,4213
+	
+update candidates set total_marks= normalised_score +ncc_marks;---93228,93230
+
+update candidates set cat2 ='0';---93228
+
+update candidates set cat2='3' where is_ex_serviceman='yes'
+
+update candidates set cat2='3' where is_ex_serviceman='true';
+
+select distinct is_ex_serviceman,count(*) from candidates group by is_ex_serviceman;
+
+update candidates set exsm_length= substring(exsm_length_ymd,1,2) where cat2 ='3';--1605
+
+update candidates set agerelax_code= substring(arccode_with_year,1,1);---93228
+
+alter table candidates add column agerelax_code character varying;
+
+update candidates set agerelax_code = agerelax_code_raw;---93228
+update candidates set agerelax_code = null where agerelax_code_raw ='0';--26376
+
+alter table candidates add column cut_off character varying;
+
+alter table master_table add constraint master_table_pk primary key (serial);
+
+update candidates set rollno =pet_rollno where rollno is null;
+
+alter table candidates add constraint candidates_pk primary key (rollno);
+
+update candidates
+set regno = pet_regid,
+ cand_name = pet_cand_name,
+ father_name = pet_cand_fname,
+ mother_name = pet_cand_mname,
+ gender = pet_gender,
+ cat1 = pet_category,
+ dob = pet_dob,
+ cat2=pet_is_ex_serviceman,
+ arccode_with_year =pet_age_relaxation_code,
+ isncc_certificate = pet_isncc_certificate ,
+ typeofncc_certificate = pet_typeofncc_certificate, 
+ is_migrated =pet_ismigrated,
+ isseeking_reservation =pet_isreservation_availed_candidate,
+ domicile_stateid = pet_domicile_stateid,
+ domicile_state = pet_domicile_state, 
+ domicile_districtid = pet_domicile_districtid,
+ domicile_district = pet_domicile_district,
+ origin_stateid = pet_origin_stateid,
+ origin_state = pet_origin_state ,
+ origin_districtid = pet_origin_districtid,
+ origin_district = pet_origin_district ,
+ stateconsider = pet_stateconsider,
+ statename_considered = pet_statename_considered,
+ districtconsider = pet_districtconsider,
+ districtname_considered = pet_districtname_considered, 
+ naxal_district =pet_naxal_district,
+ border_district = pet_border_district
+ where rollno in ('5501006256','5502001738');
+ --where regno is null;
+ 
+ update candidates
+	set general_intelligence =pet_general_intelligence,
+    general_awareness =pet_general_awareness,
+    elementry_mathematics =pet_elementry_mathematics,
+    english =pet_english,
+    hindi =pet_hindi,
+    score= pet_score,
+    normalised_score =pet_normalised_score
+	where pet_finalstatus ='Temporary Unfit';
+	
+update candidates
+	set general_intelligence =pet_general_intelligence,
+    general_awareness =pet_general_awareness,
+    elementry_mathematics =pet_elementry_mathematics,
+    english =pet_english,
+    hindi =pet_hindi,
+    score= pet_score,
+    normalised_score =pet_normalised_score
+	where rollno in ('5501006256','5502001738');	
+	
+update candidates set agerelax_code_raw= substring(arccode_with_year,1,1) where pet_finalstatus ='Temporary Unfit' ;
+
+update candidates set cat1=pet_category,
+dob=pet_dob,
+arccode_with_year=pet_age_relaxation_code,
+agerelax_code_raw=pet_age_relaxation_code,
+isncc_certificate=pet_isncc_certificate,
+typeofncc_certificate=pet_typeofncc_certificate
+ where cat1 is null and final_status ='TU';---10 updates
+
+update candidates
+set final_status ='TU'where pet_finalstatus ='Temporary Unfit';---50 updates
+
+select rollno,pet_finalstatus,final_status from candidates where pet_finalstatus ='With Held' and final_status ='Q';
+
+update candidates
+set final_status ='W' where pet_finalstatus ='With Held' and final_status ='Q';--1056 updated
+	
+update candidates set agerelax_code ='03' where agerelax_code is null and cat2='3' and final_status<>'NQ';---3 updates
+
+update candidates set rejection_provision ='C' where final_status <>'NQ';---70425
+
+select rollno,cat1,cat2,arccode_with_year,agerelax_code_raw,agerelax_code 
+from candidates where cat2='0' and final_status<>'NQ' and cat1 in ('1','2')
+and (agerelax_code is null or agerelax_code='');
+
+update candidates set agerelax_code ='01' where cat2='0' and final_status<>'NQ' and cat1 in ('1','2')
+and (agerelax_code is null or agerelax_code='');---10451 updates
+
+select rollno,cat1,cat2,arccode_with_year,agerelax_code_raw,agerelax_code 
+from candidates where cat2='0' and final_status<>'NQ' and cat1 in ('6')
+and (agerelax_code is null  or agerelax_code='');
+
+update candidates set agerelax_code ='02' where cat2='0' and final_status<>'NQ' and cat1 in ('6')
+and (agerelax_code is null or agerelax_code='');---16094 updates
+
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+
+
+select rollno,pet_category,cat1,cat2,pet_isexs_benefit_availed_for_civilpost,pet_ex_isexs_eligibility,exs_reservation 
+from candidates where cat2 ='3'  and pet_ex_isexs_eligibility='Yes' and exs_reservation ='false' ;
+
+dob_flag
+
+"01"	3201
+"02"	2990
+"03"	5
+"04"	1
+"05"	1
+"06"	1
+"9"		63341
+"99"	885
+		22805
+		
+select rollno,cand_name,pet_category,arccode_with_year,pet_age_relaxation_code,cat1,cat2,exsm_length,dob,agerelax_code,
+merit,merit_female,final_status,rejection_provision,pet_dob_flag,dob_flag,catsel_dob,pet_catsel_dob 
+from candidates where 
+--pet_category<>cat1 and
+final_status<>'NQ' and catsel_dob<>pet_catsel_dob;
+
+
+update candidates
+set height_chest_rlx_pet_pst_final =pet_height_chest_rlx_pet_pst_final;-----93230
+
+update candidates 
+set post_preference = pet_post_preference;---93230
+
+
+select rollno,cand_name,pet_category,arccode_with_year,pet_age_relaxation_code,cat1,cat2,exsm_length,dob,agerelax_code,
+merit,merit_female,final_status,rejection_provision,pet_dob_flag,dob_flag,catsel_dob,pet_catsel_dob,cut_off,catsel,height_chest_rlx_pet_pst_final 
+from candidates where 
+--pet_category<>cat1 and
+final_status<>'NQ' and catsel='';
+
+Alter table candidates add column allcated_category character varying;
+Alter table candidates add column allocated_post character varying;
+Alter table candidates add column allocated_state character varying;
+Alter table candidates add column allocated_area character varying;
+Alter table candidates add column allocated_against_ur character varying;
+
+update vacancy_table set allocated=null,
+left_vacancy =null,
+
+
+update vacancy_table set allocated=null,
+left_vacancy =null,
+min_marks =null,
+min_marks_parta=null,
+min_marks_partb=null;
+
+
+update candidates set allocated_category =null,
+allocated_post =null,
+allocated_state =null,
+allocated_area=null,
+allocated_against_ur =null;
+
+
+create table dv_cat_mismatch
+(
+	rollno character varying,
+	regid character varying,
+	cname character varying,
+	cat1tier1 character varying,
+	cat1_pet character varying,
+	cat1 character varying,
+	migrated character varying,
+	res_in_soo character varying,
+	DV_Category character varying
+)
+
+update candidates set cat1=b.dv_category::integer from dv_cat_mismatch b where b.rollno =candidates.rollno;

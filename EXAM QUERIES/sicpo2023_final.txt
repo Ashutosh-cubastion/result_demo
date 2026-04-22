@@ -1,0 +1,829 @@
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_examsicpo2023_applicant_reg_pu where ear_isactive='True' and ear_application_status='1') to 'C:\Users\Public\t_examsicpo2023_applicant_reg_pu165.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final
+	
+\copy t_examsicpo2023_applicant_reg_pu from 'C:\Users\Public\t_examsicpo2023_applicant_reg_pu165.csv' csv header;
+
+ select count(*) from t_examsicpo2023_applicant_reg_pu;--- 834466
+ 
+ create table edp_marks
+(
+	REGID character varying,
+	ROLL character varying,
+	NAME character varying,
+	CHANGENAME character varying,
+	FATHERNAME character varying,
+	MOTHERNAME character varying,
+	DOB date,
+	GENDER character varying,
+	CAT1 character varying,
+	CAT2 character varying,
+	CAT3 character varying,
+	DEPTL_DP character varying,
+	ESM_SPLCAT character varying,
+	NCC_CERTI character varying,
+	NCC_TYPE character varying,
+	AGERLXCODE character varying,
+	EQ character varying,
+	SCORE_P1 numeric,
+	NORMALIZED_p1 numeric,
+	NCCP1MARKS numeric,
+	PAPER1 numeric,
+	PET	character varying,
+	SCORE_P2 numeric,
+	NCCP2MARKS numeric,
+	PAPER2 numeric,
+	WITHHELD character varying,
+	REJPROV character varying,
+	REMARKS character varying
+	);
+	
+	
+CREATE TABLE IF NOT EXISTS public.vacancy_male
+(
+    slno integer,
+    post_name character varying COLLATE pg_catalog."default",
+    post_code character varying COLLATE pg_catalog."default" NOT NULL,
+    category_code character varying COLLATE pg_catalog."default" NOT NULL,
+    sub_category_code character varying COLLATE pg_catalog."default" NOT NULL,
+    vacancy integer,
+    initial_vacancy integer,
+    current integer,
+    allocated integer,
+    left_vacancy integer,
+    min_marks double precision,
+    min_paper1 double precision,
+    min_paper2 double precision,
+    min_marks_cand_dob date,
+    max_merit integer,
+    CONSTRAINT vacancy_male_pkey PRIMARY KEY (post_code, sub_category_code, category_code)
+)
+
+CREATE TABLE IF NOT EXISTS public.vacancy_female
+(
+    slno integer NOT NULL,
+    post_name character varying COLLATE pg_catalog."default",
+    post_code character varying COLLATE pg_catalog."default" NOT NULL,
+    category_code character varying COLLATE pg_catalog."default" NOT NULL,
+    initial_vacancy integer,
+    current integer,
+    allocated integer,
+    left_vacancy integer,
+    min_marks double precision,
+    min_paper1 double precision,
+    min_paper2 double precision,
+    min_marks_cand_dob date,
+    max_merit integer,
+    CONSTRAINT vacancy_table_female_pk PRIMARY KEY (post_code, category_code)
+)
+
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final
+
+ \copy vacancy_male from 'C:\Users\SalauddinKhan\Desktop\vacancy_male_sicpo23.csv' csv header;
+--COPY 45
+
+ \copy vacancy_female from 'C:\Users\SalauddinKhan\Desktop\vacancy_female_sicp23.csv' csv header;
+--COPY 30	
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_sicpo2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final -t arc_table C:\Users\Public\arc_table.dump
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_sicpo2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final -t master_table C:\Users\Public\master_table.dump
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_debbaredcandidates_ssc_new -F c -f C:\Users\Public\m_debbaredcandidates_ssc_new.dump alloc_ctgd2022_allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final -t m_debbaredcandidates_ssc_new C:\Users\Public\m_debbaredcandidates_ssc_new.dump
+
+select * into dv_dme_rme_db from 
+(
+with cte as
+(select a.*,b.* from
+t_appl_dv_ro_candidatedata_ssc a left join
+t_appl_dv_sicpo2023candidatedetails_ssc b
+on
+a.advcd_rollno=b.advc_rollno 
+where
+a.advcd_notificationid='70' and a.advcd_examid='5'
+)
+select cte.*,c.* from
+cte
+left join t_sicpo23exam_medical c
+on cte.advcd_rollno::bigint = c.med_roll_no
+);
+
+
+2219003083
+2219000727
+2214003426
+3005001066
+ABHAY SINGH
+AMIT KUMAR SINGH
+AMAN DABAS
+SANDEEP KUMAR SINGH ----> in our record marked as fit but not present in bsf fit list
+
+
+2215012621
+7204003954 ----> marked fit by bsf but marked absent in our DBA
+ISLAMUDDUN
+ASHUTOSH
+
+
+7204003954	Ashutosh----->
+4205012864	Anish Kumar Mahto
+4410015006	Aditya Sharma
+2214014797	Amit Kumar
+2215012621	Islamuddun------>
+22190000727	Amit Kumar Singh------>rollno extra 0
+2219003038	Abhay Singh
+2401006981	Rakesh Kumar Meghwal
+1403006369	Prity -------> TU
+3010006739	Ajit Singh
+2209003592	Deepak Panchal
+2209005011	Ravi Shankar Koshi
+6001013609	Aniket Meena
+3206019998	Kundan Kumar
+2201051584	Ashish Choudhary-----present in BSF fit list not in ours
+
+
+>pg_dump -U postgres -h 10.246.126.165 -p 5432 -t dv_dme_rme_db -F c -f C:\Users\Public\dv_dme_rme_db.dump ssc2
+>pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_sicpo2023allocation_final -t dv_dme_rme_db C:\Users\Public\dv_dme_rme_db.dump
+
+
+create table consolidated_data_bsf 
+(
+advcd_id character varying,
+advcd_name character varying,
+advcd_rollno character varying,	
+med_dme_rme_finalstatus character varying,
+med_rme_final_status character varying,
+FINALSTATUS character varying,
+REMARKS character varying
+)
+
+
+alter table dv_dme_rme_db add column dme_rme_finalstatus_bsf character varying;
+alter table dv_dme_rme_db add column rme_finalstatus_bsf character varying;
+alter table dv_dme_rme_db add column finalstatus_bsf character varying;
+alter table dv_dme_rme_db add column remarks_bsf character varying;
+
+update dv_dme_rme_db a
+set a.dme_rme_finalstatus_bsf=b.med_dme_rme_finalstatus,
+a.rme_finalstatus_bsf=b.med_rme_final_status,
+a.finalstatus_bsf=b.finalstatus,
+a.remarks_bsf=b.remarks
+from consolidated_data_bsf b
+where a.advcd_rollno =b.advcd_rollno;
+
+
+select * into candidates from
+(
+select advcd_rollno,advc_rollno,advcd_regno,advc_regno,advc_name,advc_father_name,advc_mother_name,
+advc_candidatenameremarks,advc_fathernameremarks,advc_mothernameremarks,
+advc_genderid,advc_dob,advc_age,advc_categoryid,advc_reason_for_catchange,advc_isex_serviceman,
+advc_serviceperiod,advc_discharged_date,advc_isph,advc_phcode,advc_minority_community,advc_minority_name,
+advc_dvactualdate,advc_arccode,advc_rejectionprovision,advc_rejectionreason,advc_remarks,
+advc_notificationid,advc_examid,advc_examyear,advc_posteligiblefor,advc_posteligiblefor_dept_code,advc_postpreference_dv_option,
+advc_tenth_rollno,advc_driving_licence_formotorcycle,advc_driving_licence_date_formotorcycle,advc_driving_licence_forcar,advc_driving_licence_date_forcar,
+advc_pet_pst_date,advc_isdept_candidate,advc_isdept_certificate,advc_isexs_specialquota,
+advc_specialforcensg_proof,advc_commandoqi_proof,advc_commando_navyair_proof,advc_share_persinfo,advc_permanentaddress,
+advc_permanentstateid,advc_permanentdistid,advc_permanentpincode,advc_persentaddress,advc_persentstateid,advc_persentdistid,advc_persentpincode,
+advc_emailid,null as mobileno,advc_isncc_certificate,advc_typeof_ncccertificate,advc_attendance,advc_excertificate,
+med_dme_status,med_dme_unfitreason,med_dme_unfitreason_remarks,med_dme_rme_finalstatus,dme_rme_finalstatus_bsf,med_rme_applied,med_rme_appeal_approved,med_biometric_status_rme,med_biometric_photo_rme,med_rme_biometric_description,
+med_rme_finalstatus,med_rme_final_status,rme_finalstatus_bsf,med_rme_final_description,med_rme_date_of_appear,med_rme_centercode,med_rme_centername, finalstatus_bsf,remarks_bsf
+from dv_dme_rme_db
+);
+
+select finalstatus_bsf,count(*) from candidates group by finalstatus_bsf;
+"Fit "								4195
+"Unfit "							966
+"Temporary Unfit due to pregnancy "	2
+"Absent "							1882
+
+select * from candidates where finalstatus_bsf='Fit ';
+
+update candidates
+set finalstatus_bsf ='fit' where finalstatus_bsf='Fit ';---4195
+
+select * from candidates where finalstatus_bsf='Unfit ';
+
+update candidates
+set finalstatus_bsf ='unfit' where finalstatus_bsf='Unfit ';---966
+
+
+select * from candidates where finalstatus_bsf='Absent ';
+
+update candidates
+set finalstatus_bsf ='absent' where finalstatus_bsf='Absent ';---1882
+
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy ';
+
+update candidates
+set finalstatus_bsf ='Temporary Unfit due to pregnancy' where finalstatus_bsf='Temporary Unfit due to pregnancy ';--2
+
+----data sanity-----
+
+select * from candidates where finalstatus_bsf='fit' and advc_rollno is null;--7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_name is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_father_name is null;--7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_mother_name is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_genderid is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_dob is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_age is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_categoryid is null;---7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_isex_serviceman='true' and advc_serviceperiod is null;---2215012621 ISLAMUDDIN
+select * from candidates where finalstatus_bsf='fit' and advc_rejectionprovision is null;--7204003954
+select * from candidates where finalstatus_bsf='fit' and advc_postpreference_dv_option is null;---"7204003954","2201094205","2215012621"
+select * from candidates where finalstatus_bsf='fit' and advc_isncc_certificate='true' and (advc_typeof_ncccertificate is null or advc_typeof_ncccertificate='0');
+
+
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_rollno is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_name is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_father_name is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_mother_name is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_genderid is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_dob is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_age is null;
+select * from candidates where finalstatus_bsf='Temporary Unfit due to pregnancy' and advc_categoryid is null;---1403006369 PRITY
+
+
+select * from vacancy_male where post_code='A';
+select sum(vacancy) from vacancy_male where post_code='A';---98
+
+select * from vacancy_male where post_code<>'A';
+select sum(vacancy) from vacancy_male where post_code<>'A';--1772
+
+select * from vacancy_female where post_code='A';
+select sum(initial_vacancy) from vacancy_female where post_code='A';--53
+
+select * from vacancy_male where post_code<>'A';
+select sum(initial_vacancy) from vacancy_female where post_code<>'A';--113
+
+create table candidates as (
+select a.*,b.* 
+from 
+candidates_1 a,
+edp_marks b
+where a.advcd_rollno=b.roll
+);
+
+----debbarred checking--------
+
+select a.advcd_regno,a.advcd_rollno,a.advc_name,a.advc_father_name,a.advc_mother_name,a.advc_dob,a.advc_genderid,a.advc_categoryid,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc_new b where 
+--b.dc_debarred_upto >'2023-08-01' and
+
+--replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)||UPPER(a.advc_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+ 
+replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_mother_name)),' ','') and a.advc_dob = b.dc_dob_name;
+ 
+replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)),' ','') and a.advc_dob = b.dc_dob_name;
+
+
+for 7204003954 ASHUTOSH ,please share post_preference, and confirm whether the person has a valid Driving licence or not.
+for 2215012621 ISLAMUDDIN, please share post preference.
+
+Please share height/ chest measure and height/chest relaxation taken(if any) of the 4197 fit/temporay unfit candidates. 
+
+
+'8601008694','8601008897','8601014459','8603000012','8004000765','8007003659','8008000150','8604000195','8001001678','8601004875','8601007266','8012002764','8601006625','8601001788','8601015682','8603000080','2405045251','2405045713','2405047831','2405050141','2405051863','2405052085','2405053801','2405054013','2405055189','2405057464','2405057471','2405057905','2405057961','2405058704','2405058894','2406000297','2406006167','2409002604','3003015967','3009004765','7006000809','7203000239','7204000003','7204000628','7204004010','7205003137','7205005209','7208000096','7208000666','7208005069','7208007343','6006007375','6204000310','6204006614','6007004462','5001000613','5105000053','5105000832','5105001660','5105004065','5105004247','5105005459','5105006554','5105007969','5105008885','5105009187','5107000047','5107000072','5107000273','5107000327','5107001240','5107001730','5107001977','5107002660','5302000046','5302000162','5302000804','5302001144','5302001384','5401000080','5401000191','5401000274','5401000347','5401000437','5401000575','5401000767','5401000834','5401000897','5401000938','5401001030','5401001467','5501000127','5501001745','5501002224','5501003013','5701000107','5701000116','5701000182','5701000395','5701000642','5701000677','5701000965','5701000987','5701001292','5701001493','5701001537','5401000739','5105003693','5107000608','5107001019','5302001410','5501000208','5501001381','5701000769','4205002556','4205004553','4205004586','4205005679','4205006263','4205006868','4205008142','4410024251','4205008709','4205013766','4410012298','4410013792','4410018476','4604005188','4604005367','4410014070','2405001001','2405002035','2405002290','2405002844','2405003111','2405004585','2405005157','2405007684','2405008164','2405008211','2405010137','2405010878','2405012562','2405013019','2405016783','2405019654','2405021205','2405021729','2405024683','2405028569','2405028789','2405028872','2405029213','2405030579','2405031063','2405031275','2405032258','2405032266','2405032275','2405033575','2405033765','2405034499','2405035077','2405036054','2405036465','2405036625','2405036775','2405037758','2405038066','2405042829','2405043754','2405044065','2405044173','2405044892','2201013408','2003003986','2002003063','2002000802','2002002271','2201040195','2201040759','2201036107','2201077603','2405010076','2201092975','2405004865','2201096444','2405009574','2405033370','2405052903','2201050551','2201054958','2201060835','2201061298','2201063286','2201084110','2201092768','2201094403','2201095948','2201097810','2201101061','3008002022','3010008225','3011006132','3011017614','9011000339','9011001517','9005000465','9002001414','9001002621','9008000095','2002002250','2002002440','2002003173','2002003379','2002004074','2002004267','2002004716','2002004970','2002005244','2002005932','2002006121','2002006138','2003003568','2003005505','2201006398','2201007815','2201008137','2201009021','2201009077','2201013550','2201013933','2201016334','2201022520','2201030608','2201032276','2201041282','2201042486'
+
+alter table candidates add column agerelax_code character varying;
+alter table candidates add column cat1_cpo character varying;
+alter table candidates add column cat1_dp character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column meritm integer;
+alter table candidates add column meritf integer;
+alter table candidates add column dob_flag_cpo character varying;
+alter table candidates add column dob_flag_dp character varying;
+alter table candidates add column catsel_dob_cpo character varying;
+alter table candidates add column catsel_dob_dp character varying;
+
+
+update candidates
+set rejection_provision='C' where finalstatus_bsf='fit';---4195
+
+update candidates
+set rejection_provision='TU' where finalstatus_bsf='Temporary Unfit due to pregnancy';--2
+
+update candidates
+set cat1_dp='6',
+cat1_cpo='9'
+where rejection_provision in ('C','TU') and advc_categoryid='11';---64
+
+update candidates
+set cat1_dp='6',
+cat1_cpo='0'
+where rejection_provision in ('C','TU') and advc_categoryid='12';---7
+
+update candidates
+set agerelax_code =substring(advc_arccode,1,2);
+
+update candidates
+set agerelax_code =replace(agerelax_code,',','');
+
+update candidates
+set agerelax_code =null where agerelax_code='0';
+
+select * from candidates where rejection_provision in ('C','TU') and agerelax_code is null
+and advc_age>'25';---0
+
+update candidates
+set exsm_length =substring(advc_serviceperiod,1,3) where advc_isex_serviceman='true';
+
+update candidates
+set exsm_length =replace(exsm_length,'/','') where advc_isex_serviceman='true';
+
+-------DOB FLAGS---------------------------
+
+select * from sp_get_dob_flag('SICPO23',3);
+
+select distinct dob_flag_cpo,count(*) from candidates group by dob_flag_cpo;
+"01"	260
+"02"	318
+"06"	352
+"9"		3240
+"99"	27
+		2848
+		
+select distinct cat1_cpo from candidates where dob_flag_cpo='01';---1,2
+select distinct cat1_cpo from candidates where dob_flag_cpo='02';---6,9
+select distinct cat1_cpo,cat2 from candidates where dob_flag_cpo='06';---6,9
+select distinct cat1_cpo from candidates where dob_flag_cpo='9';---0,1,2,6,9		
+
+select advcd_rollno,advc_categoryid,agerelax_code,cat1_cpo,cat2,dob_flag_cpo from candidates where dob_flag_cpo='02'
+and cat1_cpo in ('9','0');---15
+
+update candidates
+set dob_flag_cpo='' where dob_flag_cpo='02'
+and cat1_cpo in ('9','0');
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_cpo as cat1,cat2,advc_genderid as gender,agerelax_code,exsm_length
+,dob_flag_cpo from candidates where rejection_provision in ('C','TU') and dob_flag_cpo='99' ;---27 all checked and found correct
+
+select distinct dob_flag_cpo,count(*) from candidates group by dob_flag_cpo;
+
+"01"	260
+"02"	303
+"06"	352
+"9"		3240
+"99"	27
+		2863
+		
+		
+select * from sp_get_dob_flag('SICPO23',4);
+
+select distinct dob_flag_dp,count(*) from candidates group by dob_flag_dp;
+"01"	258
+"02"	317
+"06"	352
+"17"	17
+"18"	8
+"19"	5
+"9"		3240
+		2848
+		
+select distinct cat1_dp from candidates where dob_flag_dp='01';---1,2
+select distinct cat1_dp from candidates where dob_flag_dp='02';---6
+select distinct cat1_dp,cat2 from candidates where dob_flag_dp='06';---6,9
+select distinct cat1_dp,advc_genderid from candidates where dob_flag_dp='17';---0,9 
+select distinct cat1_dp,advc_genderid from candidates where dob_flag_dp='18';---6
+select distinct cat1_dp,advc_genderid from candidates where dob_flag_dp='19';---1,2		
+
+------Catseldob flag--------------
+
+select * from sp_get_catseldob_flag('SICPO23',5);
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_cpo as cat1,cat2,advc_genderid as gender,dob_flag_cpo as dob_flag,
+exsm_length,catsel_dob_cpo from candidates where (dob_flag_cpo is not null or dob_flag_cpo<>'') 
+and catsel_dob_cpo='' order by advcd_rollno;---27 overaged
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_cpo as cat1,cat2,advc_genderid as gender,dob_flag_cpo as dob_flag,
+exsm_length,catsel_dob_cpo from candidates where (dob_flag_cpo is not null or dob_flag_cpo<>'') 
+and dob_flag_cpo='06' order by advcd_rollno;----all 3
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_cpo as cat1,cat2,advc_genderid as gender,dob_flag_cpo as dob_flag,
+exsm_length,catsel_dob_cpo from candidates where (dob_flag_cpo is not null or dob_flag_cpo<>'') 
+and dob_flag_cpo='01' order by advcd_rollno;---1,2
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_cpo as cat1,cat2,advc_genderid as gender,dob_flag_cpo as dob_flag,
+exsm_length,catsel_dob_cpo from candidates where (dob_flag_cpo is not null or dob_flag_cpo<>'') 
+and dob_flag_cpo='02' order by advcd_rollno;---all 6
+
+
+select * from sp_get_catseldob_flag('SICPO23',6);
+
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and catsel_dob_dp='' order by advcd_rollno;---
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and dob_flag_dp='01' order by advcd_rollno;---
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and dob_flag_dp='02' order by advcd_rollno;---
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and dob_flag_dp='17' order by advcd_rollno;---
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and dob_flag_dp='18' order by advcd_rollno;--
+
+select advcd_rollno as rollno,advc_dob as dob1,advc_categoryid,cat1_dp as cat1,cat2,advc_genderid as gender,dob_flag_dp as dob_flag,
+exsm_length,catsel_dob_dp from candidates where (dob_flag_dp is not null or dob_flag_dp<>'') 
+and dob_flag_dp='19' order by advcd_rollno;--
+
+-----------------------------ncc certificate checking ----------------------------------------
+
+select distinct advc_typeof_ncccertificate,count(*) from candidates where  rejection_provision in ('C','TU') group by advc_typeof_ncccertificate;
+"0"	3681
+"1"	108
+"2"	89
+"3"	318
+	1 ----ASHUTOSH
+
+update candidates
+set advc_typeof_ncccertificate =null where advc_typeof_ncccertificate='0' and rejection_provision in ('C','TU');	
+
+select distinct ncc_type from candidates where  rejection_provision in ('C','TU') and advc_typeof_ncccertificate='1' ;---A
+select distinct ncc_type from candidates where  rejection_provision in ('C','TU') and advc_typeof_ncccertificate='2' ;---B
+select distinct ncc_type from candidates where  rejection_provision in ('C','TU') and advc_typeof_ncccertificate='3' ;---C
+
+select rollno,advcd_regno,advc_categoryid,advc_genderid,advc_typeof_ncccertificate,ncc_type,ncc_certi,normalized_p1,nccp1marks,
+paper1,score_p2,nccp2marks,paper2,total from candidates where rejection_provision in ('C','TU') and advc_typeof_ncccertificate='1' order by rollno;
+
+----------------------------------Merit Flag-------------------------------------------
+
+select * from sp_get_merit('SICPO23',1);----meritm updated successfully for 3809 candidates
+
+select * from sp_get_merit('SICPO23',2);-----meritf updated successfully for 388 candidates
+
+select advc_genderid,count(*) from candidates where rejection_provision in ('C','TU') group by advc_genderid ;
+1	388
+2	3809
+
+------------------------------------cutoff flag----------------------------------
+
+alter table candidates add column cutoff_flag_female_cpo character varying;
+alter table candidates add column cutoff_flag_female_dp character varying;
+alter table candidates add column cutoff_flag_male_cpo character varying;
+alter table candidates add column cutoff_flag_male_dp character varying;
+alter table candidates add column cutoff_flag_male_spclexs_dp character varying;
+
+
+select distinct isexs_specialquota,count(*) from candidates where rejection_provision in ('C','TU') group by isexs_specialquota
+false	325
+true	27
+		3845
+
+update candidates set isexs_specialquota='Yes' where isexs_specialquota='true' and rejection_provision in ('C','TU');---27 updates		
+
+--cutoff_flag_female_cpo
+select * from sp_get_cutoff('SICPO23',7);
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='0' order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='0' and paper1>='138.99649'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='0' and paper1>='138.99649' and total>='265.87105'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='1' order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='1' and paper1>='115.22565'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='1' and paper1>='115.22565' and total>='213.3931'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='2' order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='2' and paper1>='109.98635'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='2' and paper1>='109.98635' and total>='235.47174'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='6' order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='6' and paper1>='137.19433'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='6' and paper1>='137.19433' and total>='247.14849'
+order by meritf
+
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='9' order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='9' and paper1>='143.83082'
+order by meritf
+
+select rollno,cat1_cpo as cat1,cat2,isexs_specialquota,advc_genderid as gender,paper1::numeric as paper1,total::numeric as total,
+cutoff_flag_female_cpo,cutoff_flag_female_dp from candidates where meritf is not null and cat1_cpo ='9' and paper1>='143.83082' and total>='309.94012'
+order by meritf
+
+---cutoff_flag_female_dp
+select * from sp_get_cutoff('SICPO23',8);
+
+----cutoff_flag_male_cpo
+select * from sp_get_cutoff('SICPO23',9);
+
+---cutoff_flag_male_dp
+select * from sp_get_cutoff('SICPO23',10);
+
+--cutoff_flag_male_spclesm_dp
+select * from sp_get_cutoff('SICPO23',11);
+
+
+---------CATSEL flag----------------------------------
+
+alter table candidates add column catsel_female_cpo character varying;
+alter table candidates add column catsel_female_dp character varying;
+alter table candidates add column catsel_male_cpo character varying;
+alter table candidates add column catsel_male_dp character varying;
+alter table candidates add column catsel_male_spclexs_dp character varying;
+
+---catsel_female_cpo
+select * from sp_get_catsel('SICPO23',12);
+
+---catsel_female_dp
+select * from sp_get_catsel('SICPO23',13);
+
+---catsel_male_cpo
+select * from sp_get_catsel('SICPO23',14);
+
+---catsel_male_dp
+select * from sp_get_catsel('SICPO23',15);
+
+
+---------------------------------------------------------------------------
+
+create table m_states_gis
+(st_stateid integer,
+st_state_name text)
+
+
+create table m_districts_gis
+(ds_distid integer,
+ds_dist_name text)
+
+
+alter table candidates add column permanent_stateid integer;
+alter table candidates add column permanent_state_name text;
+alter table candidates add column permanent_distid text;
+alter table candidates add column permanent_dist_name text;
+alter table candidates add column permanent_pincode text;
+alter table candidates add column present_stateid integer;
+alter table candidates add column present_state_name text;
+alter table candidates add column present_distid integer;
+alter table candidates add column present_dist_name text;
+alter table candidates add column present_pincode text;
+alter table candidates add column permanent_address text;
+alter table candidates add column present_address text;
+
+
+update candidates a 
+set a.permanent_stateid = b.ear_permanent_stateid,
+    a.permanent_distid =b.ear_permanent_districtid,
+	a.permanent_address=b.ear_permanent_address,
+    a.present_stateid =b.ear_present_stateid,
+    a.present_distid =b.ear_present_districtid,
+    a.present_pincode=b.ear_present_pincode,
+	a.present_address=ear_present_address,
+	a.mobileno=b.ear_mobile_number
+	
+	from t_examsicpo2023_applicant_reg_pu b
+	where a.advcd_regno=b.ear_person_regno;
+	
+update candidates a 
+set a.permanent_state_name =b.st_state_name
+from m_states_gis b
+where a.permanent_stateid=b.st_stateid;
+	
+update candidates a 
+set a.present_dist_name =b.ds_dist_name
+from m_districts_gis b
+where a.present_distid=b.ds_distid;	
+
+update candidates a 
+set a.permanent_dist_name =b.ds_dist_name
+from m_districts_gis b
+where a.permanent_distid::integer=b.ds_distid;
+
+select rollno,advc_permanentstateid,permanent_stateid from candidates where rejection_provision in ('C','TU') and advc_permanentstateid<>'0'
+and advc_permanentstateid<>permanent_stateid;----0
+
+select rollno,advc_persentstateid,present_stateid from candidates where rejection_provision in ('C','TU') and advc_persentstateid<>'0'
+and advc_persentstateid<>present_stateid;---0
+
+select rollno,advc_permanentdistid,permanent_distid from candidates where rejection_provision in ('C','TU') and advc_permanentdistid<>'0'
+and advc_permanentdistid<>permanent_distid::integer;---0
+
+select rollno,advc_persentdistid,present_distid from candidates where rejection_provision in ('C','TU') and advc_persentdistid<>'0'
+and advc_persentdistid<>present_distid;---0
+
+
+update candidates a 
+	set a.advc_emailid = b.ear_emailid
+	
+	from t_examsicpo2023_applicant_reg_pu b
+	where a.advcd_regno=b.ear_person_regno
+	and a.rejection_provision in ('TU','C')
+	and a.advc_emailid is null;---805
+	
+select distinct advc_driving_licence_formotorcycle,count(*) from candidates where advc_genderid='2' and rejection_provision in ('TU','C') group by advc_driving_licence_formotorcycle;
+
+false	1042
+true	2766
+		1	----ASHUTOSH
+		
+		
+select distinct advc_driving_licence_forcar,count(*) from candidates where advc_genderid='2' and rejection_provision in ('TU','C') and  advc_driving_licence_formotorcycle='false'
+group by advc_driving_licence_forcar;
+
+false	1033-----can't be allocated in Delhi police
+true	9
+
+select * from candidates where advc_genderid='2' and rejection_provision in ('TU','C') and  advc_driving_licence_formotorcycle='false' and advc_driving_licence_forcar='false'
+and advc_postpreference_dv_option like '%A%';----0
+		
+----------Allocation-------------------------------
+
+alter table candidates add column allocated_category character varying;
+alter table candidates add column allocated_post character varying;
+alter table candidates add column allocated_against_ur character varying;
+alter table candidates add column sub_category character varying;
+
+
+select * from vacancy_male order by post_code,category_code,sub_category_code;
+
+update vacancy_male
+set initial_vacancy=vacancy,
+current=vacancy;
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_male;---1870,1870,0,0
+
+
+select * from vacancy_female order by post_code,category_code;
+
+update vacancy_female
+set current=initial_vacancy;
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_female;---166,166,0,0
+
+
+--------------------debabred candidates EDP shared-----------------------------
+
+create table debarred_edp
+(
+	REG_NO character varying,
+	ROLLNO character varying,
+	CNM	character varying,
+	NEW_NAME character varying,
+	FNM character varying,
+	MNM character varying,
+	DOB date,
+	SEX	character varying,
+	CATEGORY character varying
+)
+
+select a.advcd_regno,a.rollno,a.advc_name,a.advc_father_name,a.advc_mother_name,a.advc_dob,a.advc_genderid,a.advc_categoryid,
+b.cnm,b.fnm,b.mnm,b.dob,b.sex,b.category
+from candidates a,debarred_edp b where 
+--b.dc_debarred_upto >'2023-08-01' and
+
+--replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)||UPPER(a.advc_mother_name)),' ','') = replace ((UPPER(b.cnm)||UPPER(b.fnm)||UPPER(b.mnm)),' ','');
+ 
+--replace ((UPPER(b.cnm)||UPPER(b.mnm)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_mother_name)),' ','') and a.advc_dob = b.dob;
+ 
+replace ((UPPER(b.cnm)||UPPER(b.fnm)),' ','') = replace ((UPPER(a.advc_name)||UPPER(a.advc_father_name)),' ','') and a.advc_dob = b.dob;
+
+
+--------------------------------verification of result --------------------------------------------------------------------------------
+
+
+select meritf,rollno,advc_postpreference_dv_option,cat1_cpo,cat1_dp,catsel_female_cpo,catsel_female_dp,paper1,paper2,total ,allocated_post,allocated_category from candidates where meritf in ('35','64','79','102','107','108','123','127','128','130','131','132') order by meritf;
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_female;---166,166,166,0
+
+
+UR special esm left vacancy=2
+OBC special esm left vacancy=1
+
+
+update vacancy_male
+set allocated=null,
+left_vacancy =null;
+
+update candidates
+set allocated_post=null,
+allocated_category=null,
+allocated_against_ur=null
+where meritm is not null;
+
+
+create table allocated_selected_column as 
+(
+select
+rollno,
+advc_name as cname,
+advc_genderid as gender,
+advc_dob as dob,
+advc_age as age,
+advc_categoryid as cat1,
+cat1_cpo,
+cat1_dp,
+cat2,
+null as esm_ben,
+exs_reservation as esm_res,
+isexs_specialquota as esm_squota,
+advc_isdept_candidate as deptt_dp,
+eq as eq_qual,
+null as eq_year,
+advc_isncc_certificate as ncc,
+advc_typeof_ncccertificate as ncc_cert,
+agerelax_code as ar_code,
+advc_postpreference_dv_option as pref,
+rejection_provision as rej_prov,
+advc_driving_licence_forcar as dl_car,
+advc_driving_licence_formotorcycle as dl_mcycle,
+finalstatus_bsf as med_result,
+score_p1,
+normalized_p1,
+nccp1marks,
+paper1,
+score_p2,
+nccp2marks,
+paper2,
+total,
+null as debarred,
+meritm,
+meritf,
+allocated_category as alloc_category,
+sub_category as alloc_scat,
+allocated_post as alloc_post,
+allocated_against_ur as alloc_aur
+from candidates where allocated_post is not null order by advc_genderid)
+
+
+alter table candidates add column eq_year character varying;
+
+update candidates a set a.eq_year=b.ear_eduqual_passingyear 
+from t_examsicpo2023_applicant_reg_pu b
+where a.advcd_regno =b.ear_person_regno;
+
+update allocated_selected_column a
+set a.eq_year = b.eq_year
+from candidates b
+where a.rollno=b.rollno;
+
+
+----With held------------
+
+'1203000337','1401001380','1401003202','1403001712','1403006061','2002005371','2201003732','2201005826','2201006191','2201012559','2201014863','2201029093','2201029193','2201041393','2201043445','2201049259','2201051584','2201057641','2201058475','2201063105','2201072195','2201080761','2201096563','2220003095','2401000088','2401003789','2401004566','2405001256','2405001669','2405003301','2405005099','2405006403','2405006447','2405008829','2405010878','2405011945','2405014688','2405015128','2405016919','2405020320','2405022125','2405024683','2405026913','2405030229','2405030385','2405032668','2405033319','2405033911','2405037950','3205005884','3209000546','5107000072','5501003013','6005005691','6005007218','6007004462','6007007065','6014003635','6204000310','9002001941'
+
+
+CREATE TABLE IF NOT EXISTS public.t_appl_dv_sicpo2023_education_qual_ssc
+(
+    aeq_rollno text COLLATE pg_catalog."default" NOT NULL,
+    aeq_notificationid integer NOT NULL,
+    aeq_examid integer NOT NULL,
+    aeq_examyear integer NOT NULL,
+    aeq_highqual integer NOT NULL,
+    aeq_eduqual text COLLATE pg_catalog."default" NOT NULL,
+    aeq_eqstate integer,
+    aeq_equni integer,
+    aeq_eqdegree integer,
+    aeq_eqsubjects text COLLATE pg_catalog."default",
+    aeq_eqrollno text COLLATE pg_catalog."default",
+    aeq_eqyear integer,
+    aeq_eqpercentage text COLLATE pg_catalog."default",
+    aeq_eqcgpa text COLLATE pg_catalog."default"
+)
+
+
+'2401003789','2201014863','2401000088','2405003301','2405020320','2002005371','2203000488','2405030385','2405058760','6007007065','2201058475','2204004118','2201072195','2405014688'

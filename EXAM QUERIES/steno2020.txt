@@ -1,0 +1,43 @@
+1.Age relaxation table(arc_table) to be created from notice.
+2.Create marks_table from Marks data received from EDP section.
+3.Create candidates table with the data fetched from 6 different servers(post_preference/DV data)
+4.Insert the marks_table data into candidates table.
+5.Debarred candidates list will be shared by EDP section, create debbaredcandidates table and check if any debarred candidate's data is present in marks_table. If found please set debarred_flag to 'Yes' in candidates table.
+6.create master_table
+7.create merit flag in candidates table as per notice and add the entry of these flags in master_table;
+flag_query (used in STENO2020): select rollno from candidates where rejection_provision<>'R' and debarred_flag is null and total is not null order by total DESC,part1_gi DESC,part2_ga DESC,dob ASC,name ASC
+8.Create the sp for merit flag and run it using below query
+select * from sp_get_merit('Exam_name','serial from master_table');
+9.create dob_flags in candidates table as per notice and add the entry of these flags in master_table;
+flag_query (used in STENO2020): select rollno,dob1,cat1,cat2,cat3,gender,agerelax_code,exsm_length from candidates where merit is not null order by merit
+10.Create the sp for dob flags and run it using below query
+select * from sp_get_dob_flag('Exam_name','serial from master_table');
+11.create catsel_dob_flag in candidates table and add the entry of these flags in master_table;
+query used: select rollno,dob1,gender,cat1,cat2,cat3,dob_flag_c as dob_flag from candidates where (dob_flag_c is not null and dob_flag_c<>'') and merit is not null order by merit
+NOTE: the number of catsel_dob_flags =number of dob_flags
+12.Create the sp for catsel_dob flags and run it using below query
+select * from sp_get_catseldob_flag('Exam_name','serial from master_table');
+13.create cut_off_table from the write_up shared on ssc site.
+14.create cut_off_flags in candidates table as per requirement.(eg. different cutoffs for different group posts)
+15.14.Create the sp for cutoff flags and run it using below query
+select * from sp_get_cutoff_flag('Exam_name','serial from master_table');
+16.create catsel_flags in candidates table as per the combination of catsel_dob and cut_off_flags.
+17.14.Create the sp for catsel flags and run it using below query
+select * from sp_get_catsel('Exam_name','serial from master_table');
+18.create the vacancy_table from the data shared by the client(tentative vacancy section under candidates corner)
+19.Add columns allocated_category,allocated_post,allocated_medium,allocated_against_ur in candidates table.
+20. Add columns current,allocated,left_vacancy on vacancy_table and set current=initial vacancy(alreday present in vacancy_table)
+21.compile and run the allocateCandidate  files on cmd
+22.First run the AllocateCandidate file on cmd
+23.Check the candidate table and verify
+24.Check vacancy table, verify,export and save the data for future reference.
+25.Complile the AdjustVacancy file and run it
+26.Check vacancy_table.You will find changed data.Export and save it.
+27.From this data check whose initial and current values are different,mark them.
+28.set all the allocation related columns(allocated_post,allocated_category etc.) in candidates table to null before running allocation second time.
+29.repeat step 22 to 24
+30.repeat step 25 and 27. 
+31.If you find the data from step 27 and 30 are same---> vacancy_table is not changing anymore. So whatever allocation you performed is correct.
+32.Add columns min_marks,min_markspaper1_GI,min_markspaper2_GA,min_marks_cand_dob,min_marks_merit in vacancy_table;
+33.complie and run the java files on cmd
+34.Share the candidates table and vacancy_table data with client.

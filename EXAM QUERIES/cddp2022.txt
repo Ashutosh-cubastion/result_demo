@@ -1,0 +1,713 @@
+CREATE TABLE IF NOT EXISTS public.t_cddpexam2022_applicant_reg_pu
+(
+    ear_appl_regid bigint  ,
+    ear_person_regno bigint ,
+    ear_personid integer ,
+    ear_name text COLLATE pg_catalog."default" ,
+    ear_changedname text COLLATE pg_catalog."default",
+    ear_father_name text COLLATE pg_catalog."default" ,
+    ear_mother_name text COLLATE pg_catalog."default" ,
+    ear_dob date ,
+    ear_candiateage_ason_date real ,
+    ear_gender integer ,
+    ear_categoryid integer,
+    ear_regcategoryid integer,
+    ear_nationality integer ,
+    ear_identification_mark text COLLATE pg_catalog."default" ,
+    ear_tenth_education_board integer ,
+    ear_tenth_roll_no text COLLATE pg_catalog."default" ,
+    ear_tenth_yearofpassing integer ,
+    ear_photo_img_url text COLLATE pg_catalog."default" ,
+    ear_sign_img_url text COLLATE pg_catalog."default" ,
+    ear_centerid1 integer ,
+    ear_centerid2 integer ,
+    ear_centerid3 integer ,
+    ear_regionid integer ,
+    ear_is_ex_serviceman boolean ,
+    ear_service_period text COLLATE pg_catalog."default",
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_obc_by_delhigovt boolean,
+    ear_is_widow_divorced boolean,
+    ear_isdept_candidate_of_delhi_police boolean ,
+    ear_wards_of_delhi_police boolean ,
+    ear_computerbased_exam_medium integer,
+    ear_typetest_medium integer,
+    ear_isncc_certificate boolean ,
+    ear_typeof_certificate integer,
+    ear_isrru_degree boolean ,
+    ear_rru_degree_class integer,
+    ear_is_age_relaxation boolean ,
+    ear_age_relaxation_code integer,
+    ear_sportsperson_of_distinction boolean ,
+    ear_age_relaxation_sport integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text COLLATE pg_catalog."default",
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone DEFAULT now(),
+    ear_notificationid integer ,
+    ear_application_status integer,
+    ear_edqualification integer ,
+    ear_share_persinfo_accrossportal boolean,
+    ear_education_details text COLLATE pg_catalog."default" ,
+    ear_passed_qual_exam text COLLATE pg_catalog."default",
+    ear_state_for_university integer,
+    ear_eduqual_university_board integer,
+    ear_eduqual_rollno text COLLATE pg_catalog."default",
+    ear_eduqual_passingyear integer,
+    ear_eduqual_percentage text COLLATE pg_catalog."default",
+    ear_eduqual_cgpa text COLLATE pg_catalog."default",
+    ear_present_address text COLLATE pg_catalog."default",
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text COLLATE pg_catalog."default",
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text COLLATE pg_catalog."default" ,
+    ear_mobile_number text COLLATE pg_catalog."default" ,
+    ear_other_national_address text COLLATE pg_catalog."default",
+    ear_photo_date text COLLATE pg_catalog."default",
+    ear_isdate_clear_on_photo boolean ,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text COLLATE pg_catalog."default",
+    applicationfee character varying(30) COLLATE pg_catalog."default" ,
+    ear_qrcode_path text COLLATE pg_catalog."default",
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_is_ews_candidate boolean,
+    ear_is_having_dl boolean ,
+    ear_dl_number text COLLATE pg_catalog."default",
+    ear_name_for_issuing_authority_for_dl text COLLATE pg_catalog."default",
+    ear_issuedate_for_dl date,
+    ear_add_source character(1) COLLATE pg_catalog."default",
+    ear_upd_source character(1) COLLATE pg_catalog."default",
+    ear_noofattempt integer,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean,
+    ear_isextended boolean
+	
+	)
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_cddp2022allocation_final
+\copy t_cddpexam2022_applicant_reg_pu from 'C:\Users\Public\CDDP_2022_ALL_DB.csv' csv header;	
+
+alter table t_cddpexam2022_applicant_reg_pu add constraint pk_1 primary key (ear_person_regno);
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t m_debbaredcandidates_ssc -F c -f C:\Users\Public\debbared.dump alloc_cgle2023_allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cddp2022allocation_final -t m_debbaredcandidates_ssc C:\Users\Public\debbared.dump
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master.dump alloc_chsl2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_cddp2022allocation_final -t master_table C:\Users\Public\master.dump
+
+alter table master_table add constraint pk_2 primary key (serial);
+
+create table candidates as (
+
+select
+
+    ear_person_regno as regno ,
+    ear_name as name,
+    ear_changedname as changed_name,
+    ear_father_name as father_name ,
+    ear_mother_name as mother_name ,
+    ear_dob as dob ,
+    ear_candiateage_ason_date as age ,
+    ear_gender as gender ,
+    ear_categoryid as cat1,
+    ear_regcategoryid as regcategoryid,
+    ear_identification_mark as identification_mark,
+    ear_tenth_education_board as tenth_education_board ,
+    ear_tenth_roll_no as tenth_roll_no,
+    ear_tenth_yearofpassing as tenth_yearofpassing ,
+    ear_centerid1 as centerid1 ,
+    ear_centerid2 as centerid2 ,
+    ear_centerid3 as centerid3 ,
+    ear_regionid as regionid ,
+    ear_is_ex_serviceman as is_ex_serviceman ,
+	'3' as cat2,
+    ear_service_period as service_period,
+    ear_joining_date_for_armedforces as joining_date_for_armedforces,
+    ear_joining_date_for_civilpost as joining_date_for_civilpost,
+    ear_discharged_date as discharged_date,
+    ear_isexs_benefit_availed_for_civilpost as isexs_benefit_availed_for_civilpost,
+    ear_obc_by_delhigovt as obc_by_delhigovt,
+    ear_is_widow_divorced as is_widow_divorced,
+    ear_isdept_candidate_of_delhi_police as isdept_candidate_of_delhi_police ,
+    ear_wards_of_delhi_police as wards_of_delhi_police ,
+    ear_computerbased_exam_medium as computerbased_exam_medium,
+    ear_typetest_medium as typetest_medium,
+    ear_isncc_certificate as isncc_certificate ,
+    ear_typeof_certificate as typeof_certificate,
+    ear_isrru_degree as isrru_degree ,
+    ear_rru_degree_class as rru_degree_class,
+    ear_is_age_relaxation as is_age_relaxation ,
+    ear_age_relaxation_code as age_relaxation_code,
+    ear_sportsperson_of_distinction as sportsperson_of_distinction ,
+    ear_age_relaxation_sport as age_relaxation_sport,
+    ear_notificationid as notificationid ,
+    ear_application_status as application_status,
+    ear_edqualification as edqualification ,
+    ear_share_persinfo_accrossportal as share_persinfo_accrossportal,
+    ear_education_details as education_details ,
+    ear_passed_qual_exam as passed_qual_exam,
+    ear_state_for_university as state_for_university,
+    ear_eduqual_university_board as eduqual_university_board,
+    ear_eduqual_rollno as eduqual_rollno,
+    ear_eduqual_passingyear as eduqual_passingyear,
+    ear_eduqual_percentage as eduqual_percentage,
+    ear_eduqual_cgpa as eduqual_cgpa,
+    ear_present_address as present_address,
+    ear_present_districtid as present_districtid,
+    ear_present_stateid as present_stateid,
+    ear_present_pincode as present_pincode,
+    ear_permanent_address as permanent_address,
+    ear_permanent_stateid as permanent_stateid,
+    ear_permanent_districtid as permanent_districtid,
+    ear_permanent_pincode as permanent_pincode,
+    ear_email_id as email_id ,
+    ear_mobile_number as mobile_number,
+    ear_is_physically_handicaped as is_physically_handicaped,
+    ear_ph_code as cat3,
+    ear_is_ews_candidate as is_ews_candidate,
+    ear_is_having_dl as is_having_dl ,
+    ear_dl_number as dl_number,
+    ear_name_for_issuing_authority_for_dl as name_for_issuing_authority_for_dl,
+    ear_issuedate_for_dl as issuedate_for_dl
+    from t_cddpexam2022_applicant_reg_pu
+	 );
+	 
+alter table candidates add constraint pk_3 primary key (regno);	 
+
+update candidates set cat2= null;
+
+update candidates set cat2= '3' where is_ex_serviceman ='true';---3392
+
+
+
+2201044834
+2201044836
+2201044837
+2201044838
+2201044841
+2201044842
+2201044844
+2201044846
+2201044852
+2201044854
+2201044855
+2201044859
+2201044861
+2201044862
+2201044863
+2201044866
+2201044867
+2201044869
+2201044871
+2201044873
+2201044875
+2201044876
+2201044878
+2201044882
+2201044883
+2201044884
+2201044886
+2201044890
+2201044897
+2201044898
+2201044893
+-------With held
+
+create table edp_marks
+(
+ParticipantID	text,
+regno text,
+T1_Qualified	boolean,
+Name text,
+ParticipantType	text,
+TestCenterCode	text,
+TestCenterName	text,
+LanName	text,
+City	text,
+State	text,
+Country	text,
+Subject	text,
+Part_A_General_Awareness numeric,
+Part_B_General_Intelligence	numeric,
+Part_C_Numerical_Ability numeric,
+Part_D numeric,
+Score	numeric,
+DefaultLanguage text,
+Normalized_Score numeric,
+System_Name text
+)
+
+
+alter table candidates add column rollno character varying;
+
+update candidates set rollno = b.participantid
+from edp_marks b where
+ b.t1_qualified ='true' and 
+ candidates.regno = b.regno::bigint; ----26806
+ 
+ do
+ $$
+ begin
+alter table candidates add column Part_A_General_Awareness numeric;
+alter table candidates add column Part_B_General_Intelligence	numeric;
+alter table candidates add column Part_C_Numerical_Ability numeric;
+alter table candidates add column Part_D numeric;
+alter table candidates add column Score	numeric;
+alter table candidates add column Normalized_Score numeric;
+
+end
+$$
+
+update candidates a
+set
+a.Part_A_General_Awareness = b.Part_A_General_Awareness,
+a.Part_B_General_Intelligence	= b.Part_B_General_Intelligence,
+a.Part_C_Numerical_Ability = b.Part_C_Numerical_Ability,
+a.Part_D = b.Part_D,
+a.Score	= b.Score,
+a.Normalized_Score = b.Normalized_Score
+from edp_marks b where
+ b.t1_qualified ='true' and 
+ a.regno = b.regno::bigint; ----26806
+ 
+ 
+create table candidates as (select * from candidates_all where rollno is not null);
+
+alter table candidates add constraint pk_rollno primary key (rollno );
+
+
+create table vacancy_table
+(
+	category_code text,
+	department_code text,
+	gender character varying,
+	initial_vacancy integer,
+	current integer,
+	allocated integer,
+	left_vacancy integer,
+	lowest_marks_prev numeric,
+	lowest_marks numeric
+)
+
+create table cut_off_table
+(
+serial_id integer,
+category character varying,
+paper1 numeric
+)
+
+
+select a.regno,a.rollno,a.name,a.father_name,a.mother_name,a.dob,a.gender,a.cat1,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc b where 
+b.dc_debarred_upto >'2023-01-01' and
+--replace ((UPPER(a.name)||UPPER(a.father_name)||UPPER(a.mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.mother_name)),' ','') and a.dob = b.dc_dob_name;
+
+replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.name)||UPPER(a.father_name)),' ','') and a.dob = b.dc_dob_name;
+
+74001584507	"2201006915"	"LALIT YADAV"	"ASHOK KUMAR"	"BIMLA DEVI"	"1997-06-03"	2	6	"LALIT YADAV"	"ASHOK KUMAR"	"NULL"	"1997-06-03"	2	"6"	"2029-10-20"
+92000735822	"2003000396"	"MAHESH KUMAR"	"BABU LAL"	"CHANDRAKALA DEVI"	"1992-01-14"	2	6	"MAHESH KUMAR"	"BABU LAL"	"CHANDRAKALA DEVI"	"1992-01-14"	2	"6"	"2027-11-16"
+73000014244	"2201022696"	"PRAVEEN KUMAR"	"MUKESH KUMAR"	"SHEELA DEVI"	"1998-01-10"	2	0	"PRAVEEN KUMAR"	"MUKESH KUMAR"	"SHEELA DEVI"	"1998-03-15"	2	"9"	"2026-08-13"
+95000140419	"2201014903"	"SANDEEP"	"DEVI SINGH"	"SANTOSH DEVI"	"1994-07-23"	2	6	"SANDEEP"	"DEVI SINGH"	"SANTOSH DEVI"	"1994-07-23"	2	"9"	"2026-08-19"
+74001261914	"1401000627"	"SONU"	"SATPAL"	"SANTOSH"	"1998-04-10"	2	0	"SONU"	"SATPAL"	"SANTOSH"	"1998-04-10"	2	"9"	"2026-08-01"
+
+alter table candidates add column debarred character varying;
+alter table candidates add column rejection_provision character varying;
+alter table candidates add column remarks character varying;
+
+update candidates
+set debarred ='Yes',
+remarks ='Debarred',
+rejection_provision = 'D' where regno in ('74001584507','92000735822','73000014244','95000140419','74001261914');
+
+
+create table dv_data
+(
+advc_name text,
+advc_father_name text,
+advc_mother_name text,
+advc_candidatenameremarks text,
+advc_fathernameremarks text,
+advc_mothernameremarks text,
+advc_genderid text,
+advc_categoryid text,
+advc_reason_for_catchange text,
+advc_isex_serviceman text,
+advc_serviceperiod text,
+advc_discharged_date date,
+advc_isph text,
+advc_examregion_code text,
+advc_minority_community text,
+advc_dvactualdate date,
+advc_isactive text,
+advc_arccode text,
+advc_phcode text,
+advc_rejectionprovision text,
+advc_rejectionreason text,
+advc_remarks text,
+advc_rollno text,
+advc_isdvcomplete text,
+advc_regno text,
+advc_dob date,
+advc_schedule_date date,
+advc_minority_name text,
+advc_subcat_of_phtype text,
+advc_is_eligible_exsvc_reservation text,
+advc_exsvc_joining_date date,
+advc_age text,
+advc_tenth_rollno text,
+advc_driving_licence_formotorcycle text,
+advc_driving_licence_date_formotorcycle text,
+advc_driving_licence_forcar text,
+advc_driving_licence_date_forcar text,
+advc_pet_pst_date date,
+advc_isdept_candidate text,
+advc_isdept_certificate text,
+advc_iswards_of_delhipolice text,
+advc_issportsperson_of_distinction text,
+advc_typeof_sportdistinction text,
+advc_isncc_certificate text,
+advc_typeof_ncccertificate text,
+advc_exs_govtjob text,
+advc_exs_govtjob_join_date date,
+advc_exam_applied_date date,
+advc_exs_govtjob_undertaking text,
+advc_email_id text,
+advc_share_persinfo text,
+advc_permanentaddress text,
+advc_permanentstateid text,
+advc_permanentdistid text,
+advc_permanentpincode text,
+advc_persentaddress text,
+advc_persentstateid text,
+advc_persentdistid text,
+advc_persentpincode text,
+advc_attendance text,
+advc_photostatus text,
+advc_reasonforchangesport text,
+advc_reasonfordepartmentalchange text,
+advc_isvalidannexureixandx text,
+advc_isvalidannexurexiii text,
+advc_isvalidannexurexiv text,
+advc_actualgender text,
+advc_degreeofrru text,
+advc_typeofrrudegree text,
+advc_dlnlmv text,
+advc_ainlmv text,
+advc_dlnhmv text,
+advc_ainhmv text,
+pt_rollno text,
+pt_regno text,
+pt_name text,
+pt_father_name text,
+pt_mother_name text,
+pt_genderid text,
+pt_notificationid text,
+pt_isracequalified text,
+pt_islongjumpqualified text,
+pt_ishighjumpqualified text,
+pt_ispetqualified text,
+pt_ispstattended text,
+pt_heightmeasure text,
+pt_isheightrelxavail text,
+pt_heightrelx text,
+pt_chestexp text,
+pt_chestnotexp text,
+pt_ischestrelxavail text,
+pt_chestrelx text,
+pt_pemtstatus text,
+pt_finalstatus text,
+pt_remarks text )
+
+
+
+CREATE TABLE TRADE_TEST_MARKS(
+Trade_Test_No CHARACTER VARYING,
+Roll_Number CHARACTER VARYING,
+Reg_No CHARACTER VARYING,
+Candidate_Name CHARACTER VARYING,
+Father_Name CHARACTER VARYING,
+Date_of_Birth DATE,
+Category CHARACTER VARYING,
+Ground CHARACTER VARYING,
+Exam_Date DATE,
+PRESENT_ABSENT CHARACTER VARYING,
+REJECTED_DUE_TO_INVALID_DRIVING_LICENSE_DOCUMENT CHARACTER VARYING,
+LMV_FORWARD CHARACTER VARYING,
+LMV_REVERSE CHARACTER VARYING,
+LMV_PARKING CHARACTER VARYING,
+LMV_MARKS CHARACTER VARYING,
+LMV_STATUS CHARACTER VARYING,
+HMV_FORWARD CHARACTER VARYING,
+HMV_REVERSE CHARACTER VARYING,
+HMV_PARKING CHARACTER VARYING,
+HMV_MARKS CHARACTER VARYING,
+HMV_STATUS CHARACTER VARYING,
+SECTION_C_MARKS CHARACTER VARYING,
+SECTION_C_STATUS CHARACTER VARYING,
+SECTION_D_MARKS CHARACTER VARYING,
+SECTION_D_STATUS CHARACTER VARYING,
+TOTAL_MARKS CHARACTER VARYING,
+FINAL_STATUS CHARACTER VARYING )
+
+
+
+do
+$$
+BEGIN
+Alter table candidates add column advc_name text;
+Alter table candidates add column advc_father_name text;
+Alter table candidates add column advc_mother_name text;
+Alter table candidates add column advc_candidatenameremarks text;
+Alter table candidates add column advc_fathernameremarks text;
+Alter table candidates add column advc_mothernameremarks text;
+Alter table candidates add column advc_genderid text;
+Alter table candidates add column advc_categoryid text;
+Alter table candidates add column advc_reason_for_catchange text;
+Alter table candidates add column advc_isex_serviceman text;
+Alter table candidates add column advc_serviceperiod text;
+Alter table candidates add column advc_discharged_date date;
+Alter table candidates add column advc_isph text;
+Alter table candidates add column advc_examregion_code text;
+Alter table candidates add column advc_minority_community text;
+Alter table candidates add column advc_dvactualdate date;
+Alter table candidates add column advc_isactive text;
+Alter table candidates add column advc_arccode text;
+Alter table candidates add column advc_phcode text;
+Alter table candidates add column advc_rejectionprovision text;
+Alter table candidates add column advc_rejectionreason text;
+Alter table candidates add column advc_remarks text;
+Alter table candidates add column advc_rollno text;
+Alter table candidates add column advc_isdvcomplete text;
+Alter table candidates add column advc_regno text;
+Alter table candidates add column advc_dob date;
+Alter table candidates add column advc_schedule_date date;
+Alter table candidates add column advc_minority_name text;
+Alter table candidates add column advc_subcat_of_phtype text;
+Alter table candidates add column advc_is_eligible_exsvc_reservation text;
+Alter table candidates add column advc_exsvc_joining_date date;
+Alter table candidates add column advc_age text;
+Alter table candidates add column advc_tenth_rollno text;
+Alter table candidates add column advc_driving_licence_formotorcycle text;
+Alter table candidates add column advc_driving_licence_date_formotorcycle text;
+Alter table candidates add column advc_driving_licence_forcar text;
+Alter table candidates add column advc_driving_licence_date_forcar text;
+Alter table candidates add column advc_pet_pst_date date;
+Alter table candidates add column advc_isdept_candidate text;
+Alter table candidates add column advc_isdept_certificate text;
+Alter table candidates add column advc_iswards_of_delhipolice text;
+Alter table candidates add column advc_issportsperson_of_distinction text;
+Alter table candidates add column advc_typeof_sportdistinction text;
+Alter table candidates add column advc_isncc_certificate text;
+Alter table candidates add column advc_typeof_ncccertificate text;
+Alter table candidates add column advc_exs_govtjob text;
+Alter table candidates add column advc_exs_govtjob_join_date date;
+Alter table candidates add column advc_exam_applied_date date;
+Alter table candidates add column advc_exs_govtjob_undertaking text;
+Alter table candidates add column advc_email_id text;
+Alter table candidates add column advc_share_persinfo text;
+Alter table candidates add column advc_permanentaddress text;
+Alter table candidates add column advc_permanentstateid text;
+Alter table candidates add column advc_permanentdistid text;
+Alter table candidates add column advc_permanentpincode text;
+Alter table candidates add column advc_persentaddress text;
+Alter table candidates add column advc_persentstateid text;
+Alter table candidates add column advc_persentdistid text;
+Alter table candidates add column advc_persentpincode text;
+Alter table candidates add column advc_attendance text;
+Alter table candidates add column advc_photostatus text;
+Alter table candidates add column advc_reasonforchangesport text;
+Alter table candidates add column advc_reasonfordepartmentalchange text;
+Alter table candidates add column advc_isvalidannexureixandx text;
+Alter table candidates add column advc_isvalidannexurexiii text;
+Alter table candidates add column advc_isvalidannexurexiv text;
+Alter table candidates add column advc_actualgender text;
+Alter table candidates add column advc_degreeofrru text;
+Alter table candidates add column advc_typeofrrudegree text;
+Alter table candidates add column advc_dlnlmv text;
+Alter table candidates add column advc_ainlmv text;
+Alter table candidates add column advc_dlnhmv text;
+Alter table candidates add column advc_ainhmv text;
+Alter table candidates add column pt_rollno text;
+Alter table candidates add column pt_regno text;
+Alter table candidates add column pt_name text;
+Alter table candidates add column pt_father_name text;
+Alter table candidates add column pt_mother_name text;
+Alter table candidates add column pt_genderid text;
+Alter table candidates add column pt_notificationid text;
+Alter table candidates add column pt_isracequalified text;
+Alter table candidates add column pt_islongjumpqualified text;
+Alter table candidates add column pt_ishighjumpqualified text;
+Alter table candidates add column pt_ispetqualified text;
+Alter table candidates add column pt_ispstattended text;
+Alter table candidates add column pt_heightmeasure text;
+Alter table candidates add column pt_isheightrelxavail text;
+Alter table candidates add column pt_heightrelx text;
+Alter table candidates add column pt_chestexp text;
+Alter table candidates add column pt_chestnotexp text;
+Alter table candidates add column pt_ischestrelxavail text;
+Alter table candidates add column pt_chestrelx text;
+Alter table candidates add column pt_pemtstatus text;
+Alter table candidates add column pt_finalstatus text;
+Alter table candidates add column pt_remarks text ;
+Alter table candidates add column Trade_Test_No CHARACTER VARYING;
+Alter table candidates add column Roll_Number CHARACTER VARYING;
+Alter table candidates add column Reg_No CHARACTER VARYING;
+Alter table candidates add column trade_Candidate_Name CHARACTER VARYING;
+Alter table candidates add column trade_Father_Name CHARACTER VARYING;
+Alter table candidates add column Date_of_Birth DATE;
+Alter table candidates add column Category CHARACTER VARYING;
+Alter table candidates add column Ground CHARACTER VARYING;
+Alter table candidates add column Exam_Date DATE;
+Alter table candidates add column PRESENT_ABSENT CHARACTER VARYING;
+Alter table candidates add column REJECTED_DUE_TO_INVALID_DRIVING_LICENSE_DOCUMENT CHARACTER VARYING;
+Alter table candidates add column LMV_FORWARD CHARACTER VARYING;
+Alter table candidates add column LMV_REVERSE CHARACTER VARYING;
+Alter table candidates add column LMV_PARKING CHARACTER VARYING;
+Alter table candidates add column LMV_MARKS CHARACTER VARYING;
+Alter table candidates add column LMV_STATUS CHARACTER VARYING;
+Alter table candidates add column HMV_FORWARD CHARACTER VARYING;
+Alter table candidates add column HMV_REVERSE CHARACTER VARYING;
+Alter table candidates add column HMV_PARKING CHARACTER VARYING;
+Alter table candidates add column HMV_MARKS CHARACTER VARYING;
+Alter table candidates add column HMV_STATUS CHARACTER VARYING;
+Alter table candidates add column SECTION_C_MARKS CHARACTER VARYING;
+Alter table candidates add column SECTION_C_STATUS CHARACTER VARYING;
+Alter table candidates add column SECTION_D_MARKS CHARACTER VARYING;
+Alter table candidates add column SECTION_D_STATUS CHARACTER VARYING;
+Alter table candidates add column TOTAL_MARKS CHARACTER VARYING;
+Alter table candidates add column FINAL_STATUS CHARACTER VARYING;
+
+end
+
+$$
+
+
+do
+$$
+begin
+
+alter table candidates add column cat1 integer;
+alter table candidates add column cat2 integer;
+alter table candidates add column service_period character varying;
+alter table candidates add column age_relaxation_code character varying;
+alter table candidates add column exsm_length character varying;
+alter table candidates add column exs_reservation character varying;
+
+end
+$$
+
+update candidates 
+set cat1 =advc_categoryid::integer;
+
+update candidates 
+set cat2 = '3' where advc_isex_serviceman ='TRUE';
+
+update candidates 
+set exsm_length = substring(advc_serviceperiod,1,2) where advc_isex_serviceman ='TRUE';
+
+update candidates 
+set exs_reservation = 'Yes' where advc_isex_serviceman ='TRUE';
+
+update candidates 
+set exs_reservation = 'Yes' where advc_isex_serviceman ='TRUE' and advc_is_eligible_exsvc_reservation = 'TRUE';
+
+
+alter table candidates add column rru_marks numeric;
+alter table candidates add column ncc_marks numeric;
+
+update trade_test_marks a
+set a.test ='Y' 
+from candidates b where a.roll_number = b.rollno and a.final_status in ('QUALIFIED','QULAIFIED');
+
+
+select * from edp_marks where participantid in ('2201044899',
+'2201044893',
+'2201044855');
+
+select advc_rollno,advc_regno,name,advc_dob,advc_age,advc_categoryid,advc_serviceperiod,advc_arccode,age_relaxation_code,exsm_length,
+pt_isheightrelxavail,pt_heightrelx,pt_chestexp,pt_ischestrelxavail,pt_chestrelx,pt_finalstatus,final_status
+from candidates where final_status in ('QUALIFIED','QULAIFIED');
+
+update candidates
+set cat1 =advc_categoryid::integer;
+
+update candidates
+set final_score = normalized_score+ncc_marks+rru_marks where final_status in ('QUALIFIED','QULAIFIED');
+
+select rollno,normalized_score,ncc_marks,rru_marks,final_score from candidates where final_status in ('QUALIFIED','QULAIFIED')and final_score is null;
+
+Alter table candidates add column merit integer;
+Alter table candidates add column dob_flag character varying COLLATE pg_catalog."default";
+Alter table candidates add column catsel_dob character varying COLLATE pg_catalog."default";
+Alter table candidates add column cutoff_flag character varying(10) COLLATE pg_catalog."default";
+Alter table candidates add column catsel character varying COLLATE pg_catalog."default";
+Alter table candidates add column allocated_category character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_dept character varying(5) COLLATE pg_catalog."default";
+Alter table candidates add column allocated_against_ur character varying(5) COLLATE pg_catalog."default";
+
+select * from sp_get_merit('CDDP22',1);
+
+select * from sp_get_dob_flag('CDDP22',2);
+
+select * from sp_get_catseldob_flag('CDDP22',3);
+
+select * from sp_get_cutoff('CDDP22',4);
+
+select * from sp_get_catsel('CDDP22',5);
+
+
+update candidates set catsel=replace(catsel,'9',''),
+remarks ='ST Height relaxation taken' where merit is not null
+and pt_heightrelx is not null 
+and cat1='2';---128
+
+
+Select cat2,rollno,advc_categoryid,dob,age,catsel,catsel_dob,dob_flag from candidates where advc_categoryid in ('1','6','2') 
+and ( wards_of_delhi_police = 'true' )and dob<'1992-07-02' and merit is not null
+and ( pt_isheightrelxavail = 'TRUE' and  pt_heightrelx = 'hrelaxforward' ) ;
+
+
+update candidates set catsel= null,
+remarks ='Double relaxation not allowed'  where advc_categoryid in ('1','6','2') 
+and ( wards_of_delhi_police = 'true' )and dob<'1992-07-02' and merit is not null
+and ( pt_isheightrelxavail = 'TRUE' and  pt_heightrelx = 'hrelaxforward' ) ;---10
+
+update candidates set catsel=replace(catsel,'9',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---558
+
+update candidates set catsel=replace(catsel,'1',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---558
+
+update candidates set catsel=replace(catsel,'2',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---558
+
+update candidates set catsel=replace(catsel,'6',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';--558
+
+update candidates set catsel=replace(catsel,'0',''),
+remarks ='Only ESM Category allowed' where merit is not null
+and cat2='3';---558

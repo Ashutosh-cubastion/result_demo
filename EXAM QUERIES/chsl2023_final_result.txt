@@ -1,0 +1,618 @@
+
+
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_chsl2023exam_applicant_reg_pu where ear_application_status='1' and ear_isactive='true') to 'C:\Users\Public\chsl2023_165.csv' csv header;
+
+
+CREATE TABLE IF NOT EXISTS public.t_chsl2023exam_applicant_reg_pu
+(
+    ear_appl_regid bigint ,
+    ear_person_regno bigint ,
+    ear_personid integer ,
+    ear_name text COLLATE pg_catalog."default" ,
+    ear_changedname text COLLATE pg_catalog."default",
+    ear_father_name text COLLATE pg_catalog."default" ,
+    ear_mother_name text COLLATE pg_catalog."default" ,
+    ear_dob date ,
+    ear_candiateage_ason_date real ,
+    ear_gender integer ,
+    ear_categoryid integer,
+    ear_nationality integer ,
+    ear_identification_mark text COLLATE pg_catalog."default" ,
+    ear_tenth_education_board integer ,
+    ear_tenth_roll_no text COLLATE pg_catalog."default" ,
+    ear_tenth_yearofpassing integer ,
+    ear_photo_img_url text COLLATE pg_catalog."default" ,
+    ear_sign_img_url text COLLATE pg_catalog."default" ,
+    ear_centerid1 integer ,
+    ear_centerid2 integer ,
+    ear_centerid3 integer ,
+    ear_regionid integer ,
+    ear_is_ex_serviceman boolean ,
+    ear_service_period text COLLATE pg_catalog."default",
+    ear_joining_date_for_armedforces date,
+    ear_joining_date_for_civilpost date,
+    ear_discharged_date date,
+    ear_isexs_benefit_availed_for_civilpost boolean,
+    ear_is_physically_handicaped boolean,
+    ear_ph_code integer,
+    ear_is_pwbd_blindness boolean,
+    ear_is_cerebral_palsy boolean,
+    ear_is_physical_limitation boolean,
+    ear_is_scribe_required boolean,
+    ear_scribe_medium integer,
+    ear_own_scribe boolean,
+    ear_typetest_medium integer ,
+    ear_science_withmaths boolean ,
+    ear_is_age_relaxation boolean ,
+    ear_age_relaxation_code integer,
+    ear_isactive boolean DEFAULT true,
+    ear_ip_address text COLLATE pg_catalog."default",
+    ear_createdbyid integer,
+    ear_createdbyrid integer,
+    ear_updbyid integer,
+    ear_upddtm timestamp without time zone,
+    ear_createddtm timestamp without time zone DEFAULT now(),
+    ear_notificationid integer ,
+    ear_application_status integer,
+    ear_is_ews_candidate boolean,
+    ear_share_persinfo_accrossportal boolean ,
+    ear_languagepreference integer ,
+    ear_edqualification integer ,
+    ear_education_details text COLLATE pg_catalog."default" ,
+    ear_passed_qual_exam text COLLATE pg_catalog."default",
+    ear_state_for_university integer,
+    ear_eduqual_university_board integer,
+    ear_eduqual_rollno text COLLATE pg_catalog."default",
+    ear_eduqual_passingyear integer,
+    ear_eduqual_percentage text COLLATE pg_catalog."default",
+    ear_eduqual_cgpa text COLLATE pg_catalog."default",
+    ear_present_address text COLLATE pg_catalog."default",
+    ear_present_districtid integer,
+    ear_present_stateid integer,
+    ear_present_pincode integer,
+    ear_permanent_address text COLLATE pg_catalog."default",
+    ear_permanent_stateid integer,
+    ear_permanent_districtid integer,
+    ear_permanent_pincode integer,
+    ear_email_id text COLLATE pg_catalog."default" ,
+    ear_mobile_number text COLLATE pg_catalog."default" ,
+    ear_other_national_address text COLLATE pg_catalog."default",
+    ear_photo_date text COLLATE pg_catalog."default",
+    ear_isdate_clear_on_photo boolean ,
+    challan_generation_date date,
+    challan_downloaded_date date,
+    challan_refno text COLLATE pg_catalog."default",
+    applicationfee character varying(30) COLLATE pg_catalog."default" ,
+    ear_rollno text COLLATE pg_catalog."default",
+    ear_qrcode_path text COLLATE pg_catalog."default",
+    ear_add_source character(1) COLLATE pg_catalog."default",
+    ear_upd_source character(1) COLLATE pg_catalog."default",
+    ear_noofattempt integer,
+    ear_flag integer,
+    ear_piflag integer,
+    ear_siflag integer,
+    ear_piflag_lastupdtm timestamp without time zone,
+    ear_siflag_lastupdtm timestamp without time zone,
+    ear_isdraftprint_util_flag boolean
+	)
+	
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final
+\copy t_chsl2023exam_applicant_reg_pu from 'C:\Users\Public\chsl2023_165.csv' csv header;
+
+alter table t_chsl2023exam_applicant_reg_pu add constraint pk_ear_regno primary key (ear_person_regno);
+
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t arc_table -F c -f C:\Users\Public\arc_table.dump alloc_chsl2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final -t arc_table C:\Users\Public\arc_table.dump
+
+
+CREATE TABLE IF NOT EXISTS public.t_post_preference_chsle2023_ssc
+(
+    tp_id integer NOT NULL ,
+    tp_regno bigint NOT NULL,
+    tp_cand_name text COLLATE pg_catalog."default",
+    tp_cand_father_name text COLLATE pg_catalog."default",
+    tp_cand_mother_name text COLLATE pg_catalog."default",
+    tp_cand_rollno text COLLATE pg_catalog."default",
+    tp_dob date NOT NULL,
+    tp_gender integer NOT NULL,
+    tp_cat1 integer,
+    tp_is_ex_serviceman boolean NOT NULL,
+    tp_cat2 integer,
+    tp_is_physically_handicaped boolean NOT NULL,
+    tp_cat3 integer,
+    tp_is_age_relaxation boolean NOT NULL,
+    tp_age_relaxation_code integer,
+    tp_joining_date_for_armedforces date,
+    tp_discharged_date date,
+    tp_service_period text COLLATE pg_catalog."default",
+    tp_isexs_benefit_availed_for_civilpost boolean,
+    tp_joining_date_for_civilpost date,
+    tp_post_pref text COLLATE pg_catalog."default" NOT NULL,
+    tp_isactive boolean DEFAULT true,
+    tp_ip_address text COLLATE pg_catalog."default",
+    tp_createdbyid integer,
+    tp_createdbyrid integer,
+    tp_updbyid integer,
+    tp_upddtm timestamp without time zone,
+    tp_createddtm timestamp without time zone DEFAULT now(),
+    tp_notificationid integer,
+    tp_examid integer,
+    tp_exam_year integer,
+    tp_qrcode_path text COLLATE pg_catalog."default",
+    tp_remarks text COLLATE pg_catalog."default"
+	)
+	
+alter table t_post_preference_chsle2023_ssc add constraint pk_tp_regno primary key (tp_regno);
+	
+psql -U postgres -h 10.246.126.165 -p 5432 -d ssc2
+\copy (select * from t_post_preference_chsle2023_ssc) to 'C:\Users\Public\chsle2023postpref_165.csv' csv header;
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final
+\copy t_post_preference_chsle2023_ssc from 'C:\Users\Public\chsle2023postpref_165.csv' csv header;
+
+
+CREATE TABLE IF NOT EXISTS public.cut_off_table
+(
+    serial_id integer NOT NULL,
+    category character varying(1) COLLATE pg_catalog."default",
+    paper1 numeric,
+    paper2 numeric,
+    mistakes_ldc numeric,
+    mistakes_deo numeric,
+    cut_off_name character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT cut_off_table_pkey PRIMARY KEY (serial_id)
+)
+
+psql -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final
+\copy cut_off_table from 'C:\Users\SalauddinKhan\Desktop\cut_off_table_chsle2023.csv' csv header;
+
+pg_dump -U postgres -h 10.246.126.173 -p 5432 -t master_table -F c -f C:\Users\Public\master_table.dump alloc_chsl2022allocation_final
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final -t master_table C:\Users\Public\master_table.dump
+
+
+pg_dump -U postgres -h 10.246.126.164 -p 5432 -t vacancy_table_chsl -F c -f C:\Users\Public\vacancy_table_chsl.dump ssc2
+pg_restore -U postgres -h 10.246.126.173 -p 5432 -d alloc_chsl2023allocation_final -t vacancy_table_chsl C:\Users\Public\vacancy_table_chsl.dump
+
+
+Alter table vacancy_table add column allocated integer;
+Alter table vacancy_table add column left_vacancy integer;
+Alter table vacancy_table add column min_marks numeric;
+Alter table vacancy_table add column min_marks_section1 numeric;
+Alter table vacancy_table add column min_paper1 numeric;
+Alter table vacancy_table add column min_marks_cand_dob date;
+
+
+CREATE TABLE IF NOT EXISTS public.m_districts_gis
+(
+    ds_distid integer ,
+    ds_dist_name text COLLATE pg_catalog."default" NOT NULL,
+    ds_stateid integer,
+    ds_statename character varying ,
+    ds_border boolean DEFAULT false,
+    ds_naxal boolean DEFAULT false
+)
+
+CREATE TABLE IF NOT EXISTS public.m_states_gis
+(
+    st_stateid integer NOT NULL ,
+    st_state_name text COLLATE pg_catalog."default" NOT NULL
+	
+)
+
+CREATE TABLE IF NOT EXISTS public.m_debbaredcandidates_ssc
+(
+    dc_rollno text COLLATE pg_catalog."default",
+    dc_name text COLLATE pg_catalog."default" NOT NULL,
+    dc_father_name text COLLATE pg_catalog."default" NOT NULL,
+    dc_mother_name text COLLATE pg_catalog."default",
+    dc_dob_name date NOT NULL,
+    dc_gender integer NOT NULL,
+    dc_category text COLLATE pg_catalog."default",
+    dc_debarreddate date NOT NULL,
+    dc_debarred_upto date NOT NULL,
+)
+
+
+create table tier1_marks
+(
+REGID bigint,
+ROLL bigint,
+NAME text,
+FNAME text,
+MNAME text,
+DOB date,
+GENDER text,
+CAT1 character varying,
+TT_MEDIUM	text,
+SCI_MATH text,
+CAT2 character varying,
+CAT3 character varying,
+AGERLXCODE character varying,
+EQ character varying,
+ENG numeric,
+GI numeric,
+QA numeric,
+GA numeric,
+SCORE numeric,
+TIER1 numeric
+)
+
+create table candidates as 
+(
+select a.*,b.roll,b.tt_medium,b.sci_math,b.eq,b.eng,b.gi,b.qa,b.ga,b.score,b.tier1 
+from
+t_chsl2023exam_applicant_reg_pu a,
+tier1_marks b
+where a.ear_person_regno =b.regid)
+
+
+alter table candidates add column cat1 integer;
+alter table candidates add column cat2 integer;
+alter table candidates add column cat3 integer;
+alter table candidates add column age_relaxation_code character varying;
+alter table candidates add column service_period text;
+
+
+
+update candidates
+set cat1 =ear_categoryid;
+
+update candidates
+set cat3 =ear_ph_code;---770
+
+update candidates
+set cat2 ='3' where ear_is_ex_serviceman='true';---879
+
+
+alter table candidates add column exsm_length character varying;
+alter table candidates add column dob_flag character varying;
+alter table candidates add column catsel_dob character varying;
+alter table candidates add column tt_exempted character varying;
+alter table candidates add column ckt_qly character varying;
+alter table candidates add column debarred character varying;
+
+
+update candidates
+set service_period = ear_service_period
+where cat2='3';
+
+update candidates
+set exsm_length = substring(service_period,1,3)
+where cat2='3';
+
+update candidates
+set exs_reservation ='No'
+where cat2='3'and ear_isexs_benefit_availed_for_civilpost='true';
+
+update candidates
+set age_relaxation_code= ear_age_relaxation_code;
+
+
+Debarred candidates:-
+
+select a.ear_person_regno,a.rollno,a.ear_name,a.ear_father_name,a.ear_mother_name,a.dob,a.gender,a.cat1,
+b.dc_name,b.dc_father_name,b.dc_mother_name,b.dc_dob_name,b.dc_gender,b.dc_category,b.dc_debarred_upto
+from candidates a,m_debbaredcandidates_ssc b where 
+b.dc_debarred_upto >'2023-08-01' and
+
+replace ((UPPER(a.ear_name)||UPPER(a.ear_father_name)||UPPER(a.ear_mother_name)),' ','') = replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)||UPPER(b.dc_mother_name)),' ','');
+ 
+--replace ((UPPER(b.dc_name)||UPPER(b.dc_mother_name)),' ','') = replace ((UPPER(a.ear_name)||UPPER(a.ear_mother_name)),' ','') and a.dob = b.dc_dob_name;
+ 
+replace ((UPPER(b.dc_name)||UPPER(b.dc_father_name)),' ','') = replace ((UPPER(a.ear_name)||UPPER(a.ear_father_name)),' ','') and a.dob = b.dc_dob_name;
+
+update candidates
+set debarred ='Yes'
+where rollno in ('3010014870','2201146942','2201246766','6005027872','3206132245');
+
+
+alter table candidates add column rejection_provision character varying;
+
+update candidates
+set rejection_provision='D' where debarred='Yes';
+
+
+select * from sp_get_dob_flag('CHSL23',2);
+
+select dob_flag,count(*) from candidates group by dob_flag;
+
+		5
+"10"	56
+"06"	867
+"11"	6
+"03"	121
+"01"	1205
+"05"	53
+"04"	99
+"02"	845
+"9"		14378
+
+select * from sp_get_catseldob_flag('CHSL23',3);
+
+select catsel_dob,count(*) from candidates group by catsel_dob;
+"1"	844
+"4"	4
+"9"	14703
+"6"	845
+"3"	867
+	5
+"2"	361
+"7"	5
+"5"	1
+
+alter table candidates alter column rollno type character varying;
+
+select tt_medium,ear_typetest_medium from candidates group by tt_medium,ear_typetest_medium;
+"E"	1
+"H"	2
+
+select distinct ear_science_withmaths ,sci_math from candidates group by ear_science_withmaths ,sci_math;
+false	"N"
+true	"Y"
+
+create table skilltest_ldc
+(asr_rollno	character varying,
+ asr_region_code character varying,
+ asr_date_appeared date,
+ asr_master_no character varying,
+ asr_spelling_mistakes character varying,
+ asr_half_error character varying,
+ asr_misc_error character varying,
+ asr_punctuation_error character varying,
+ asr_paragraphic_error character varying,
+ asr_total_mistakes character varying,
+ asr_no_of_word_original character varying,
+ asr_per_of_error numeric,
+ asr_stenograde	character varying,
+ asr_remarks character varying
+ )
+ 
+create table skilltest_deoA
+(asr_rollno	character varying,
+ asr_region_code character varying,
+ asr_date_appeared date,
+ asr_master_no character varying,
+ asr_spelling_mistakes character varying,
+ asr_half_error character varying,
+ asr_misc_error character varying,
+ asr_punctuation_error character varying,
+ asr_paragraphic_error character varying,
+ asr_total_mistakes character varying,
+ asr_no_of_word_original character varying,
+ asr_per_of_error numeric,
+ asr_stenograde	character varying,
+ asr_remarks character varying
+ ) 
+ 
+ create table skilltest_deoB
+(asr_rollno	character varying,
+ asr_region_code character varying,
+ asr_date_appeared date,
+ asr_master_no character varying,
+ asr_spelling_mistakes character varying,
+ asr_half_error character varying,
+ asr_misc_error character varying,
+ asr_punctuation_error character varying,
+ asr_paragraphic_error character varying,
+ asr_total_mistakes character varying,
+ asr_no_of_word_original character varying,
+ asr_per_of_error numeric,
+ asr_stenograde	character varying,
+ asr_remarks character varying
+ )
+ 3009003653 
+
+ 
+ Typing test exempted list:
+ 
+'2201286417','2201261819','2201022351','2201321776','2201115567','2201231307','2201089921','2201196691','2201320812','2201117510','2201050320','2201261999','2201196486','2201221643','2201188348','2201229543','2201188592','2201254226','2201163360','2201261589','2201260862','2201321322','2201294542','2201254582','2201331414','2201021190','2201195932','2201287571','2201329297','2201152549','2201162975','2201286706','2201196010','2201187759','2201161977','2201254033','2201321241','2201320948','2201294927','2201087336','2201163399','2201154132','2201020780','2201082050','2201320397','2201195690','2201230097','2201162405','2201075707','2201018586','2201338344','2201050279','2201296252','2406014257','2409000949','2409006110','2404017084','2404007713','2405117847','2405154183','2405170367','2405029019','2405069865','2405071899','2405098510','2405097019','2405075071','2405007865','2405151608','2405190440','2405075698','2405113125','2405072008','2003008594','2201049240','2201081680','2201082570','2201087827','2201089360','2201115269','2201115722','2201126816','2201161925','2201229506','2201328495','2201328973','6005010618','6005021845','6005001956','6005022440','6005022512','1601004301','1403004556','8012004348','8601009735','8601016144','8601017436','8601029132','8601015829','8012011555','8603004052','3001009360','3001019378','3003011451','3003072673','3009003647','3009054032','3009061176','3010017883','3010037186','3010040110','3010048226','3010078545','3013014334','3013055415','3013064442','3205048021','3206055602','3206055671','3206064429','3206066550','3206068251','3206117320','3009003653','4419012118','4205056007','4205005392'
+
+update candidates a
+set a.post_pref=b.tp_post_pref
+from t_post_preference_chsle2023_ssc b where
+a.ear_person_regno =b.tp_regno;---11467
+
+
+alter table candidates add column mistakes_ldc numeric;
+alter table candidates add column ldc_medium text;
+alter table candidates add column mistakes_deo numeric;
+alter table candidates add column deo_medium text;
+alter table candidates add column mistakes_deocag numeric;
+alter table candidates add column deocag_medium text;
+
+create table edp_marks
+(
+participantid character varying,
+Name character varying,
+TestCenterCode character varying,
+City character varying,
+State character varying,
+ComputerKnowledgeModule numeric,
+EnglishLanguageandComprehension numeric,
+GeneralAwareness numeric,
+MathematicalAbilities numeric,
+ReasoningandGeneralIntelligence numeric,
+Score numeric,	
+SystemName character varying
+)
+
+alter table edp_marks add constraint pk_participantid primary key(participantid);
+
+
+alter table candidates add column computer_knowledge_module numeric;
+alter table candidates add column english_language_and_comprehension numeric;
+alter table candidates add column general_awareness numeric;
+alter table candidates add column mathematical_abilities numeric;
+alter table candidates add column reasoning_and_general_intelligence numeric;
+alter table candidates add column total numeric;
+alter table candidates add column section1 numeric;
+
+update candidates 
+set 
+computer_knowledge_module=b.computerknowledgemodule,
+english_language_and_comprehension=b.englishlanguageandcomprehension,
+mathematical_abilities=b.mathematicalabilities,
+general_awareness=b.generalawareness,
+reasoning_and_general_intelligence=b.reasoningandgeneralintelligence
+from edp_marks b
+where candidates.rollno =b.participantid;--14734
+
+
+update candidates
+set total= english_language_and_comprehension +general_awareness +mathematical_abilities +reasoning_and_general_intelligence;---17635
+
+update candidates
+set section1= mathematical_abilities +reasoning_and_general_intelligence;
+
+
+select ear_person_regno,ear_name,rollno,dob,gender,cat1,cat2,cat3,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2='3' and computer_knowledge_module>='9'; ---295
+
+update candidates set ckt_qly ='Y' where cat2='3' and computer_knowledge_module>='9'; ---295 updates
+
+select ear_person_regno,ear_name,rollno,dob,gender,cat1,cat2,cat3,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 in ('4','5','7','8') and computer_knowledge_module>='9'; ----333
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 in ('4','5','7','8') and computer_knowledge_module>='9';--333 updates
+
+select ear_person_regno,ear_name,rollno,dob,gender,cat1,cat2,cat3,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('1','2') and computer_knowledge_module>='9';----2447
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('1','2') and computer_knowledge_module>='9';--2447 updates
+
+select ear_person_regno,ear_name,rollno,dob,gender,cat1,cat2,cat3,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('6','0') and computer_knowledge_module>='11.25'; ----3570
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('6','0') and computer_knowledge_module>='11.25';---2570 updates
+
+select ear_person_regno,ear_name,rollno,dob,gender,cat1,cat2,cat3,age_relaxation_code,computer_knowledge_module,ckt_qly 
+from candidates where cat2 is null and cat3 is null and cat1 in ('9') and computer_knowledge_module>='13.5'; ----1113
+
+update candidates set ckt_qly ='Y' where cat2 is null and cat3 is null and cat1 in ('9') and computer_knowledge_module>='13.5';--1113 updates
+
+
+update candidates 
+set rejection_provision=null
+where ckt_qly is null and rejection_provision<>'D';
+
+select distinct ckt_qly,rejection_provision,count(*) from candidates  group by ckt_qly,rejection_provision;
+"Y"	"C"	7758
+	"D"	5
+		9872
+		
+alter table candidates add column merit integer;
+alter table candidates add column cutoff_flag_deocag character varying;
+alter table candidates add column cutoff_flag_deo character varying;
+alter table candidates add column cutoff_flag_ldc character varying;
+alter table candidates add column catsel_deocag character varying;
+alter table candidates add column catsel_deo character varying;
+alter table candidates add column catsel_ldc character varying;
+
+select * from sp_get_merit('CHSL23',1);--merit updated successfully for 7758 candidates
+
+
+update candidates
+set
+mistakes_ldc=b.asr_per_of_error,
+ldc_medium=b.asr_remarks
+from skilltest_ldc b
+where candidates.rollno=b.asr_rollno;---14548 updates
+
+update candidates
+set
+mistakes_deocag=b.asr_per_of_error,
+deocag_medium=b.asr_remarks
+from skilltest_deoa b
+where candidates.rollno=b.asr_rollno;---632 updates
+
+update candidates
+set
+mistakes_deo=b.asr_per_of_error,
+deo_medium=b.asr_remarks
+from skilltest_deob b
+where candidates.rollno=b.asr_rollno;---1047 updates
+
+select * from candidates where (mistakes_ldc is not null or mistakes_deo is not null or mistakes_deocag is not null) and tt_exempted='Y' ;
+3013064442
+3013014334
+
+alter table candidates add column remarks character varying;
+
+update candidates
+set mistakes_ldc='0',
+remarks ='TT exempted but exam given'
+where rollno ='3013064442';
+
+update candidates
+set mistakes_ldc='0',
+remarks ='TT exempted'
+where tt_exempted='Y' and rollno <>'3013064442';
+
+select * from sp_get_cut_off('CHSL23',4);
+select * from sp_get_cut_off('CHSL23',5);
+select * from sp_get_cut_off('CHSL23',6);
+
+select * from sp_get_catsel('CHSL23',7);
+select * from sp_get_catsel('CHSL23',8);
+select * from sp_get_catsel('CHSL23',9);
+
+alter table candidates add column allocated_category character varying(5);
+alter table candidates add column allocated_dept character varying(5);
+alter table candidates add column allocated_against_ur character varying(5);
+
+
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---1282	1282	1282	0
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---1282	1211		
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---1282	1211		
+select sum(initial_vacancy),sum(current),sum(allocated),sum(left_vacancy) from vacancy_table;---1282	1211		
+
+select ear_person_regno as "regno",
+ear_name as "name",
+ear_father_name as "father_name",
+ear_mother_name as "mother_name",
+rollno,
+dob,
+gender,
+cat1,
+cat2,
+cat3,
+age_relaxation_code,
+ear_isexs_benefit_availed_for_civilpost as "isexs_benefit_availed_for_civilpost",
+post_pref,
+ear_education_details as "education_details",
+ear_eduqual_passingyear as "eduqual_passingyear",
+ear_science_withmaths as "science_math",
+ear_share_persinfo_accrossportal as "Share_Per",
+ear_mobile_number as "Mobile",
+ear_email_id as "Email_ID",
+computer_knowledge_module,
+english_language_and_comprehension,
+general_awareness,
+mathematical_abilities,
+reasoning_and_general_intelligence,
+--score,
+total,
+section1,
+mistakes_ldc,
+mistakes_deocag as "mistakes_deo",
+mistakes_deo as "mistakes_deo_Otherthan",
+tt_medium as "SkillTest_medium",
+rejection_provision,
+remarks,
+merit,
+tt_exempted,
+ckt_qly,
+debarred,
+withheld,
+exs_reservation,
+allocated_category,
+allocated_dept,
+allocated_against_ur,
+true as "paper1qly"
+from candidates where allocated_dept is not null;
+
+
+
+'2201212753','2201216896','6001008247','6001008363','6001008497','6001008539','6001008723','6001026662','6001026814','6001026870'
